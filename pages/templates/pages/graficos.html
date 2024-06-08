@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="content-wrapper">
+  <div class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6">
+          <h1 class="m-0">Gerar Gráficos</h1>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="content">
+    <div class="container-fluid">
+      <form method="post" id="graficoForm">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-success">Gerar Gráfico</button>
+      </form>
+
+      {% if plot_div %}
+      <h3>Gráfico Gerado:</h3>
+      <div id="plotly-div">
+        {{ grafico|safe }}
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+{% block extra_script %}
+{{ block.super }}
+<!-- Plotly -->
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+{% endblock %}
+{% endblock %}

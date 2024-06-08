@@ -1,0 +1,39 @@
+<h1>Create Chart</h1>
+<form method="post">
+    {% csrf_token %}
+    {{ form.management_form }}
+    <div id="formset-container">
+        {% for form in form.forms %}
+            <div class="form-row">
+                {{ form.as_p }}
+            </div>
+        {% endfor %}
+    </div>
+    <button type="button" id="add-form">Add another pair</button>
+    <button type="button" id="remove-form">Remove last pair</button>
+    <button type="submit">Create</button>
+</form>
+
+<script>
+    document.getElementById('add-form').addEventListener('click', function() {
+        const formContainer = document.getElementById('formset-container');
+        const totalForms = document.getElementById('id_form-TOTAL_FORMS');
+        const newForm = formContainer.children[0].cloneNode(true);
+        const formRegex = RegExp(`form-(\\d){1}-`, 'g');
+        
+        newForm.innerHTML = newForm.innerHTML.replace(formRegex, `form-${totalForms.value}-`);
+        formContainer.appendChild(newForm);
+        
+        totalForms.value = parseInt(totalForms.value) + 1;
+    });
+
+    document.getElementById('remove-form').addEventListener('click', function() {
+        const formContainer = document.getElementById('formset-container');
+        const totalForms = document.getElementById('id_form-TOTAL_FORMS');
+        
+        if (formContainer.children.length > 1) {
+            formContainer.removeChild(formContainer.lastChild);
+            totalForms.value = parseInt(totalForms.value) - 1;
+        }
+    });
+</script>

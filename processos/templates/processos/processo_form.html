@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% load custom_filters %}
+
+{% block content %}
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>Novo Processo</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="{% url 'pages:index' %}">Início</a></li>
+                        <li class="breadcrumb-item"><a href="{% url 'processos:list' %}">Processos</a></li>
+                        <li class="breadcrumb-item active">Novo Processo</li>
+                    </ol>
+                </div>
+            </div>
+        </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <!-- General form elements -->
+                    <div class="card card-primary">
+                        <div class="card-header">
+                            <h3 class="card-title">Cadastro de Processo</h3>
+                        </div>
+                        <!-- form start -->
+                        <form method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <div class="card-body">
+                                {% for field in form %}
+                                    <div class="form-group">
+                                        {% if field.field.widget.input_type == 'checkbox' %}
+                                            <div class="form-check">
+                                                {{ field|add_class:"form-check-input" }}
+                                                <label class="form-check-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+                                            </div>
+                                        {% elif field.name == 'cliente' or field.name == 'advogado' %}
+                                            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                                            {{ field|add_class:"form-control select2" }}
+                                        {% else %}
+                                            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                                            {{ field|add_class:"form-control" }}
+                                        {% endif %}
+                                        {% if field.errors %}
+                                            <div class="alert alert-danger">{{ field.errors }}</div>
+                                        {% endif %}
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            <!-- /.card-body -->
+
+                            <div class="card-footer">
+                                <button type="submit" class="btn btn-primary">Salvar</button>
+                            </div>
+                        </form>
+                    </div>
+                    <!-- /.card -->
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- /.content -->
+</div>
+<!-- /.content-wrapper -->
+
+<div style="position: fixed; bottom: 20px; right: 20px;">
+    <a href="{% url 'processos:list' %}" class="btn btn-secondary" title="Voltar">
+        <i class="fas fa-arrow-left"></i> Voltar
+    </a>
+</div>
+
+{% endblock %}
+
+{% block extra_script %}
+{{ block.super }}
+<script src="{% static 'js/custom_mask.js' %}"></script>
+<script>
+    $(document).ready(function() {
+        $('.select2').select2({
+            theme: 'bootstrap4'
+        });
+    });
+</script>
+{% endblock %}

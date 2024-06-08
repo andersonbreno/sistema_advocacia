@@ -1,0 +1,106 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block content %}
+
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>Detalhe do Processo</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="{% url 'pages:index' %}">Início</a></li>
+                        <li class="breadcrumb-item"><a href="{% url 'processos:list' %}">Processos</a></li>
+                        <li class="breadcrumb-item active">Detalhe do Processo</li>
+                    </ol>
+                </div>
+            </div>
+        </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-8">
+                    <!-- Basic Card Example -->
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                            <h6 class="m-0 font-weight-bold text-primary">Informações do Processo</h6>
+                            <div>
+                                <a href="{% url 'processos:processo-update' processo.pk %}"
+                                    class="btn btn-warning btn-circle btn-sm" title="Editar">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <label class="form-label">Número do Processo:</label>
+                                <p>{{ processo.numero_processo }}</p>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Descrição:</label>
+                                <p>{{ processo.descricao }}</p>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Cliente:</label>
+                                <p>{{ processo.cliente }}</p>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Advogado:</label>
+                                <p>{{ processo.advogado }}</p>
+                            </div>
+                            <!-- Adicione mais campos conforme necessário -->
+                        </div>
+                    </div>
+
+                    <!-- Related Processes Card -->
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-primary">Processos Relacionados</h6>
+                        </div>
+                        <div class="card-body">
+                            {% if processos_relacionados %}
+                            <ul class="list-group">
+                                {% for processo_relacionado in processos_relacionados %}
+                                <li class="list-group-item">
+                                    Processo nº: {{ processo_relacionado.numero_processo }} - {{ processo_relacionado.descricao }}
+                                    <!-- Adicione outros detalhes que você deseja mostrar -->
+                                </li>
+                                {% endfor %}
+                            </ul>
+                            {% else %}
+                            <p>Não há processos relacionados.</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Optional: Include a sidebar with additional information -->
+                <div class="col-lg-4">
+                    <!-- Status Card -->
+                    <!-- ... -->
+
+                    <!-- Recent Activities -->
+                    <!-- ... -->
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- /.content -->
+</div>
+
+<!-- Botão de Voltar -->
+<div style="position: fixed; bottom: 20px; right: 20px;">
+    <a href="{% url 'processos:list' %}" class="btn btn-secondary" title="Voltar">
+        <i class="fas fa-arrow-left"></i> Voltar
+    </a>
+</div>
+
+{% endblock %}

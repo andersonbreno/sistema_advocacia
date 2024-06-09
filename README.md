@@ -42,6 +42,7 @@ cp .env.example .env
 ### Criar virtualenv
 python -m venv .venv
 source .venv/bin/activate
+
 Autor
 Anderson Breno de Aguiar Azevedo
 

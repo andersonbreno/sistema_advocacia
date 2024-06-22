@@ -1,17 +1,17 @@
 services:
   web:
-    container_name: djangoapp
+    container_name: sistema_advocacia
     build:
       context: .
     command: python manage.py runserver 0.0.0.0:8000  
     ports:
       - 8000:8000
     volumes:
-      - ./djangoapp:/djangoapp
-      - ./data/web/static:/data/web/static
-      - ./data/web/media:/data/web/media
+      - ../:/sistema_advocacia
+      - ../data/web/static:/data/web/static
+      - ../data/web/media:/data/web/media
     env_file:
-      - ./dotenv_files/.env
+      - ../dotenv_files/.env
     depends_on:      
       - db
       - redis
@@ -28,9 +28,9 @@ services:
     container_name: psql
     image: postgres:14-alpine
     volumes:
-      - ./data/postgres/data:/var/lib/postgresql/data
+      - ../data/postgres/data:/var/lib/postgresql/data
     env_file:
-      - ./dotenv_files/.env
+      - ../dotenv_files/.env
 volumes:
     data:
     redis-data:

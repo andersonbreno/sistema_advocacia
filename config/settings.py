@@ -15,6 +15,7 @@ from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+DATA_DIR = BASE_DIR.parent / 'data' / 'web'
 
 # Título que aparece na aba do navegador
 ADMIN_SITE_TITLE = "Administração Victor Rocha Advocacia"
@@ -29,12 +30,12 @@ ADMIN_INDEX_TITLE = "Bem-vindo(a) à Administração Victor Rocha Advocacia"
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-e00u&++xh9dy%1d1)i0kz83+-7+3jii189^vp$84!k@238(v+j"
+SECRET_KEY = os.environ.get('SECRET_KEY', 'change-me')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = bool(int(os.environ.get('DEBUG',0)))
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '[::1]', 'web']
 
 # Application definition
 
@@ -93,8 +94,12 @@ WSGI_APPLICATION = "config.wsgi.application"
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": os.environ.get('POSTGRES_DB','change-me'),
+        "USER": os.environ.get('POSTGRES_USER','change-me'),
+        "PASSWORD": os.environ.get('POSTGRES_PASSWORD','change-me'),
+        "HOST": os.environ.get('POSTGRES_HOST','change-me'),
+        "PORT": os.environ.get('POSTGRES_PORT','change-me'),
     }
 }
 
@@ -170,3 +175,16 @@ LOGIN_REDIRECT_URL = 'pages:index'
 LOGOUT_REDIRECT_URL = 'login'
 LOGIN_URL = 'login' 
 
+CACHES = {
+    'default': {
+        'BACKEND': 'django_redis.cache.RedisCache',
+        'LOCATION': 'redis://redis:6379/1',
+        'OPTIONS': {
+            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+        }
+    }
+}
+
+# Para utilizar Redis como backend para sessão, adicione:
+SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
+SESSION_CACHE_ALIAS = 'default'

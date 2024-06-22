@@ -1,13 +1,18 @@
-FROM python:3.9-slim
+FROM python:3.11-slim
 
-ENV PYTHONUNBUFFERED 1
+ENV PYTHONUNBUFFERED=1
 
-WORKDIR /sistema_advocaria
+WORKDIR /sistema_advocacia
 
-COPY /sistema_advocaria/requirements.txt /djangoapp/
+# Copy the requirements file
+COPY sistema_advocacia/requirements.txt /sistema_advocacia/
 
-RUN pip install --no-cache-dir -r /sistema_advocaria/requirements.txt
+# Install the dependencies
+RUN pip install --no-cache-dir -r /sistema_advocacia/requirements.txt
 
-COPY . /sistema_advocaria//
+# Copy the rest of the application code
+COPY . /sistema_advocacia/
 
+# Specify the entrypoint script
 CMD ["scripts/docker-entrypoint.sh"]
+

@@ -5,7 +5,7 @@ ENV PYTHONUNBUFFERED=1
 WORKDIR /sistema_advocacia
 
 # Copy the requirements file
-COPY sistema_advocacia/requirements.txt /sistema_advocacia/
+COPY ./requirements.txt /sistema_advocacia/
 
 # Install the dependencies
 RUN pip install --no-cache-dir -r /sistema_advocacia/requirements.txt
@@ -15,4 +15,3 @@ COPY . /sistema_advocacia/
 
 # Specify the entrypoint script
 CMD ["scripts/docker-entrypoint.sh"]
-

@@ -2,12 +2,12 @@ FROM python:3.9-slim
 
 ENV PYTHONUNBUFFERED 1
 
-WORKDIR /djangoapp
+WORKDIR /sistema_advocaria
 
-COPY /djangoapp/requirements.txt /djangoapp/
+COPY /sistema_advocaria/requirements.txt /djangoapp/
 
-RUN pip install --no-cache-dir -r /djangoapp/requirements.txt
+RUN pip install --no-cache-dir -r /sistema_advocaria/requirements.txt
 
-COPY . /djangoapp/
+COPY . /sistema_advocaria//
 
 CMD ["scripts/docker-entrypoint.sh"]

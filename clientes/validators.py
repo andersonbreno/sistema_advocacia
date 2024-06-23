@@ -1,7 +1,7 @@
 from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator
 import re
-from validate_docbr import CPF
+#from validate_docbr import CPF
 
 # def validar_cep(value):
 #     # Expressão regular para validar o formato do CEP: XX.XXX-XXX

@@ -10,7 +10,7 @@ defusedxml==0.7.1
     # via odfpy
 diff-match-patch==20230430
     # via django-import-export
-django==5.0.6
+django==4.2.11
     # via
     #   -r requirements.in
     #   django-autocomplete-light
@@ -18,19 +18,22 @@ django==5.0.6
     #   django-import-export
     #   django-redis
     #   django-reversion
+    #   django-watchman
 django-admin-extra-buttons==1.5.8
     # via -r requirements.in
 django-autocomplete-light==3.9.7
     # via -r requirements.in
-django-debug-toolbar==3.8.1
+django-debug-toolbar==4.4.2
     # via -r requirements.in
-django-environ==0.9.0
+django-environ==0.10.0
     # via -r requirements.in
-django-import-export==3.3.9
+django-import-export==3.2.0
     # via -r requirements.in
 django-redis==5.4.0
     # via -r requirements.in
 django-reversion==5.0.12
+    # via -r requirements.in
+django-watchman==1.3.0
     # via -r requirements.in
 et-xmlfile==1.1.0
     # via openpyxl
@@ -42,6 +45,8 @@ odfpy==1.4.1
     # via tablib
 openpyxl==3.1.4
     # via tablib
+pillow==10.3.0
+    # via -r requirements.in
 psycopg2-binary==2.9.9
     # via -r requirements.in
 pyyaml==6.0.1

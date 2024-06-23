@@ -30,10 +30,10 @@ ADMIN_INDEX_TITLE = "Bem-vindo(a) à Administração Victor Rocha Advocacia"
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get('SECRET_KEY', 'change-me')
+SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = bool(int(os.environ.get('DEBUG',0)))
+DEBUG = bool(int(os.getenv('DEBUG',0)))
 
 ALLOWED_HOSTS = ['localhost', '127.0.0.1', '[::1]', 'web']
 
@@ -95,11 +95,12 @@ WSGI_APPLICATION = "config.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": os.environ.get('POSTGRES_DB','change-me'),
-        "USER": os.environ.get('POSTGRES_USER','change-me'),
-        "PASSWORD": os.environ.get('POSTGRES_PASSWORD','change-me'),
-        "HOST": os.environ.get('POSTGRES_HOST','change-me'),
-        "PORT": os.environ.get('POSTGRES_PORT','change-me'),
+        "NAME": os.getenv('POSTGRES_DB'),
+        "USER": os.getenv('POSTGRES_USER'),
+        "PASSWORD": os.getenv('POSTGRES_PASSWORD'),
+        "HOST": "psql",
+        "PORT": "15234",
+        
     }
 }
 

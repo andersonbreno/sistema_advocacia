@@ -13,6 +13,11 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 import os
 from pathlib import Path
 
+from dotenv import load_dotenv
+
+# Carregar variáveis de ambiente do arquivo .env
+load_dotenv()
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 DATA_DIR = BASE_DIR.parent / 'data' / 'web'
@@ -35,7 +40,10 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = bool(int(os.getenv('DEBUG',0)))
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', '[::1]', 'web']
+ALLOWED_HOSTS = [
+    h.strip() for h in os.getenv('ALLOWED_HOSTS','').split(',')
+    if h.strip()
+]
 
 # Application definition
 
@@ -55,6 +63,7 @@ INSTALLED_APPS = [
     "processos",
     "pages",
     "usuarios.apps.UsuariosConfig",
+    "dotenv"
 ]
 
 MIDDLEWARE = [
@@ -94,15 +103,29 @@ WSGI_APPLICATION = "config.wsgi.application"
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": os.getenv('POSTGRES_DB'),
-        "USER": os.getenv('POSTGRES_USER'),
-        "PASSWORD": os.getenv('POSTGRES_PASSWORD'),
-        "HOST": "psql",
-        "PORT": "15234",
+        "ENGINE": os.getenv('DB_ENGINE','django.db.backends.postgresql'),
+        "NAME": os.getenv('POSTGRES_DB',''),
+        "USER": os.getenv('POSTGRES_USER',''),
+        "PASSWORD": os.getenv('POSTGRES_PASSWORD',''),
+        "HOST": os.getenv('POSTGRES_HOST',''),
+        "PORT": os.getenv('POSTGRES_PORT',''),
         
     }
 }
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django_redis.cache.RedisCache',
+        'LOCATION': 'redis://redis:6379/1',
+        'OPTIONS': {
+            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+        }
+    }
+}
+
+# Para utilizar Redis como backend para sessão, adicione:
+SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
+SESSION_CACHE_ALIAS = 'default'
 
 
 # Password validation
@@ -175,17 +198,3 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 LOGIN_REDIRECT_URL = 'pages:index'
 LOGOUT_REDIRECT_URL = 'login'
 LOGIN_URL = 'login' 
-
-CACHES = {
-    'default': {
-        'BACKEND': 'django_redis.cache.RedisCache',
-        'LOCATION': 'redis://redis:6379/1',
-        'OPTIONS': {
-            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
-        }
-    }
-}
-
-# Para utilizar Redis como backend para sessão, adicione:
-SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
-SESSION_CACHE_ALIAS = 'default'

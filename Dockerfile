@@ -1,29 +1,26 @@
 FROM python:3.11-slim
 
-ENV PYTHONUNBUFFERED=1
+# Cria um usuário não privilegiado chamado 'default'
+RUN useradd default -m && \
+mkdir /sistema_advocacia && chown default /sistema_advocacia
 
 WORKDIR /sistema_advocacia
+# Define o usuário padrão como 'default'
 USER default
+ENV PATH="/home/default/.local/bin:$PATH"
 
-
-# Copy the requirements file
+# Copia o arquivo requirements.txt
 COPY requirements.txt .
-RUN pip install -r requirements.txt
 
-# Install the dependencies
-RUN pip install --no-cache-dir -r /sistema_advocacia/requirements.txt
+# Instala as dependências
+RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy the rest of the application code
+# Copia o restante do código do aplicativo
 COPY . .
 
+# Copia o script de entrada e define permissões
 COPY --chown=default:default docker-entrypoint.sh /docker-entrypoint.sh
-COPY libnitgen/lib/libNBioBSP.so /usr/lib
-COPY libnitgen/lib/NBioBSP.lic /usr/lib
-
-
 RUN chmod 755 /docker-entrypoint.sh
 
-ENV DJANGO_RUN_MIGRATE=1
-
-# Specify the entrypoint script
-CMD ["scripts/docker-entrypoint.sh"]
+# Especifica o script de entrada
+CMD ["/docker-entrypoint.sh"]

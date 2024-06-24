@@ -12,15 +12,19 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 
 import os
 from pathlib import Path
+import environ
 
-from dotenv import load_dotenv
-
-# Carregar variáveis de ambiente do arquivo .env
-load_dotenv()
-
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
+# Defina o caminho base do projeto
 BASE_DIR = Path(__file__).resolve().parent.parent
 DATA_DIR = BASE_DIR.parent / 'data' / 'web'
+
+# Inicialize o django-environ
+env = environ.Env(
+    DEBUG=(bool, False)
+)
+
+# Leia o arquivo .env
+environ.Env.read_env(BASE_DIR / '.env')
 
 # Título que aparece na aba do navegador
 ADMIN_SITE_TITLE = "Administração Victor Rocha Advocacia"
@@ -35,15 +39,12 @@ ADMIN_INDEX_TITLE = "Bem-vindo(a) à Administração Victor Rocha Advocacia"
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv('SECRET_KEY')
+SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = bool(int(os.getenv('DEBUG',0)))
+DEBUG = env.bool('DEBUG', default=False)
 
-ALLOWED_HOSTS = [
-    h.strip() for h in os.getenv('ALLOWED_HOSTS','').split(',')
-    if h.strip()
-]
+ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=[])
 
 # Application definition
 
@@ -63,7 +64,7 @@ INSTALLED_APPS = [
     "processos",
     "pages",
     "usuarios.apps.UsuariosConfig",
-    "dotenv"
+    
 ]
 
 MIDDLEWARE = [
@@ -102,15 +103,7 @@ WSGI_APPLICATION = "config.wsgi.application"
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
 DATABASES = {
-    "default": {
-        "ENGINE": os.getenv('DB_ENGINE','django.db.backends.postgresql'),
-        "NAME": os.getenv('POSTGRES_DB',''),
-        "USER": os.getenv('POSTGRES_USER',''),
-        "PASSWORD": os.getenv('POSTGRES_PASSWORD',''),
-        "HOST": os.getenv('POSTGRES_HOST',''),
-        "PORT": os.getenv('POSTGRES_PORT',''),
-        
-    }
+    "default": env.db(),  # Lê DATABASE_URL e configura o banco de dados automaticamente
 }
 
 CACHES = {
@@ -197,4 +190,4 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 LOGIN_REDIRECT_URL = 'pages:index'
 LOGOUT_REDIRECT_URL = 'login'
-LOGIN_URL = 'login' 
+LOGIN_URL = 'login'

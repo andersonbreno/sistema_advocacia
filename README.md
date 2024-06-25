@@ -52,7 +52,7 @@ pip-sync
 ```
 * Copiar arquivo de variáveis de ambiente
 ```
-cp .env.example .env
+cp .env-example .env
 ```
 * Execute o Docker Compose
 ```

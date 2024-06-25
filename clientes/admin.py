@@ -10,9 +10,13 @@ class ClienteAdmin(admin.ModelAdmin):
         models.TextField: {'widget': Textarea(attrs={'rows': 1, 'cols': 40})},
     }
     
-    list_display = ('nome', 'cpf', 'virou_cliente', 'foto_thumbnail',)  # Inclui uma visualização em miniatura da foto se necessário
-    search_fields = ['nome', 'cpf', 'email__email', 'telefone__numero']  # Atualize conforme a nova estrutura
+    list_display = ('nome','virou_cliente', 'foto_thumbnail',)  # Inclui uma visualização em miniatura da foto se necessário
+    search_fields = ['nome','email__email', 'telefone__numero']  # Atualize conforme a nova estrutura
     list_filter = ('virou_cliente',)  # Campos pelos quais pode-se filtrar na barra lateral.
+
+    #list_display = ('nome', 'cpf', 'virou_cliente', 'foto_thumbnail',)  # Inclui uma visualização em miniatura da foto se necessário
+    #search_fields = ['nome', 'cpf', 'email__email', 'telefone__numero']  # Atualize conforme a nova estrutura
+    
 
     readonly_fields = ["foto_thumbnail"]  # Campo readonly para visualização da foto
 

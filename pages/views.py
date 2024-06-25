@@ -15,17 +15,17 @@ from clientes.models import Cliente
 from processos.models import Processo
 
 
-from plotly.graph_objs import Bar
+#from plotly.graph_objs import Bar
 
 from django.db.models.functions import TruncMonth
 from django.db.models import Count
-from plotly.offline import plot
-import plotly.graph_objs as go
+#from plotly.offline import plot
+#import plotly.graph_objs as go
 import json
 from .models import DataPoint
 from .forms import DataPointFormSet
-import plotly.express as px
-import pandas as pd
+#import plotly.express as px
+#import pandas as pd
 
 import logging
 

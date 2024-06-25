@@ -13,8 +13,19 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 import os
 from pathlib import Path
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
+import environ
+
+# Defina o caminho base do projeto
 BASE_DIR = Path(__file__).resolve().parent.parent
+DATA_DIR = BASE_DIR.parent / 'data' / 'web'
+
+# Inicialize o django-environ
+env = environ.Env(
+    DEBUG=(bool, False)
+)
+
+# Leia o arquivo .env
+environ.Env.read_env(BASE_DIR / '.env')
 
 # Título que aparece na aba do navegador
 ADMIN_SITE_TITLE = "Administração Victor Rocha Advocacia"
@@ -29,12 +40,12 @@ ADMIN_INDEX_TITLE = "Bem-vindo(a) à Administração Victor Rocha Advocacia"
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-e00u&++xh9dy%1d1)i0kz83+-7+3jii189^vp$84!k@238(v+j"
+SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = env.bool('DEBUG', default=False)
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = 'localhost','127.0.0.1'
 
 # Application definition
 
@@ -42,7 +53,7 @@ INSTALLED_APPS = [
     #"adminlte3",
     #"adminlte3_theme",
     #"jazzmin",
-    "cpf_field",
+    #"cpf_field",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -54,6 +65,7 @@ INSTALLED_APPS = [
     "processos",
     "pages",
     "usuarios.apps.UsuariosConfig",
+    
 ]
 
 MIDDLEWARE = [
@@ -92,11 +104,31 @@ WSGI_APPLICATION = "config.wsgi.application"
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
 DATABASES = {
+    #"default": env.db(),  # Lê DATABASE_URL e configura o banco de dados automaticamente
+
     "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": os.environ.get('POSTGRES_DB',''),
+        "USER": os.environ.get('POSTGRES_USER',''),
+        "PASSWORD": os.environ.get('POSTGRES_PASSWORD',''),
+        "HOST": os.environ.get('POSTGRES_HOST',''),
+        "PORT": os.environ.get('POSTGRES_PORT',''),
     }
 }
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django_redis.cache.RedisCache',
+        'LOCATION': 'redis://redis:6379/1',
+        'OPTIONS': {
+            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+        }
+    }
+}
+
+# Para utilizar Redis como backend para sessão, adicione:
+SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
+SESSION_CACHE_ALIAS = 'default'
 
 
 # Password validation
@@ -149,15 +181,16 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
+#STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATIC_URL = "static/"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
-STATICFILES_DIRS = [
-    BASE_DIR / 'static',
+#STATICFILES_DIRS = [
+    #BASE_DIR / 'static',
     # ... outros diretórios se necessário ...
-]
+#]
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')  # Onde os arquivos de mídia são guardados
 MEDIA_URL = '/media/'
@@ -168,5 +201,4 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 LOGIN_REDIRECT_URL = 'pages:index'
 LOGOUT_REDIRECT_URL = 'login'
-LOGIN_URL = 'login' 
-
+LOGIN_URL = 'login'

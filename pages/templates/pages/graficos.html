@@ -20,13 +20,13 @@
         {{ form.as_p }}
         <button type="submit" class="btn btn-success">Gerar Gráfico</button>
       </form>
-
+      <!--
       {% if plot_div %}
       <h3>Gráfico Gerado:</h3>
       <div id="plotly-div">
         {{ grafico|safe }}
       </div>
-      {% endif %}
+      {% endif %}-->
     </div>
   </div>
 </div>
@@ -34,6 +34,6 @@
 {% block extra_script %}
 {{ block.super }}
 <!-- Plotly -->
-<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+<!--<script src="https://cdn.plot.ly/-latest.min.js"></script>-->
 {% endblock %}
 {% endblock %}

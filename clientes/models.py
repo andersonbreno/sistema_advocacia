@@ -2,7 +2,7 @@ from django.db import models
 # from .validators import validar_cep, validar_telefone
 from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator
-from cpf_field.models import CPFField
+# from cpf_field.models import CPFField
 
 class EstadoCivil(models.TextChoices):
     SOLTEIRO = 'Solteiro(a)', 'Solteiro(a)'
@@ -18,7 +18,7 @@ class VirouCliente(models.TextChoices):
 
 class Cliente(models.Model):
     nome = models.CharField(max_length=150)
-    cpf = CPFField('cpf', unique=True)
+    # cpf = CPFField('cpf', unique=True)
     data_de_nascimento = models.DateField(blank=True, null=True)
     estado_civil = models.CharField(max_length=20, choices=EstadoCivil.choices, blank=True, null=True)
     profissao = models.CharField(max_length=80, verbose_name='Profissão')

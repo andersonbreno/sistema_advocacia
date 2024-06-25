@@ -17,7 +17,7 @@ Permissões Personalizadas: Controle de acesso baseado em tipos de usuários.
 Tecnologias Utilizadas
 Linguagem: Python
 Framework: Django
-Banco de Dados: SQLite (Apenas para o MVP)
+Banco de Dados: Postgresql (Apenas para o MVP)
 Frontend: HTML5, CSS3, Bootstrap 5
 Backend: Django
 Hospedagem: AWS
@@ -32,16 +32,30 @@ Banco de dados: Postgresql
 Front end
 HTML / CSS /
 Bootstrap 5
-Como executar o projeto
-### Instalar dependências de desenvolvimento
-pip install -r requirements-dev.txt
 
-### Copiar arquivo de variáveis de ambiente
-cp .env.example .env
+# Como executar o projeto
 
-### Criar virtualenv
+* Criar virtualenv
+´´´
 python -m venv .venv
 source .venv/bin/activate
+´´´
+* Instalar dependências de desenvolvimento
+´´´
+pip install -r requirements.txt
+´´´
+* Sincronizar as atualizações das bibliotecas
+´´´
+pip-sync
+´´´
+* Copiar arquivo de variáveis de ambiente
+´´´
+cp .env.example .env
+´´´
+* Execute o Docker Compose
+´´´
+docker compose up -d
+´´´
 
 Autor
 Anderson Breno de Aguiar Azevedo

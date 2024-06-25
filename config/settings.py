@@ -45,7 +45,7 @@ SECRET_KEY = env('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env.bool('DEBUG', default=False)
 
-ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=[])
+ALLOWED_HOSTS = 'localhost','127.0.0.1'
 
 # Application definition
 
@@ -104,7 +104,16 @@ WSGI_APPLICATION = "config.wsgi.application"
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
 DATABASES = {
-    "default": env.db(),  # Lê DATABASE_URL e configura o banco de dados automaticamente
+    #"default": env.db(),  # Lê DATABASE_URL e configura o banco de dados automaticamente
+
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": os.environ.get('POSTGRES_DB',''),
+        "USER": os.environ.get('POSTGRES_USER',''),
+        "PASSWORD": os.environ.get('POSTGRES_PASSWORD',''),
+        "HOST": os.environ.get('POSTGRES_HOST',''),
+        "PORT": os.environ.get('POSTGRES_PORT',''),
+    }
 }
 
 CACHES = {
@@ -172,16 +181,16 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+#STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATIC_URL = "static/"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
-STATICFILES_DIRS = [
-    BASE_DIR / 'static',
+#STATICFILES_DIRS = [
+    #BASE_DIR / 'static',
     # ... outros diretórios se necessário ...
-]
+#]
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')  # Onde os arquivos de mídia são guardados
 MEDIA_URL = '/media/'

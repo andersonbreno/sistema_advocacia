@@ -2,8 +2,10 @@ services:
 
   web:
     container_name: sistema_advocacia
+    ports:
+      - "8000:8000"
     build:
-      context: .    
+      context: .     
     restart: on-failure     
     volumes:
       - ./:/sistema_advocacia
@@ -12,7 +14,7 @@ services:
     env_file:
       - .env
     depends_on:
-      - psql
+      - postgres
       - redis
 
   redis:
@@ -23,7 +25,7 @@ services:
     volumes:
       - redis-data:/data
 
-  psql:
+  postgres:
     image: postgres:14-alpine
     container_name: postgres
     ports:

@@ -39,23 +39,23 @@ Bootstrap 5
 ´´´
 python3 -m venv .venv
 source .venv/bin/activate
-´´´
+```
 * Instalar dependências de desenvolvimento
-´´´
+```
 pip install -r requirements.txt
-´´´
+```
 * Sincronizar as atualizações das bibliotecas
-´´´
+```
 pip-sync
-´´´
+```
 * Copiar arquivo de variáveis de ambiente
-´´´
+```
 cp .env.example .env
-´´´
+```
 * Execute o Docker Compose
-´´´
+```
 docker compose up -d
-´´´
+```
 
 Autor
 Anderson Breno de Aguiar Azevedo

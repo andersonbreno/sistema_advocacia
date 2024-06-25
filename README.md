@@ -37,7 +37,7 @@ Bootstrap 5
 
 * Criar virtualenv
 ´´´
-python -m venv .venv
+python3 -m venv .venv
 source .venv/bin/activate
 ´´´
 * Instalar dependências de desenvolvimento

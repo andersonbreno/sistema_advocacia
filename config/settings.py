@@ -54,8 +54,8 @@ ALLOWED_HOSTS = 'localhost','127.0.0.1'
 # Application definition
 
 INSTALLED_APPS = [
-    "adminlte3",
-    "adminlte3_theme",
+    #"adminlte3",
+    #"adminlte3_theme",
     #"jazzmin",
     "cpf_field",
     "django.contrib.admin",

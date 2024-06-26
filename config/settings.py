@@ -21,7 +21,7 @@ DATA_DIR = BASE_DIR.parent / 'data' / 'web'
 
 # Inicialize o django-environ
 env = environ.Env(
-    DEBUG=(bool, False)
+    DEBUG=(bool, False),    
 )
 
 # Leia o arquivo .env
@@ -43,17 +43,17 @@ ADMIN_INDEX_TITLE = "Bem-vindo(a) à Administração Victor Rocha Advocacia"
 SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = env.bool('DEBUG', default=False)
+DEBUG = env('DEBUG')
 
 ALLOWED_HOSTS = 'localhost','127.0.0.1'
 
 # Application definition
 
 INSTALLED_APPS = [
-    #"adminlte3",
-    #"adminlte3_theme",
+    "adminlte3",
+    "adminlte3_theme",
     #"jazzmin",
-    #"cpf_field",
+    "cpf_field",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -69,10 +69,11 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
-    "django.middleware.csrf.CsrfViewMiddleware",
+    "django.middleware.csrf.CsrfViewMiddleware",    
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
@@ -104,16 +105,16 @@ WSGI_APPLICATION = "config.wsgi.application"
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
 DATABASES = {
-    #"default": env.db(),  # Lê DATABASE_URL e configura o banco de dados automaticamente
+    "default": env.db(),  # Lê DATABASE_URL e configura o banco de dados automaticamente
 
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": os.environ.get('POSTGRES_DB',''),
-        "USER": os.environ.get('POSTGRES_USER',''),
-        "PASSWORD": os.environ.get('POSTGRES_PASSWORD',''),
-        "HOST": os.environ.get('POSTGRES_HOST',''),
-        "PORT": os.environ.get('POSTGRES_PORT',''),
-    }
+    #"default": {
+        #"ENGINE": "django.db.backends.postgresql",
+        #"NAME": os.environ.get('POSTGRES_DB',''),
+        #"USER": os.environ.get('POSTGRES_USER',''),
+        #"PASSWORD": os.environ.get('POSTGRES_PASSWORD',''),
+        #"HOST": os.environ.get('POSTGRES_HOST',''),
+        #"PORT": os.environ.get('POSTGRES_PORT',''),
+    #}
 }
 
 CACHES = {
@@ -181,16 +182,20 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
+# Static files (CSS, JavaScript, Images)
+# https://docs.djangoproject.com/en/5.0/howto/static-files/
+
 #STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATIC_URL = "static/"
-
-# Default primary key field type
-# https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 #STATICFILES_DIRS = [
     #BASE_DIR / 'static',
     # ... outros diretórios se necessário ...
 #]
+
+# Default primary key field type
+# https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
+
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')  # Onde os arquivos de mídia são guardados
 MEDIA_URL = '/media/'

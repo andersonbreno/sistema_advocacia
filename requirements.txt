@@ -20,6 +20,7 @@ django==5.0.6
     # via
     #   -r requirements.in
     #   crispy-bootstrap5
+    #   django-adminlte-3
     #   django-autocomplete-light
     #   django-crispy-forms
     #   django-debug-toolbar
@@ -29,6 +30,8 @@ django==5.0.6
     #   django-watchman
 django-admin-extra-buttons==1.5.8
     # via -r requirements.in
+django-adminlte-3==0.1.6
+    # via -r requirements.in
 django-autocomplete-light==3.9.7
     # via -r requirements.in
 django-cpf==0.1.0
@@ -37,7 +40,7 @@ django-crispy-forms==2.2
     # via crispy-bootstrap5
 django-debug-toolbar==4.4.2
     # via -r requirements.in
-django-environ==0.10.0
+django-environ==0.11.2
     # via -r requirements.in
 django-import-export==3.2.0
     # via -r requirements.in
@@ -51,8 +54,6 @@ et-xmlfile==1.1.0
     # via openpyxl
 gunicorn==20.1.0
     # via -r requirements.in
-markuppy==1.14
-    # via tablib
 odfpy==1.4.1
     # via tablib
 openpyxl==3.1.4
@@ -81,8 +82,10 @@ sqlparse==0.5.0
     # via
     #   django
     #   django-debug-toolbar
-tablib[html,ods,xls,xlsx,yaml]==3.5.0
+tablib[html,ods,xls,xlsx,yaml]==3.6.1
     # via django-import-export
+validate-docbr==1.10.0
+    # via -r requirements.in
 wheel==0.43.0
     # via pip-tools
 whitenoise==6.4.0

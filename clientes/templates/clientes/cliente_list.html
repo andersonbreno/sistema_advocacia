@@ -50,7 +50,7 @@
                             {% for cliente in clientes %}
                             <tr>
                                 <td><a href="{% url 'clientes:cliente-update' cliente.pk %}">{{ cliente.nome }}</a></td>
-                                <!--<td>{{ cliente.cpf }}</td>-->
+                                <td>{{ cliente.cpf }}</td>
                                 <td>{{ cliente.virou_cliente }}</td>
                                 <td>
                                     <a href="{% url 'clientes:cliente-update' cliente.pk %}"

@@ -21,7 +21,11 @@ DATA_DIR = BASE_DIR.parent / 'data' / 'web'
 
 # Inicialize o django-environ
 env = environ.Env(
-    DEBUG=(bool, False)
+    DEBUG=(bool, False),
+    STATIC_URL=(str, "static/"),
+    STATIC_ROOT=(Path, BASE_DIR / "staticfiles"),
+    MEDIA_URL=(str, "media/"),
+    MEDIA_ROOT=(Path, BASE_DIR / "media"),
 )
 
 # Leia o arquivo .env
@@ -43,7 +47,7 @@ ADMIN_INDEX_TITLE = "Bem-vindo(a) à Administração Victor Rocha Advocacia"
 SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = env.bool('DEBUG', default=False)
+DEBUG = env('DEBUG')
 
 ALLOWED_HOSTS = 'localhost','127.0.0.1'
 
@@ -53,7 +57,7 @@ INSTALLED_APPS = [
     #"adminlte3",
     #"adminlte3_theme",
     #"jazzmin",
-    #"cpf_field",
+    "cpf_field",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -69,10 +73,11 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
-    "django.middleware.csrf.CsrfViewMiddleware",
+    "django.middleware.csrf.CsrfViewMiddleware",    
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
@@ -181,19 +186,24 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
-#STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-STATIC_URL = "static/"
+STATIC_URL = env("STATIC_URL")
+STATIC_ROOT = env("STATIC_ROOT")
+STATICFILES_DIRS = [BASE_DIR / "static"]
+
+MEDIA_URL = env("MEDIA_URL")
+MEDIA_ROOT = env("MEDIA_ROOT")
+
+STORAGES = {
+    "default": {
+        "BACKEND": "django.core.files.storage.FileSystemStorage",
+    },
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedStaticFilesStorage",
+    },
+}
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
-
-#STATICFILES_DIRS = [
-    #BASE_DIR / 'static',
-    # ... outros diretórios se necessário ...
-#]
-
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')  # Onde os arquivos de mídia são guardados
-MEDIA_URL = '/media/'
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 

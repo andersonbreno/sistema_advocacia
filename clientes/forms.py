@@ -16,7 +16,7 @@ class ClienteForm(forms.ModelForm):
         ]
         widgets = {
             'nome': forms.TextInput(attrs={'class': 'form-control'}),
-            #'cpf': forms.TextInput(attrs={'class': 'form-control cpf-mask'}),
+            'cpf': forms.TextInput(attrs={'class': 'form-control cpf-mask'}),
             'data_de_nascimento': forms.DateInput(format='%Y-%m-%d', attrs={'class': 'form-control', 'type': 'date'}),
             'estado_civil': forms.Select(attrs={'class': 'form-control'}),
             'profissao': forms.TextInput(attrs={'class': 'form-control'}),
@@ -39,11 +39,11 @@ class ClienteForm(forms.ModelForm):
             'estado': forms.TextInput(attrs={'class': 'form-control'}),
         }
 
-    #def clean_cpf(self):
-        #cpf = self.cleaned_data.get('cpf')
-        #if Cliente.objects.filter(cpf=cpf).exclude(pk=self.instance.pk).exists():
-            #raise forms.ValidationError("Cliente com este CPF já existe.")
-        #return cpf
+    def clean_cpf(self):
+        cpf = self.cleaned_data.get('cpf')
+        if Cliente.objects.filter(cpf=cpf).exclude(pk=self.instance.pk).exists():
+            raise forms.ValidationError("Cliente com este CPF já existe.")
+        return cpf
 
     def clean(self):
         cleaned_data = super().clean()

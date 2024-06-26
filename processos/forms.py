@@ -12,7 +12,7 @@ class ProcessoForm(forms.ModelForm):
         widgets = {
             'cliente': forms.TextInput(attrs={'class': 'form-control'}),
             'advogado': forms.TextInput(attrs={'class': 'form-control'}),
-            #'advogado': forms.TextInput(attrs={'class': 'form-control cpf-mask'}),
+            'advogado': forms.TextInput(attrs={'class': 'form-control cpf-mask'}),
             'numero_processo': forms.NumberInput(attrs={'class': 'form-control'}),
             'grupo': forms.Select(attrs={'class': 'form-control'}),
             'fase_processo': forms.Select(attrs={'class': 'form-control'}),

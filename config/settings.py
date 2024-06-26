@@ -21,7 +21,12 @@ DATA_DIR = BASE_DIR.parent / 'data' / 'web'
 
 # Inicialize o django-environ
 env = environ.Env(
-    DEBUG=(bool, False),    
+    DEBUG=(bool, False),  
+    STATIC_URL=(str, "static/"),
+    STATIC_ROOT=(Path, BASE_DIR / "staticfiles"),
+    MEDIA_URL=(str, "media/"),
+    MEDIA_ROOT=(Path, BASE_DIR / "media"),
+  
 )
 
 # Leia o arquivo .env
@@ -185,20 +190,21 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
-#STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-STATIC_URL = "static/"
+STATIC_URL = env("STATIC_URL")
+STATIC_ROOT = env("STATIC_ROOT")
+STATICFILES_DIRS = [BASE_DIR / "static"]
 
-#STATICFILES_DIRS = [
-    #BASE_DIR / 'static',
-    # ... outros diretórios se necessário ...
-#]
+MEDIA_URL = env("MEDIA_URL")
+MEDIA_ROOT = env("MEDIA_ROOT")
 
-# Default primary key field type
-# https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
-
-
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')  # Onde os arquivos de mídia são guardados
-MEDIA_URL = '/media/'
+STORAGES = {
+    "default": {
+        "BACKEND": "django.core.files.storage.FileSystemStorage",
+    },
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedStaticFilesStorage",
+    },
+}
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 

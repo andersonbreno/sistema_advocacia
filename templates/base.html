@@ -1,3 +1,4 @@
+{% load adminlte_helpers i18n %}
 {% load static %}
 
 <!DOCTYPE html>
@@ -17,7 +18,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <!-- Font Awesome Icons -->
   <link rel="stylesheet" href="{% static 'theme/plugins/select2/css/select2.min.css' %}">
   <!-- Theme style -->
-  <link rel="stylesheet" href="{% static 'theme/dist/css/adminlte.min.css' %}">
+  <link rel="stylesheet" href="{% static 'theme/docs/assets/css/adminlte.min.css' %}">
 
   <!-- Select2 -->
   <link rel="stylesheet" href="{% static 'theme/plugins/select2/css/select2.min.css' %}">
@@ -27,18 +28,21 @@ scratch. This page gets rid of all links and provides the needed markup only.
   {{ block.super }}
   {% endblock extra_style %}
 </head>
+{% block body %}
 <body class="hold-transition sidebar-mini">
-<div class="wrapper">
+  <div class="wrapper">
 
-{% include 'partials/_navbar.html' %}
+    {% include 'partials/_navbar.html' %}
 
-{% block content %}
+    {% block content %}
 
-{% endblock %}
+    {% endblock %}
 
-{% include 'partials/_sidebar.html' %}
+    {% include 'partials/_sidebar.html' %}
 
-{% include 'partials/_footer.html' %}
+    {% include 'partials/_footer.html' %}
+
+  </div>
 
 <!-- REQUIRED SCRIPTS -->
 
@@ -47,7 +51,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <!-- Bootstrap 4 -->
 <script src="{% static 'theme/plugins/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
 <!-- AdminLTE App -->
-<script src="{% static 'theme/dist/js/adminlte.min.js' %}"></script>
+<script src="{% static 'theme/docs/assets/js/adminlte.min.js' %}"></script>
 <!-- Select2 -->
 <script src="{% static 'theme/plugins/select2/js/select2.full.min.js' %}"></script>
 <!-- Chart.js -->
@@ -59,4 +63,5 @@ scratch. This page gets rid of all links and provides the needed markup only.
 {{ block.super }}
 {% endblock extra_script %}
 </body>
+{% endblock %}
 </html>

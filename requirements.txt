@@ -8,6 +8,10 @@ asgiref==3.8.1
     # via django
 build==1.2.1
     # via pip-tools
+certifi==2024.6.2
+    # via requests
+charset-normalizer==3.3.2
+    # via requests
 click==8.1.7
     # via pip-tools
 crispy-bootstrap5==0.7
@@ -54,12 +58,16 @@ et-xmlfile==1.1.0
     # via openpyxl
 gunicorn==20.1.0
     # via -r requirements.in
+idna==3.7
+    # via requests
 odfpy==1.4.1
     # via tablib
 openpyxl==3.1.4
     # via tablib
 packaging==24.1
     # via build
+panda==0.3.1
+    # via -r requirements.in
 pillow==10.3.0
     # via -r requirements.in
 pip-tools==7.4.1
@@ -76,6 +84,8 @@ redis==5.0.6
     # via
     #   -r requirements.in
     #   django-redis
+requests==2.32.3
+    # via panda
 six==1.16.0
     # via django-autocomplete-light
 sqlparse==0.5.0
@@ -84,6 +94,8 @@ sqlparse==0.5.0
     #   django-debug-toolbar
 tablib[html,ods,xls,xlsx,yaml]==3.6.1
     # via django-import-export
+urllib3==2.2.2
+    # via requests
 validate-docbr==1.10.0
     # via -r requirements.in
 wheel==0.43.0

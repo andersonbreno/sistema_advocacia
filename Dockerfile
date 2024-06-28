@@ -16,6 +16,9 @@ mkdir /sistema_advocacia && chown default /sistema_advocacia
 # Instala o postgresql-client
 RUN apt-get update && apt-get install -y postgresql-client
 
+# Instala o nc para o postgresql
+RUN apt-get update && apt-get install -y netcat-openbsd
+
 # Copia o restante do código do aplicativo
 COPY . .
 

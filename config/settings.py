@@ -10,10 +10,10 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
-import os
 from pathlib import Path
 
 import environ
+import os
 
 # Defina o caminho base do projeto
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -30,7 +30,7 @@ env = environ.Env(
 )
 
 # Leia o arquivo .env
-environ.Env.read_env(BASE_DIR / '.env')
+environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 
 # Título que aparece na aba do navegador
 ADMIN_SITE_TITLE = "Administração Victor Rocha Advocacia"
@@ -48,9 +48,9 @@ ADMIN_INDEX_TITLE = "Bem-vindo(a) à Administração Victor Rocha Advocacia"
 SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = env('DEBUG')
+DEBUG = env("DEBUG")
 
-ALLOWED_HOSTS = 'localhost','127.0.0.1'
+ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=["*"])
 
 # Application definition
 
@@ -130,6 +130,10 @@ CACHES = {
             'CLIENT_CLASS': 'django_redis.client.DefaultClient',
         }
     }
+    #'default': env.cache(),
+
+    # read os.environ['REDIS_URL']
+    #'redis': env.cache_url('REDIS_URL')
 }
 
 # Para utilizar Redis como backend para sessão, adicione:

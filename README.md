@@ -37,7 +37,7 @@ Bootstrap 5
 
 * Criar virtualenv
 ```
-python3 -m venv .venv
+python3.12 -m venv .venv
 ```
 ```
 source .venv/bin/activate
@@ -46,7 +46,10 @@ source .venv/bin/activate
 ```
 pip install -r requirements.txt
 ```
-* Sincronizar as atualizações das bibliotecas
+* Compilar e Sincronizar as atualizações das bibliotecas
+```
+pip-compile
+```
 ```
 pip-sync
 ```
@@ -54,10 +57,18 @@ pip-sync
 ```
 cp .env-example .env
 ```
+* Instale os arquivos estáticos
+```
+python3 manage.py collectstatic --no-input
+```
 * Execute o Docker Compose
 ```
 docker compose up -d
 ```
+* Credenciais do Superusuário Administrador
+
+Usuário: admin
+Senha: sysadv123
 
 Autor
 Anderson Breno de Aguiar Azevedo

@@ -17,8 +17,13 @@
 __pycache__
 dist
 docs
+venv
+.venv
+.venv/*
 env
+.env
 logs
 stats
-Dockerfile
+.data
+.data/*
 __localcode/

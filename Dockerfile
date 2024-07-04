@@ -38,5 +38,6 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY --chown=default:default docker-entrypoint.sh /docker-entrypoint.sh
 RUN chmod 755 /docker-entrypoint.sh
 
+
 # Especifica o script de entrada
 CMD ["/docker-entrypoint.sh"]

@@ -65,10 +65,10 @@ python3 manage.py collectstatic --no-input
 ```
 docker compose up -d
 ```
-* Criando o Superusuário
-```
-python manage.py createsuperuser
-```
+* Credenciais do Superusuário Administrador
+
+Usuário: admin
+Senha: sysadv123
 
 Autor
 Anderson Breno de Aguiar Azevedo

@@ -4,8 +4,6 @@
 
 # Sobre o projeto
 
-* Sistema de Gestão para Escritórios de Advocacia
-
 - Introdução
   
 Este sistema é uma solução desenvolvida para otimizar a gestão de escritórios de advocacia. O projeto foi concebido como parte do trabalho de conclusão do curso de Sistemas para Internet e está atualmente em estágio de MVP (Produto Mínimo Viável). Utilizando a interface AdminLTE, o sistema oferece funcionalidades completas de CRUD para Clientes, Processos e Tarefas, além de telas de login, logout e recuperação de senha. A ideia é futuramente transformá-lo em uma plataforma SaaS (Software as a Service).

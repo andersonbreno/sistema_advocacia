@@ -26,7 +26,8 @@ Hospedagem: AWS
 Este projeto é um desenvolvimento contínuo e está alinhado com as necessidades específicas de escritórios de advocacia, buscando sempre melhorar a eficiência e a gestão dos processos internos. 
 
 
-Tecnologias utilizadas
+- Tecnologias utilizadas
+
 Back end
 Python
 Django

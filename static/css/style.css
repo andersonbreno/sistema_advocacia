@@ -91,3 +91,8 @@
 .checkbox-input {
   margin-right: 50px; /* Ajuste conforme necessário */
 }
+
+.required-field::after {
+  content: " *";
+  color: red;
+}

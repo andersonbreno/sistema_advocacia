@@ -42,10 +42,10 @@
                                     {% if field.field.widget.input_type == 'checkbox' %}
                                     <div class="icheck-primary d-inline">
                                         {{ field }}
-                                        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                                        <label for="{{ field.id_for_label }}" class="{% if field.field.required %}required-field{% endif %}">{{ field.label }}</label>
                                     </div>
                                     {% else %}
-                                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                                    <label for="{{ field.id_for_label }}" class="{% if field.field.required %}required-field{% endif %}">{{ field.label }}</label>
                                     {{ field }}
                                     {% endif %}
                                     {% if field.errors %}
@@ -82,7 +82,7 @@
 
 {% block extra_style %}
 {{ block.super }}
-<link rel="stylesheet" href="{% static 'css/style.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
 
 {% endblock %}
 

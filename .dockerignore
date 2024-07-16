@@ -26,6 +26,4 @@ logs
 stats
 .data
 .data/*
-staticfiles
-staticfiles/*
 __localcode/

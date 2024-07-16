@@ -1,0 +1,98 @@
+/* Estilos básicos do container da câmera e da imagem */
+.camera, .pfp-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 15px;
+  }
+  
+  /* Estiliza o vídeo e canvas para captura de imagem */
+  video, canvas {
+    max-width: 100%;
+    border: 3px solid #ddd;
+    border-radius: 5px;
+  }
+  
+  /* Botões de ação para captura de imagem */
+  .capture-button, .reset-button, .new-button {
+    display: block;
+    width: 150px;
+    padding: 10px;
+    margin: 5px auto;
+    font-size: 1rem;
+    color: #fff;
+    background-color: #007bff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .capture-button:hover, .reset-button:hover, .new-button:hover {
+    background-color: #0056b3;
+  }
+  
+  /* Quando um botão está desativado, muda a cor para indicar isso */
+  .capture-button:disabled, .reset-button:disabled, .new-button:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+  }
+  
+  /* Estilos para a imagem capturada */
+  .pfp {
+    width: 240px; /* ou qualquer outro tamanho desejado */
+    height: auto;
+    border-radius: 0 !important;
+    object-fit: cover;
+  }
+  
+  /* Placeholder para a área da imagem quando não houver imagem capturada */
+  .pfp-placeholder {
+    width: 240px;
+    height: 240px;
+    background-color: #f0f0f0;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #bbb;
+    font-size: 2rem;
+  }
+  
+  /* Erros de validação do formulário */
+  .form-error {
+    color: #ff0000;
+    font-size: 0.875rem;
+    margin-top: 5px;
+  }
+
+  #search-results {
+    position: absolute;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-top: none;
+    z-index: 10;  /* Garanta que está acima de outros conteúdos */
+    width: 100%;  /* Pode precisar ajustar para corresponder ao tamanho do input de busca */
+}
+
+.search-result-item {
+    padding: 10px;
+    cursor: pointer;
+}
+
+.search-result-item:hover {
+    background-color: #f2f2f2;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+}
+
+.checkbox-input {
+  margin-right: 50px; /* Ajuste conforme necessário */
+}
+
+.required-field::after {
+  content: " *";
+  color: red;
+}

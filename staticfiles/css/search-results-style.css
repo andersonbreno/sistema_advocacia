@@ -1,0 +1,91 @@
+.navbar-search {
+    position: relative;
+}
+
+.search-results-panel {
+    display: none;
+    position: absolute;
+    top: 100%; /* Logo abaixo do elemento de busca */
+    left: 0;
+    right: 0;
+    background-color: #ffffff;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1050; /* Certifique-se que este valor é suficientemente alto para sobrepor outros elementos */
+    /* Outras propriedades conforme necessário */
+}
+
+/* código para x da busca */
+
+.btn-clear {
+    background: none;
+    border: none;
+    position: absolute;
+    right: 40px; /* Ajuste conforme o necessário */
+    top: 50%;
+    transform: translateY(-50%);
+    color: #ccc;
+    cursor: pointer;
+}
+
+.btn-clear:hover {
+    color: #aaa; /* Cor ao passar o mouse sobre o botão */
+}
+
+/* Esconde o botão por padrão e só mostra quando o input tem conteúdo */
+#search-input:valid + .btn-clear {
+    display: block;
+}
+
+/* Estilizações adicionais para o input e o ícone de busca se necessário */
+#search-input {
+    padding-right: 30px; /* Espaço para o botão limpar */
+}
+
+.input-group-append {
+    position: relative;
+}
+
+/* Corrige o alinhamento do ícone de busca */
+.input-group-append .btn {
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+}
+
+
+
+.search-result-item {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+    cursor: pointer;  /* Mãozinha ao passar o mouse */
+}
+
+.search-result-item:last-child {
+    border-bottom: none;  /* Remove a borda do último item */
+}
+
+.search-result-item:hover {
+    background-color: #f8f8f8;  /* Efeito de hover */
+}
+
+.search-result-icon i {
+    margin-right: 10px;
+    color: #777;
+}
+
+.search-result-content {
+    flex-grow: 1;  /* Ocupa o espaço disponível */
+}
+
+.search-result-name {
+    font-weight: bold;
+    color: #333;
+}
+
+.search-result-info {
+    font-size: 0.85em;
+    color: #507;
+}

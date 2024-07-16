@@ -176,6 +176,3 @@ cython_debug/
 # Past
 .data
 .data/*
-staticfiles
-staticfiles/*
-

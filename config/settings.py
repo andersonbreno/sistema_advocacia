@@ -69,6 +69,7 @@ INSTALLED_APPS = [
     #"smart_selects",
     "processos",
     "pages",
+    "parceiros",
     "usuarios.apps.UsuariosConfig",
     
 ]

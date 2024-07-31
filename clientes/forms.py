@@ -44,6 +44,7 @@ class ClienteForm(forms.ModelForm):
 
         self.fields['profissao'].required = False
         self.fields['foto'].required = False
+        self.fields['telefone'].required = True
         
 
     def clean_cpf(self):

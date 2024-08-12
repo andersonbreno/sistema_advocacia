@@ -49,7 +49,7 @@
                                             <label for="{{ field.id_for_label }}">{{ field.label }}</label>
                                             {{ field|add_class:"form-control select2" }}
                                         {% else %}
-                                            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                                            <label for="{{ field.id_for_label }}" class="{% if field.field.required %}required-field{% endif %}">{{ field.label }}</label>
                                             {{ field|add_class:"form-control" }}
                                         {% endif %}
                                         {% if field.errors %}

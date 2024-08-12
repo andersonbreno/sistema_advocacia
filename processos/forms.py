@@ -24,6 +24,10 @@ class ProcessoForm(forms.ModelForm):
             'pendencia': forms.Select(attrs={'class': 'form-control'}),
             # Adicione widgets personalizados para outros campos conforme necessário
         }
+    def __init__(self, *args, **kwargs):
+        super(ProcessoForm, self).__init__(*args, **kwargs)
+        self.field['numero_processo'].required = False
+
     def clean(self):
         # Chama o método clean() do super para garantir que todas as validações do modelo sejam executadas
         super().clean()

@@ -9,11 +9,6 @@ class ParceiroForm (forms.ModelForm):
             'parceiro', 'email_parceiro'
             ]
         widgets = {
-            'parceiro': forms.TextInput(atrrs={'class': 'form-control'}),
-            'email_parceiro': forms.TextInput(atrrs={'class': 'form-control'}),
-        }
-
-    def __init__(self, *args, **kwargs):
-        super(ParceiroForm, self).__init__(*args, **kwargs)
-
-        self.fields['parceiro'].required = False
+            'parceiro': forms.TextInput(attrs={'class': 'form-control'}),
+            'email_parceiro': forms.EmailInput(attrs={'class': 'form-control'}),
+        }    

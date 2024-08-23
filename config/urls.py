@@ -31,6 +31,7 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path('', include(('pages.urls', 'pages'), namespace='pages')),  # Inclui as URLs do app pages
     path('clientes/', include('clientes.urls')),  # Inclui as URLs do app clientes
+    path('parceiros/', include('parceiros.urls')),
     path('processos/', include('processos.urls')),  # Inclui as URLs do app processos
     path('', include('usuarios.urls')),
 ]

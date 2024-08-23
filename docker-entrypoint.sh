@@ -18,8 +18,15 @@ done
 
 echo "✅ Postgres Database Started Successfully ($POSTGRES_HOST:$POSTGRES_PORT)"
 
-python3 manage.py makemigrations --no-input
-python3 manage.py migrate --no-input
+# Verifica permissões
+#echo "Verificando permissões no diretório do projeto..."
+#ls -l /sistema_advocacia
+
+#echo "Verificando permissões no diretório de migrações..."
+#ls -l /sistema_advocacia/parceiros/migrations
+
+python manage.py makemigrations --no-input
+python manage.py migrate --no-input
 
 # Criar o superusuário se ele não existir
 python3 manage.py shell <<EOF

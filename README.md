@@ -36,8 +36,16 @@ Front end
 HTML / CSS /
 Bootstrap 5
 
-# Como executar o projeto
+# Como executar o projeto nas distrinuições Debian/Ubuntu
 
+* Instale o python3.12
+```
+apt install python3.12
+```
+* Instale o python3.12-venv
+```
+apt install python3.12-venv
+```
 * Criar virtualenv
 ```
 python3.12 -m venv .venv

@@ -2,7 +2,7 @@ from django import forms
 from django.core.validators import validate_email
 from .models import Parceiros
 
-class ParceiroForm (forms.ModelForm):
+class ParceirosForm (forms.ModelForm):
     class Meta:
         model = Parceiros
         fields = [

@@ -60,6 +60,13 @@
                             <div class="card-footer">
                                 <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Salvar</button>
                             </div>
+
+                            <div style="position: fixed; bottom: 20px; right: 20px;">
+                                <a href="{% url 'parceiros:list' %}" class="btn btn-secondary" title="Voltar">
+                                    <i class="fas fa-arrow-left"></i> Voltar
+                                </a>
+                            </div>
+
                         </form>
                     </div>
                     <!-- /.card -->
@@ -70,13 +77,6 @@
     <!-- /.content -->
 </div>
 <!-- /.content-wrapper -->
-
-<div style="position: fixed; bottom: 20px; right: 20px;">
-    <a href="{% url 'parceiros:list' %}" class="btn btn-secondary" title="Voltar">
-        <i class="fas fa-arrow-left"></i> Voltar
-    </a>
-</div>
-
 {% endblock %}
 
 

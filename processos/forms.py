@@ -1,9 +1,10 @@
 from django import forms
-from .models import Cliente, Processo, Advogado
+from .models import Cliente, Processo, Parceiros, Advogado
 
 class ProcessoForm(forms.ModelForm):
     
     cliente = forms.ModelChoiceField(queryset=Cliente.objects.all(), required=True, label="Cliente")
+    parceiro = forms.ModelChoiceField(queryset=Parceiros.objects.all(), required=True, label="Parceiro/Origem")
     advogado = forms.ModelChoiceField(queryset=Advogado.objects.all(), required=True, label="Advogado")
 
     class Meta:
@@ -11,6 +12,7 @@ class ProcessoForm(forms.ModelForm):
         fields = '__all__'  # Garante que todos os campos sejam incluídos
         widgets = {
             'cliente': forms.TextInput(attrs={'class': 'form-control'}),
+            'parceiro': forms.TextInput(attrs={'class': 'form-control'}),
             'advogado': forms.TextInput(attrs={'class': 'form-control'}),
             'advogado': forms.TextInput(attrs={'class': 'form-control cpf-mask'}),
             'numero_processo': forms.NumberInput(attrs={'class': 'form-control'}),
@@ -23,7 +25,8 @@ class ProcessoForm(forms.ModelForm):
             'descricao': forms.TextInput(attrs={'class': 'form-control'}),
             'pendencia': forms.Select(attrs={'class': 'form-control'}),
             # Adicione widgets personalizados para outros campos conforme necessário
-        }
+        }    
+
     def clean(self):
         # Chama o método clean() do super para garantir que todas as validações do modelo sejam executadas
         super().clean()

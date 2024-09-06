@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% load custom_filters %}
+
+
+{% block content %}
+
+<div class="content-wrapper">
+
+    <!-- Begin Page Content -->
+    <div class="container-fluid">
+        {% if messages %}
+        <div class="row">
+            <div class="col-lg-12">
+                {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                    {{ message }}
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- DataTales Example -->
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <div class="col-sm-6">
+                    <h1>Parceiros</h1>
+                </div>
+            </div>
+            
+            <div class="card-body">
+                
+                <div><a href="{% url 'parceiros:create'%}" class="btn btn-info"><i class="fas fa-user-plus"> Novo
+                        </i>Parceiro</a></div>
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                        <thead>
+                            <tr>
+                                <th>Nome</th>
+                                <!--<th></th>-->
+                                <th>Email</th>                                
+                                <!-- Adicione mais cabeçalhos de coluna conforme necessário -->
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for parceiro in parceiros %}
+                            <tr>
+                                <td><a href="{% url 'parceiros:update' parceiro.pk %}">{{ parceiro.parceiro }}</a></td>
+                                <td><a href="{% url 'parceiros:update' parceiro.pk %}">{{ parceiro.email_parceiro }}</a></td>
+                                <td>
+                                    <a href="{% url 'parceiros:update' parceiro.pk %}"
+                                        class="btn btn-warning btn-sm" title="Editar">
+                                        <i class="fas fa-pencil-alt"></i>
+                                    </a>
+                                    <a href="{% url 'parceiros:detail' parceiro.pk %}"
+                                        class="btn btn-success btn-sm" title="Detalhes">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                    <a href="{% url 'parceiros:delete' parceiro.pk %}"
+                                        class="btn btn-danger btn-sm" title="Excluir">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </a>
+                                </td>
+                                <!-- Adicione mais células conforme necessário -->
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="5">Nenhum registro encontrado.</td>
+                            </tr>
+
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<!-- /.container-fluid -->
+{% endblock %}
+
+{% block extra_script %}
+
+{% endblock extra_script %}
+
+{% block extra_style %}
+{% endblock extra_style %}

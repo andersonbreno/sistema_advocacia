@@ -45,11 +45,16 @@
                                                 {{ field|add_class:"form-check-input" }}
                                                 <label class="form-check-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
                                             </div>
-                                        {% elif field.name == 'cliente' or field.name == 'advogado' %}
-                                            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                                        {% elif field.name == 'cliente' or field.name == 'parceiro' or field.name == 'advogado' %}
+                                            <label for="{{ field.id_for_label }}" class="{% if field.field.required %}required-field{% endif %}">
+                                                {{ field.label }}
+                                                {% if field.field.required or field.name == 'cliente' or field.name == 'advogado' %}
+                                                    <span class="text-danger">*</span> <!-- Asterisco vermelho para os campos específicos -->
+                                                {% endif %}
+                                            </label>
                                             {{ field|add_class:"form-control select2" }}
                                         {% else %}
-                                            <label for="{{ field.id_for_label }}" class="{% if field.field.required %}required-field{% endif %}">{{ field.label }}</label>
+                                            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
                                             {{ field|add_class:"form-control" }}
                                         {% endif %}
                                         {% if field.errors %}

@@ -4,7 +4,7 @@ from .models import Cliente, Processo, Parceiros, Advogado
 class ProcessoForm(forms.ModelForm):
     
     cliente = forms.ModelChoiceField(queryset=Cliente.objects.all(), required=True, label="Cliente")
-    parceiro = forms.ModelChoiceField(queryset=Parceiros.objects.all(), required=False, label="Parceiro/Origem")
+    parceiro = forms.ModelChoiceField(queryset=Parceiros.objects.all(), required=True, label="Parceiro/Origem")
     advogado = forms.ModelChoiceField(queryset=Advogado.objects.all(), required=True, label="Advogado")
 
     class Meta:

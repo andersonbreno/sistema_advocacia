@@ -8,7 +8,7 @@ class ClienteForm(forms.ModelForm):
     class Meta:
         model = Cliente
         fields = [
-            'nome','data_de_nascimento', 'estado_civil', 'profissao',
+            'nome','cpf','data_de_nascimento', 'estado_civil', 'profissao',
             'virou_cliente', 'cadastrado_advbox', 'cadastrado_planilha',
             'justificativa', 'descricao', 'foto', 'email', 'telefone',
             'whatsapp', 'cep', 'rua', 'numero', 'complemento', 'bairro',
@@ -38,6 +38,14 @@ class ClienteForm(forms.ModelForm):
             'cidade': forms.TextInput(attrs={'class': 'form-control'}),
             'estado': forms.TextInput(attrs={'class': 'form-control'}),
         }
+    
+    def __init__(self, *args, **kwargs):
+        super(ClienteForm, self).__init__(*args, **kwargs)
+
+        self.fields['profissao'].required = False
+        self.fields['foto'].required = False
+        self.fields['telefone'].required = True
+        
 
     def clean_cpf(self):
         cpf = self.cleaned_data.get('cpf')
@@ -45,9 +53,9 @@ class ClienteForm(forms.ModelForm):
             raise forms.ValidationError("Cliente com este CPF já existe.")
         return cpf
 
-    def clean(self):
-        cleaned_data = super().clean()
-        foto = cleaned_data.get('foto')
-        if not foto and not self.instance.foto:
-            self.add_error('foto', 'Por favor, capture uma foto para continuar.')
-        return cleaned_data
+    #def clean(self):
+        #cleaned_data = super().clean()
+        #foto = cleaned_data.get('foto')
+        #if not foto and not self.instance.foto:
+            #self.add_error('foto', 'Por favor, capture uma foto para continuar.')
+        #return cleaned_data

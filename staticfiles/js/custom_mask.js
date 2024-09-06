@@ -29,13 +29,13 @@
 // 	},
 // };
 
-// $(document).ready(function () {
-// 	$("#id_data_de_nascimento").mask("00/00/0000");
-// 	$(".form-control.cpf-mask").mask("000.000.000-00", { reverse: true });
-// 	// $(".mask-cnpj").mask("00.000.000/0000-00", { reverse: true });
-// 	$(".mask-cep").mask("00000-000");
-// 	$(".mask-telefone").mask(mascara_telefone, mascara_telefone_opts);
-// });
+$(document).ready(function () {
+ 	$("#id_data_de_nascimento").mask("00/00/0000");
+ 	$(".form-control.cpf-mask").mask("000.000.000-00", { reverse: true });
+ 	$(".mask-cnpj").mask("00.000.000/0000-00", { reverse: true });
+ 	$(".mask-cep").mask("00000-000");
+ 	$(".mask-telefone").mask(mascara_telefone, mascara_telefone_opts);
+ });
 
 $(document).ready(function () {
     

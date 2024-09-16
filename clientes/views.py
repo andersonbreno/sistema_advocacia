@@ -24,7 +24,7 @@ class ClienteCreateView(LoginRequiredMixin, CreateView):
     model = Cliente
     form_class = ClienteForm
     template_name = 'clientes/cliente_form.html'
-    success_url = reverse_lazy('clientes:list')
+    success_url = reverse_lazy('processos:create')
 
     def form_valid(self, form):
         with transaction.atomic():

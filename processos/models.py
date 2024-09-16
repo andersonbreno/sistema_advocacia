@@ -1,6 +1,6 @@
 from django.db import models
 from clientes.models import Cliente
-from parceiros.models import Parceiros
+
 
 class Advogado(models.Model):
     nome = models.CharField(max_length=255)
@@ -9,8 +9,7 @@ class Advogado(models.Model):
         return self.nome
     
 class Processo(models.Model):
-    cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE)
-    parceiro = models.ForeignKey(Parceiros, on_delete=models.CASCADE, null=True)
+    cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE)    
     advogado = models.ForeignKey(Advogado, on_delete=models.CASCADE, verbose_name='Advogado Responsável')
     data_criacao = models.DateTimeField(auto_now_add=True, verbose_name='Data de Criação')
     numero_processo = models.IntegerField(verbose_name='Número do Processo')    

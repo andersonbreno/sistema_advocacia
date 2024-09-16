@@ -1,15 +1,18 @@
 from django import forms
 from django.core.validators import validate_email
-from .models import Cliente
+from .models import Cliente, Parceiros
 # from .validators import validar_cpf
 from .widgets import ImageInput
 
 class ClienteForm(forms.ModelForm):
+
+    parceiro = forms.ModelChoiceField(queryset=Parceiros.objects.all(), required=True, label="Parceiro/Origem")
+
     class Meta:
         model = Cliente
         fields = [
             'nome','cpf','data_de_nascimento', 'estado_civil', 'profissao',
-            'virou_cliente', 'cadastrado_advbox', 'cadastrado_planilha',
+            'virou_cliente', 'parceiro','cadastrado_advbox', 'cadastrado_planilha',
             'justificativa', 'descricao', 'foto', 'email', 'telefone',
             'whatsapp', 'cep', 'rua', 'numero', 'complemento', 'bairro',
             'cidade', 'estado'
@@ -21,6 +24,7 @@ class ClienteForm(forms.ModelForm):
             'estado_civil': forms.Select(attrs={'class': 'form-control'}),
             'profissao': forms.TextInput(attrs={'class': 'form-control'}),
             'virou_cliente': forms.Select(attrs={'class': 'form-control'}),
+            'parceiro': forms.TextInput(attrs={'class': 'form-control'}),
             'cadastrado_advbox': forms.CheckboxInput(attrs={'class': 'form-check-input checkbox-input'}),
             'cadastrado_planilha': forms.CheckboxInput(attrs={'class': 'form-check-input checkbox-input'}),
             'justificativa': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),

@@ -3,6 +3,7 @@ from django.db import models
 from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator
 from cpf_field.models import CPFField
+from parceiros.models import Parceiros
 
 class EstadoCivil(models.TextChoices):
     SOLTEIRO = 'Solteiro(a)', 'Solteiro(a)'
@@ -23,6 +24,7 @@ class Cliente(models.Model):
     estado_civil = models.CharField(max_length=20, choices=EstadoCivil.choices, blank=True, null=True)
     profissao = models.CharField(max_length=80, verbose_name='Profissão')
     virou_cliente = models.CharField(max_length=20, choices=VirouCliente.choices, blank=False, null=False)
+    parceiro = models.ForeignKey(Parceiros, on_delete=models.CASCADE, null=True)
     cadastrado_advbox = models.BooleanField(default=False)
     cadastrado_planilha = models.BooleanField(default=False)
     justificativa = models.TextField(blank=True)

@@ -1,18 +1,16 @@
 from django import forms
-from .models import Cliente, Processo, Parceiros, Advogado
+from .models import Cliente, Processo, Advogado
 
 class ProcessoForm(forms.ModelForm):
     
-    cliente = forms.ModelChoiceField(queryset=Cliente.objects.all(), required=True, label="Cliente")
-    parceiro = forms.ModelChoiceField(queryset=Parceiros.objects.all(), required=True, label="Parceiro/Origem")
+    cliente = forms.ModelChoiceField(queryset=Cliente.objects.all(), required=True, label="Cliente")    
     advogado = forms.ModelChoiceField(queryset=Advogado.objects.all(), required=True, label="Advogado")
 
     class Meta:
         model = Processo
         fields = '__all__'  # Garante que todos os campos sejam incluídos
         widgets = {
-            'cliente': forms.TextInput(attrs={'class': 'form-control'}),
-            'parceiro': forms.TextInput(attrs={'class': 'form-control'}),
+            'cliente': forms.TextInput(attrs={'class': 'form-control'}),            
             'advogado': forms.TextInput(attrs={'class': 'form-control'}),
             'advogado': forms.TextInput(attrs={'class': 'form-control cpf-mask'}),
             'numero_processo': forms.NumberInput(attrs={'class': 'form-control'}),

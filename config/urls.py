@@ -18,8 +18,6 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from django.conf.urls.static import static
-from django.contrib.auth import views as auth_views
-
 from config import settings
 
 admin.site.site_header = settings.ADMIN_SITE_HEADER
@@ -30,6 +28,7 @@ admin.site.index_title = settings.ADMIN_INDEX_TITLE
 urlpatterns = [
     path("admin/", admin.site.urls),
     path('', include(('pages.urls', 'pages'), namespace='pages')),  # Inclui as URLs do app pages
+    path('', include('cadastro.urls')), # Inclui as URLs do app cadastro
     path('clientes/', include('clientes.urls')),  # Inclui as URLs do app clientes
     path('parceiros/', include('parceiros.urls')), # Inclui as URLs do app parceiros
     path('processos/', include('processos.urls')),  # Inclui as URLs do app processos

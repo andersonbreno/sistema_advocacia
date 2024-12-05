@@ -57,21 +57,19 @@ ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=["*"])
 INSTALLED_APPS = [
     "adminlte3",
     "adminlte3_theme",
-    #"jazzmin",
+    "cadastro",
+    "clientes",
     "cpf_field",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
-    "django.contrib.sessions",
     "django.contrib.messages",
+    "django.contrib.sessions",
     "django.contrib.staticfiles",
-    "clientes",
-    #"smart_selects",
-    "processos",
     "pages",
     "parceiros",
-    "usuarios.apps.UsuariosConfig",
-    
+    "processos",
+    "usuarios.apps.UsuariosConfig",    
 ]
 
 MIDDLEWARE = [

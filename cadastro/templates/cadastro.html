@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+  <div class="container mt-3">
+    <ul class="nav nav-tabs" id="formFlowTabs" role="tablist">
+      <li class="nav-item" role="presentation">
+        <a class="nav-link active" id="clientes-tab" data-bs-toggle="tab" href="#clientes" role="tab" aria-controls="clientes" aria-selected="true">Clientes</a>
+      </li>
+      <li class="nav-item" role="presentation">
+        <a class="nav-link" id="processos-tab" data-bs-toggle="tab" href="#processos" role="tab" aria-controls="processos" aria-selected="false">Processos</a>
+      </li>
+      <li class="nav-item" role="presentation">
+        <a class="nav-link" id="parceiros-tab" data-bs-toggle="tab" href="#parceiros" role="tab" aria-controls="parceiros" aria-selected="false">Parceiros</a>
+      </li>
+    </ul>
+    <div class="tab-content" id="formFlowTabsContent">
+      <div class="tab-pane fade show active" id="clientes" role="tabpanel" aria-labelledby="clientes-tab">
+        {% include 'clientes/form_cliente.html' %}
+      </div>
+      <div class="tab-pane fade" id="processos" role="tabpanel" aria-labelledby="processos-tab">
+        {% include 'processos/form_processo.html' %}
+      </div>
+      <div class="tab-pane fade" id="parceiros" role="tabpanel" aria-labelledby="parceiros-tab">
+        {% include 'parceiros/form_parceiro.html' %}
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block extra_script %}
+{{ block.super }}
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const tabs = document.querySelectorAll('.nav-link');
+    const forms = document.querySelectorAll('form');
+    
+    // Função para checar se todos os campos obrigatórios foram preenchidos
+    function checkRequiredFields(form) {
+      const requiredFields = form.querySelectorAll('[required]');
+      return Array.from(requiredFields).every(field => field.value.trim() !== '');
+    }
+
+    // Função para ativar a próxima aba se o formulário anterior estiver completo
+    function handleTabChange(event) {
+      const currentTab = event.target;
+      const currentForm = document.querySelector(currentTab.getAttribute('href'));
+      
+      if (checkRequiredFields(currentForm.querySelector('form'))) {
+        currentTab.classList.add('active');
+      } else {
+        event.preventDefault();
+        alert('Preencha todos os campos obrigatórios antes de prosseguir.');
+      }
+    }
+
+    tabs.forEach(tab => {
+      tab.addEventListener('click', handleTabChange);
+    });
+  });
+</script>
+{% endblock %}
+
+

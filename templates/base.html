@@ -19,6 +19,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <link rel="stylesheet" href="{% static 'theme/plugins/fontawesome-free/css/all.min.css' %}">
   <!-- Theme style -->
   <link rel="stylesheet" href="{% static 'theme/docs/assets/css/adminlte.min.css' %}">
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
   
   <!-- Select2 -->
   <link rel="stylesheet" href="{% static 'theme/plugins/select2/css/select2.min.css' %}">
@@ -46,6 +47,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
 <!-- REQUIRED SCRIPTS -->
 
+<script src="{% static 'js/custom_mask.js' %}"></script>
 <!-- jQuery -->
 <script src="{% static 'theme/plugins/jquery/jquery.min.js' %}"></script>
 <!-- Bootstrap 4 -->
@@ -56,6 +58,14 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <script src="{% static 'theme/plugins/select2/js/select2.full.min.js' %}"></script>
 <!-- Chart.js -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+  $(document).ready(function() {
+      $('.select2').select2({
+          theme: 'bootstrap4'
+      });
+  });
+</script>
 
 
 

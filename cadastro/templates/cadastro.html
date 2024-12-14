@@ -1,64 +1,115 @@
 {% extends 'base.html' %}
+
 {% load static %}
 
 {% block content %}
-  <div class="container mt-3">
-    <ul class="nav nav-tabs" id="formFlowTabs" role="tablist">
-      <li class="nav-item" role="presentation">
-        <a class="nav-link active" id="clientes-tab" data-bs-toggle="tab" href="#clientes" role="tab" aria-controls="clientes" aria-selected="true">Clientes</a>
-      </li>
-      <li class="nav-item" role="presentation">
-        <a class="nav-link" id="processos-tab" data-bs-toggle="tab" href="#processos" role="tab" aria-controls="processos" aria-selected="false">Processos</a>
-      </li>
-      <li class="nav-item" role="presentation">
-        <a class="nav-link" id="parceiros-tab" data-bs-toggle="tab" href="#parceiros" role="tab" aria-controls="parceiros" aria-selected="false">Parceiros</a>
-      </li>
-    </ul>
-    <div class="tab-content" id="formFlowTabsContent">
-      <div class="tab-pane fade show active" id="clientes" role="tabpanel" aria-labelledby="clientes-tab">
-        {% include 'clientes/form_cliente.html' %}
+<div class="content-wrapper">
+<!-- Main content -->
+<section class="content">
+  <div class="container-fluid">
+      <div class="row">
+          <div class="col-md-12">
+              <div class="card card-primary">
+                  <div class="card-header">
+                      <h3 class="card-title">Cadastro</h3>
+                  </div>
+                  <div class="container mt-5">
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <ul class="nav nav-tabs" id="formTabs" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active" id="cliente-tab" type="button" role="tab" aria-controls="cliente" aria-selected="true" onclick="showTab('cliente')">Dados do Cliente</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="processo-tab" type="button" role="tab" aria-controls="processo" aria-selected="false" onclick="showTab('processo')">Dados do Processo</button>
+                            </li>                           
+                        </ul>
+
+                        <div class="tab-content mt-4" id="formTabsContent">
+                            <!-- Dados do Cliente -->
+                            <div class="tab-pane fade show active" id="cliente" role="tabpanel" aria-labelledby="cliente-tab">
+                                {% for field in cliente_form %}
+                                    <div class="mb-3">
+                                        <label for="{{ field.id_for_label }}" class="form-label">
+                                            {{ field.label }}
+                                        </label>
+                                        {{ field }}
+                                        {% if field.errors %}
+                                            <div class="text-danger">{{ field.errors }}</div>
+                                        {% endif %}
+                                    </div>
+                                {% endfor %}
+                                <!-- Botão para avançar para a próxima aba -->
+                                <div class="d-flex justify-content-between">
+                                    <a href="javascript:void(0);" class="btn btn-secondary" onclick="showTab('processo')">Avançar</a>
+                                </div>
+                            </div>
+
+                            <!-- Dados do Processo -->
+                            <div class="tab-pane fade" id="processo" role="tabpanel" aria-labelledby="processo-tab">
+                               {% for field in processo_form %}
+                               <div class="mb-3">
+                                   <label for="{{ field.id_for_label }}" class="form-label">
+                                       {{ field.label }}
+                                   </label>
+                                   {% if field.name == 'cliente' %}
+                                   <input type="text" value="{% if field.value %}{{ field.value }}{% else %}{{ '' }}{% endif %}" class="form-control" disabled>
+                                   {% else %}
+                                       {{ field }}
+                                   {% endif %}
+                                   {% if field.errors %}
+                                       <div class="text-danger">{{ field.errors }}</div>
+                                   {% endif %}
+                               </div>
+                               {% endfor %}
+                           
+                                <!-- Botões para avançar ou voltar -->
+                                <div class="d-flex justify-content-between">
+                                    <a href="javascript:void(0);" class="btn btn-secondary" onclick="showTab('cliente')">Voltar</a>
+                                    <button type="submit" class="btn btn-primary">Salvar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                  </div>
+              </div>
+          </div>
       </div>
-      <div class="tab-pane fade" id="processos" role="tabpanel" aria-labelledby="processos-tab">
-        {% include 'processos/form_processo.html' %}
-      </div>
-      <div class="tab-pane fade" id="parceiros" role="tabpanel" aria-labelledby="parceiros-tab">
-        {% include 'parceiros/form_parceiro.html' %}
-      </div>
-    </div>
   </div>
+</section>
+</div>
+
+<!-- Botão "Sair" -->
+<div style="position: fixed; bottom: 20px; right: 20px;">
+    <a href="{% url 'clientes:list' %}" class="btn btn-danger" title="Sair">
+      <i class="fas fa-sign-out-alt"></i> Sair
+    </a>
+</div>
+
 {% endblock %}
 
 {% block extra_script %}
-{{ block.super }}
 <script>
-  document.addEventListener('DOMContentLoaded', function () {
-    const tabs = document.querySelectorAll('.nav-link');
-    const forms = document.querySelectorAll('form');
-    
-    // Função para checar se todos os campos obrigatórios foram preenchidos
-    function checkRequiredFields(form) {
-      const requiredFields = form.querySelectorAll('[required]');
-      return Array.from(requiredFields).every(field => field.value.trim() !== '');
-    }
+    // Função para alternar as abas
+    function showTab(tabName) {
+        // Esconde todas as abas
+        const tabs = document.querySelectorAll('.tab-pane');
+        tabs.forEach(tab => tab.classList.remove('show', 'active'));
 
-    // Função para ativar a próxima aba se o formulário anterior estiver completo
-    function handleTabChange(event) {
-      const currentTab = event.target;
-      const currentForm = document.querySelector(currentTab.getAttribute('href'));
-      
-      if (checkRequiredFields(currentForm.querySelector('form'))) {
-        currentTab.classList.add('active');
-      } else {
-        event.preventDefault();
-        alert('Preencha todos os campos obrigatórios antes de prosseguir.');
-      }
-    }
+        // Exibe a aba correspondente
+        const activeTab = document.getElementById(tabName);
+        if (activeTab) {
+            activeTab.classList.add('show', 'active');
+        }
 
-    tabs.forEach(tab => {
-      tab.addEventListener('click', handleTabChange);
-    });
-  });
+        // Altera o estado ativo do botão da aba
+        const buttons = document.querySelectorAll('.nav-link');
+        buttons.forEach(button => button.classList.remove('active'));
+
+        const activeButton = document.querySelector(`#${tabName}-tab`);
+        if (activeButton) {
+            activeButton.classList.add('active');
+        }
+    }
 </script>
 {% endblock %}
-
-

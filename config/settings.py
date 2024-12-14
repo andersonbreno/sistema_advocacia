@@ -69,7 +69,8 @@ INSTALLED_APPS = [
     "pages",
     "parceiros",
     "processos",
-    "usuarios.apps.UsuariosConfig",    
+    "usuarios.apps.UsuariosConfig", 
+       
 ]
 
 MIDDLEWARE = [

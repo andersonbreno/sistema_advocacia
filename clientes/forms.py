@@ -52,6 +52,13 @@ class ClienteForm(forms.ModelForm):
         if Cliente.objects.filter(cpf=cpf).exclude(pk=self.instance.pk).exists():
             raise forms.ValidationError("Cliente com este CPF já existe.")
         return cpf
+    
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+        if Cliente.objects.filter(email=email).exclude(pk=self.instance.pk).exists():
+            raise forms.ValidationError("Este email já está em uso.")
+        return email
+
 
     #def clean(self):
         #cleaned_data = super().clean()

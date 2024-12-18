@@ -53,7 +53,7 @@
                                        {{ field.label }}
                                    </label>
                                    {% if field.name == 'cliente' %}
-                                   <input type="text" value="{% if field.value %}{{ field.value }}{% else %}{{ '' }}{% endif %}" class="form-control" disabled>
+                                   <input type="hidden" name="{{ cliente_nome }}" value="{{ cliente_form.instance.pk }}">
                                    {% else %}
                                        {{ field }}
                                    {% endif %}
@@ -90,7 +90,6 @@
 
 {% block extra_script %}
 <script>
-    // Função para alternar as abas
     function showTab(tabName) {
         // Esconde todas as abas
         const tabs = document.querySelectorAll('.tab-pane');
@@ -109,6 +108,15 @@
         const activeButton = document.querySelector(`#${tabName}-tab`);
         if (activeButton) {
             activeButton.classList.add('active');
+        }
+
+        // Se for a aba do processo, preenche o campo oculto com o cliente
+        if (tabName === 'processo') {
+            const clienteNome = document.querySelector('[name="nome"]').value;
+            const hiddenClienteField = document.querySelector('[name="cliente"]');
+            if (hiddenClienteField) {
+                hiddenClienteField.value = clienteNome;
+            }
         }
     }
 </script>

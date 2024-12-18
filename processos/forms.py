@@ -3,7 +3,7 @@ from .models import Cliente, Processo, Parceiros, Advogado
 
 class ProcessoForm(forms.ModelForm):
     
-    cliente = forms.ModelChoiceField(queryset=Cliente.objects.all(), required=True, label="Cliente")
+    cliente = forms.ModelChoiceField(queryset=Cliente.objects.all(), required=False, label="Cliente")
     parceiro = forms.ModelChoiceField(queryset=Parceiros.objects.all(), required=True, label="Parceiro/Origem")
     advogado = forms.ModelChoiceField(queryset=Advogado.objects.all(), required=True, label="Advogado")
 
@@ -11,10 +11,9 @@ class ProcessoForm(forms.ModelForm):
         model = Processo
         fields = '__all__'  # Garante que todos os campos sejam incluídos
         widgets = {
-            'cliente': forms.TextInput(attrs={'class': 'form-control'}),
+            "cliente": forms.HiddenInput(),
             'parceiro': forms.TextInput(attrs={'class': 'form-control'}),
-            'advogado': forms.TextInput(attrs={'class': 'form-control'}),
-            'advogado': forms.TextInput(attrs={'class': 'form-control cpf-mask'}),
+            'advogado': forms.TextInput(attrs={'class': 'form-control'}),            
             'numero_processo': forms.NumberInput(attrs={'class': 'form-control'}),
             'grupo': forms.Select(attrs={'class': 'form-control'}),
             'fase_processo': forms.Select(attrs={'class': 'form-control'}),

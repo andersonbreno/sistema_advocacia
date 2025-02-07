@@ -28,10 +28,11 @@ admin.site.index_title = settings.ADMIN_INDEX_TITLE
 urlpatterns = [
     path("admin/", admin.site.urls),
     path('', include(('pages.urls', 'pages'), namespace='pages')),  # Inclui as URLs do app pages
-    path('', include('cadastro.urls')), # Inclui as URLs do app cadastro
+    path('cadastro', include('cadastro.urls')), # Inclui as URLs do app cadastro
     path('clientes/', include('clientes.urls')),  # Inclui as URLs do app clientes
     path('parceiros/', include('parceiros.urls')), # Inclui as URLs do app parceiros
     path('processos/', include('processos.urls')),  # Inclui as URLs do app processos
+    path('tarefas/', include('tarefas.urls')), # Inclui as URLs do app tarefas
     path('', include('usuarios.urls')),
 ]
 

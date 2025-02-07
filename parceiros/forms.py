@@ -1,10 +1,10 @@
 from django import forms
 from django.core.validators import validate_email
-from .models import Parceiros
+from .models import Parceiro
 
-class ParceirosForm (forms.ModelForm):
+class ParceiroForm (forms.ModelForm):
     class Meta:
-        model = Parceiros
+        model = Parceiro
         fields = [
             'parceiro', 'email_parceiro'
             ]

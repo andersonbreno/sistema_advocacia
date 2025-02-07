@@ -1,6 +1,6 @@
 from django.db import models
 from clientes.models import Cliente
-from parceiros.models import Parceiros
+from parceiros.models import Parceiro
 
 class Advogado(models.Model):
     nome = models.CharField(max_length=255)
@@ -10,10 +10,10 @@ class Advogado(models.Model):
     
 class Processo(models.Model):
     cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE)
-    parceiro = models.ForeignKey(Parceiros, on_delete=models.CASCADE, null=True)
+    parceiro = models.ForeignKey(Parceiro, on_delete=models.CASCADE, null=True)
     advogado = models.ForeignKey(Advogado, on_delete=models.CASCADE, verbose_name='Advogado Responsável')
     data_criacao = models.DateTimeField(auto_now_add=True, verbose_name='Data de Criação')
-    numero_processo = models.IntegerField(verbose_name='Número do Processo')    
+    numero_processo = models.IntegerField(verbose_name='Número do Processo', null=True, blank=True)    
     
     class Grupo(models.TextChoices):
         ADMINISTRATIVO = 'ADM', 'Administrativo'

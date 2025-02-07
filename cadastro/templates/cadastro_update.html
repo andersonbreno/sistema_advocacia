@@ -11,7 +11,7 @@
           <div class="col-md-12">
               <div class="card card-primary">
                   <div class="card-header">
-                      <h3 class="card-title">Cadastro</h3>
+                      <h3 class="card-title">Atualização de Cadastro</h3>
                   </div>
                   <div class="container mt-5">
                     <form method="post" enctype="multipart/form-data">
@@ -109,46 +109,4 @@
   </div>
 </section>
 </div>
-
-<!-- Botão "Sair" -->
-<div style="position: fixed; bottom: 20px; right: 20px;">
-    <a href="{% url 'cadastro:list' %}" class="btn btn-danger" title="Sair">
-      <i class="fas fa-sign-out-alt"></i> Sair
-    </a>
-</div>
-
-{% endblock %}
-
-{% block extra_script %}
-<script>
-    function showTab(tabName) {
-        // Esconde todas as abas
-        const tabs = document.querySelectorAll('.tab-pane');
-        tabs.forEach(tab => tab.classList.remove('show', 'active'));
-
-        // Exibe a aba correspondente
-        const activeTab = document.getElementById(tabName);
-        if (activeTab) {
-            activeTab.classList.add('show', 'active');
-        }
-
-        // Altera o estado ativo do botão da aba
-        const buttons = document.querySelectorAll('.nav-link');
-        buttons.forEach(button => button.classList.remove('active'));
-
-        const activeButton = document.querySelector(`#${tabName}-tab`);
-        if (activeButton) {
-            activeButton.classList.add('active');
-        }
-
-        // Se for a aba do processo, preenche o campo oculto com o cliente
-        if (tabName === 'processo') {
-            const clienteNome = document.querySelector('[name="nome"]').value;
-            const hiddenClienteField = document.querySelector('[name="cliente"]');
-            if (hiddenClienteField) {
-                hiddenClienteField.value = clienteNome;
-            }
-        }
-    }
-</script>
 {% endblock %}

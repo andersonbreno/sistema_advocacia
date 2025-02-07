@@ -16,14 +16,14 @@ class ClienteListView(LoginRequiredMixin, ListView):
     login_url = reverse_lazy('login')
     model = Cliente
     context_object_name = 'clientes'
-    template_name = 'clientes/cliente_list.html'
+    template_name = 'cliente_list.html'
 
 
 class ClienteCreateView(LoginRequiredMixin, CreateView):
     login_url = reverse_lazy('login')
     model = Cliente
     form_class = ClienteForm
-    template_name = 'clientes/cliente_form.html'
+    template_name = 'cliente_form.html'
     success_url = reverse_lazy('clientes:list')
 
     def form_valid(self, form):
@@ -43,7 +43,7 @@ class ClienteDetailView(LoginRequiredMixin, DetailView):
     login_url = reverse_lazy('login')
     model = Cliente
     context_object_name = 'cliente'
-    template_name = 'clientes/cliente_detail.html'
+    template_name = 'cliente_detail.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -77,7 +77,7 @@ class ClienteDeleteView(LoginRequiredMixin, DeleteView):
     login_url = reverse_lazy('login')
     model = Cliente
     context_object_name = 'cliente'
-    template_name = 'clientes/cliente_confirm_delete.html'
+    template_name = 'cliente_confirm_delete.html'
     success_url = reverse_lazy('clientes:list')
 
     def delete(self, request, *args, **kwargs):

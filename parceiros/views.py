@@ -2,21 +2,21 @@ from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
-from .forms import ParceirosForm
-from .models import Parceiros
+from .forms import ParceiroForm
+from .models import Parceiro
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
 
 class ParceirosListView(LoginRequiredMixin, ListView):
     login_url = reverse_lazy('login')
-    model = Parceiros
+    model = Parceiro
     context_object_name = 'parceiros'
     template_name = 'parceiros/parceiros_list.html'
 
 class ParceirosCreateView(LoginRequiredMixin, CreateView):
     login_url = reverse_lazy('login')
-    model = Parceiros
-    form_class = ParceirosForm
+    model = Parceiro
+    form_class = ParceiroForm
     template_name = 'parceiros/parceiros_form.html'
     success_url = reverse_lazy('parceiros:list')
 
@@ -30,7 +30,7 @@ class ParceirosCreateView(LoginRequiredMixin, CreateView):
     
 class ParceirosDetailView(LoginRequiredMixin, DetailView):
     login_url = reverse_lazy('login')
-    model = Parceiros
+    model = Parceiro
     context_object_name = 'parceiro'
     template_name = 'parceiros/parceiros_detail.html'
 
@@ -40,8 +40,8 @@ class ParceirosDetailView(LoginRequiredMixin, DetailView):
 
 class ParceirosUpdateView(LoginRequiredMixin, UpdateView):
     login_url = reverse_lazy('login')
-    model = Parceiros
-    form_class = ParceirosForm
+    model = Parceiro
+    form_class = ParceiroForm
     template_name = 'parceiros/parceiros_form.html'
     success_url = reverse_lazy('parceiros:list')
 
@@ -51,7 +51,7 @@ class ParceirosUpdateView(LoginRequiredMixin, UpdateView):
 
 class ParceirosDeleteView(LoginRequiredMixin, DeleteView):
     login_url = reverse_lazy('login')
-    model = Parceiros
+    model = Parceiro
     context_object_name = 'parceiros'
     template_name = 'parceiros/parceiros_confirm_delete.html'
     success_url = reverse_lazy('parceiros:list')

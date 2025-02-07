@@ -69,6 +69,7 @@ INSTALLED_APPS = [
     "pages",
     "parceiros",
     "processos",
+    "tarefas",
     "usuarios.apps.UsuariosConfig", 
        
 ]

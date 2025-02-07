@@ -2,13 +2,11 @@ from django.db import models
 from django.contrib.auth.models import User
 from processos.models import Processo
 
-STATUS_CHOICES = [
-    ('pendente', 'Pendente'),
-    ('em_progresso', 'Em Progresso'),
-    ('concluido', 'Concluído'),
-]
-
 class Tarefa(models.Model):
+    PENDENTE = 'PENDENTE'
+    EM_PROGRESSO = 'EM_PROGRESSO'
+    CONCLUIDA = 'CONCLUIDA'
+    
     numero_processo = models.ForeignKey(
         Processo, 
         on_delete=models.CASCADE, 
@@ -28,6 +26,11 @@ class Tarefa(models.Model):
     futura = models.BooleanField(default=False)
     retroativa = models.BooleanField(default=False)
     privada = models.BooleanField(default=False)
+    STATUS_CHOICES = [
+        (PENDENTE, 'Pendente'),
+        (EM_PROGRESSO, 'Em Progresso'),
+        (CONCLUIDA, 'Concluída'),
+    ]
     status = models.CharField(
         max_length=20,
         choices=STATUS_CHOICES,

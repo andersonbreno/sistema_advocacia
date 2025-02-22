@@ -4,7 +4,10 @@
 {% load custom_filters %}
 
 {% block content %}
+
 <div class="content-wrapper">
+
+    <!--Begin Page Content-->
     <div class="container-fluid">
         {% if messages %}
         <div class="row">
@@ -23,50 +26,67 @@
         <div class="card shadow mb-4">
             <div class="card-header py-3">
                 <div class="col-sm-6">
-                    <h1>{{ titulo }}</h1>
+                    <h1>Lista de clientes</h1>
                 </div>
             </div>
-            <div class="card-body">
-                {% if criar_url %}
+            <div class="card-body">   
+
                 <div>
-                    <a href="{% url 'cadastro:create' %}" class="btn btn-info">{{ botao_texto }}</a>
-                </div>
-                {% endif %}
-                
+                    <a href="{% url 'cadastro:create'%}" class="btn btn-info"><i class="fas fa-user-plus">
+                    </i> Novo Cadastro</a>
+                </div> 
                 <div class="table-responsive">
                     <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                         <thead>
                             <tr>
-                                {% for cabecalho in cabecalhos %}
-                                <th>{{ cabecalho }}</th>
-                                {% endfor %}
+                                <th>Nome</th>
+                                <th>Processo</th>
+                                <th>Tarefa</th>
+                                <th>Parceiro</th>
                                 <th>Ações</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {% for item in lista %}
+                            {% for cliente in clientes %}
                             <tr>
-                                {% for campo in campos %}
-                                <td>{{ item|attr:campo }}</td>
-                                {% endfor %}
+                                <td>{{ cliente.nome }}</td>
+                                
+                                <!-- Processo -->
                                 <td>
-                                    <a href="{% url 'cadastro:update' item.pk %}" class="btn btn-warning btn-sm" title="Editar">
-                                        <i class="fas fa-pencil-alt"></i>
-                                    </a>
-                                    <a href="{% url 'cadastro:detail' item.pk %}" class="btn btn-success btn-sm" title="Detalhes">
-                                        <i class="fas fa-eye"></i>
-                                    </a>
-                                    <a href="{% url 'cadastro:delete' item.pk %}" class="btn btn-danger btn-sm" title="Excluir">
-                                        <i class="fas fa-trash-alt"></i>
-                                    </a>
+                                    {% with cliente.processo_set.first as processo %}
+                                        {% if processo %}
+                                            {{ processo.nome }}
+                                        {% endif %}
+                                    {% endwith %}
+                                </td>
+                                
+                                <!-- Tarefa -->
+                                <td>
+                                    {% with cliente.processo_set.first.tarefa_set.first as tarefa %}
+                                        {% if tarefa %}
+                                            {{ tarefa.nome }}
+                                        {% endif %}
+                                    {% endwith %}
+                                </td>
+
+                                <!-- Parceiro -->
+                                <td>
+                                    {% with cliente.parceiro_set.first as parceiro %}
+                                        {% if parceiro %}
+                                            {{ parceiro.nome }}
+                                        {% endif %}
+                                    {% endwith %}
+                                </td>
+
+                                <td>
+                                    <a href="{% url 'cadastro:detail' cliente.pk %}" class="btn btn-info btn-sm">Detalhes</a>
+                                    <a href="{% url 'cadastro:update' cliente.pk %}" class="btn btn-warning btn-sm">Editar</a>
+                                    <a href="{% url 'cadastro:delete' cliente.pk %}" class="btn btn-danger btn-sm">Excluir</a>
                                 </td>
                             </tr>
-                            {% empty %}
-                            <tr>
-                                <td colspan="{{ cabecalhos|length|add:1 }}">Nenhum registro encontrado.</td>
-                            </tr>
                             {% endfor %}
-                        </tbody>
+
+                        </tbody>                        
                     </table>
                 </div>                
             </div>
@@ -74,4 +94,3 @@
     </div>
 </div>
 {% endblock %}
-

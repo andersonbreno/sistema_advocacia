@@ -9,7 +9,7 @@ class Advogado(models.Model):
         return self.nome
     
 class Processo(models.Model):
-    cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE)
+    cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE, null=True, related_name="processos")
     parceiro = models.ForeignKey(Parceiro, on_delete=models.CASCADE, null=True)
     advogado = models.ForeignKey(Advogado, on_delete=models.CASCADE, verbose_name='Advogado Responsável')
     data_criacao = models.DateTimeField(auto_now_add=True, verbose_name='Data de Criação')

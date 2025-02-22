@@ -6,108 +6,280 @@
 <div class="content-wrapper">
 <!-- Main content -->
 <section class="content">
-  <div class="container-fluid">
-      <div class="row">
-          <div class="col-md-12">
-              <div class="card card-primary">
-                  <div class="card-header">
-                      <h3 class="card-title">Cadastro</h3>
-                  </div>
-                  <div class="container mt-5">
-                    <form method="post" enctype="multipart/form-data">
-                        {% csrf_token %}
-                        <ul class="nav nav-tabs" id="formTabs" role="tablist">
-                            <li class="nav-item" role="presentation">
-                                <button class="nav-link active" id="cliente-tab" type="button" role="tab" aria-controls="cliente" aria-selected="true" onclick="showTab('cliente')">Dados do Cliente</button>
-                            </li>
-                            <li class="nav-item" role="presentation">
-                                <button class="nav-link" id="processo-tab" type="button" role="tab" aria-controls="processo" aria-selected="false" onclick="showTab('processo')">Dados do Processo</button>
-                            </li>       
-                            <li class="nav-item" role="presentation">
-                                <button class="nav-link" id="tarefa-tab" type="button" role="tab" aria-controls="tarefa" aria-selected="false" onclick="showTab('tarefa')">Dados da Tarefa</button>
-                            </li>                                                
-                        </ul>
-
-                        <div class="tab-content mt-4" id="formTabsContent">
-                            <!-- Dados do Cliente -->
-                            <div class="tab-pane fade show active" id="cliente" role="tabpanel" aria-labelledby="cliente-tab">
-                                {% for field in cliente_form %}
-                                    <div class="mb-3">
-                                        <label for="{{ field.id_for_label }}" class="form-label">
-                                            {{ field.label }}
-                                        </label>
-                                        {{ field }}
-                                        {% if field.errors %}
-                                            <div class="text-danger">{{ field.errors }}</div>
-                                        {% endif %}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card card-primary">
+                    <div class="card-header">
+                        <h3 class="card-title">Cadastro</h3>
+                    </div>
+                    <div class="container-fluid mt-5">
+                      <form method="post" enctype="multipart/form-data">
+                          {% csrf_token %}
+                          <ul class="nav nav-tabs" id="formTabs" role="tablist">
+                              <li class="nav-item" role="presentation">
+                                  <button class="nav-link active" id="cliente-tab" type="button" role="tab" aria-controls="cliente" aria-selected="true" onclick="showTab('cliente')">Dados do Cliente</button>
+                              </li>
+                              <li class="nav-item" role="presentation">
+                                  <button class="nav-link" id="processo-tab" type="button" role="tab" aria-controls="processo" aria-selected="false" onclick="showTab('processo')">Dados do Processo</button>
+                              </li>       
+                              <li class="nav-item" role="presentation">
+                                  <button class="nav-link" id="tarefa-tab" type="button" role="tab" aria-controls="tarefa" aria-selected="false" onclick="showTab('tarefa')">Dados da Tarefa</button>
+                              </li>                                                
+                          </ul>
+  
+                          <div class="tab-content mt-4" id="formTabsContent">
+                              <!-- Dados do Cliente -->
+                              <div class="tab-pane fade show active" id="cliente" role="tabpanel" aria-labelledby="cliente-tab">
+                                  <div class="row g-5">
+                                      <div class="col-md-7">
+                                          <div class="mb-3 row">
+                                              <div class="col-md-7">
+                                                  <label for="{{cliente_form.nome.id_for_label}}" class="form-label"> Cliente:</label>
+                                                  {{cliente_form.nome}}
+                                              </div> 
+                                              <div class="col-md-5">
+                                                  <label for="{{cliente_form.cpf.id_for_label}}" class="form-label"> CPF:</label>
+                                                      {{cliente_form.cpf}}                                            
+                                              </div>
+                                              <div class="col-md-4">
+                                                  <label for="{{cliente_form.data_de_nascimento.id_for_label}}" class="form-label"> Data de Nascimento:</label>
+                                                      {{cliente_form.data_de_nascimento}}                                            
+                                              </div>
+                                              <div class="col-md-4">
+                                                  <label for="{{for.estado_civil.id_for_label}}" class="form-label"> Estado Civil:</label>
+                                                      {{cliente_form.estado_civil}}                                            
+                                              </div>     
+                                              <div class="col-md-4">
+                                                  <label for="{{cliente_form.profissao.id_for_label}}" class="form-label"> Profissão:</label>
+                                                      {{cliente_form.profissao}}                                            
+                                              </div>        
+                                              <div class="col-md-4">
+                                                  <label for="{{cliente_form.virou_cliente.id_for_label}}" class="form-label"> Virou Cliente:</label>
+                                                      {{cliente_form.virou_cliente}}   
+                                                      <div class="form-check">
+                                                          {{cliente_form.cadastrado_advbox}} 
+                                                          <label for="{{cliente_form.cadastrado_advbox.id_for_label}}" class="form-label">Cadastrado no Advbox</label>
+                                                      </div>
+                                                      <div class="form-check">
+                                                          {{cliente_form.cadastrado_planilha}}
+                                                          <label for="{{cliente_form.cadastrado_planilha.id_for_label}}" class="form-label"> Cadastrado em Planilha</label>                    
+                                                      </div>                                         
+                                              </div>   
+                                              <div class="col-md-4">
+                                                  <label for="{{cliente_form.justificativa.id_for_label}}" class="form-label"> Justificativa:</label>
+                                                      {{cliente_form.justificativa}}                                            
+                                              </div>  
+                                              <div class="col-md-4">
+                                                  <label for="{{cliente_form.descricao.id_for_label}}" class="form-label"> Descrição:</label>
+                                                      {{cliente_form.descricao}}                                            
+                                              </div>
+                                              <div class="col-md-4">
+                                                  <label for="{{cliente_form.cep.id_for_label}}" class="form-label"> CEP:</label>
+                                                      {{cliente_form.cep}}                                            
+                                              </div>
+                                              <div class="col-md-4">
+                                                  <label for="{{cliente_form.rua.id_for_label}}" class="form-label"> Rua:</label>
+                                                      {{cliente_form.rua}}                                            
+                                              </div>
+                                              <div class="col-md-4">
+                                                  <label for="{{cliente_form.numero.id_for_label}}" class="form-label"> Número:</label>
+                                                      {{cliente_form.numero}}                                            
+                                              </div>
+                                              <div class="col-md-4">
+                                                  <label for="{{cliente_form.complemento.id_for_label}}" class="form-label"> Complemento:</label>
+                                                      {{cliente_form.complemento}}                                            
+                                              </div>
+                                              <div class="col-md-4">
+                                                  <label for="{{cliente_form.bairro.id_for_label}}" class="form-label"> Bairro:</label>
+                                                      {{cliente_form.bairro}}                                            
+                                              </div>
+                                              <div class="col-md-4">
+                                                  <label for="{{cliente_form.cidade.id_for_label}}" class="form-label"> Cidade:</label>
+                                                      {{cliente_form.cidade}}                                            
+                                              </div>
+                                              <div class="col-md-4">
+                                                  <label for="{{cliente_form.estado.id_for_label}}" class="form-label"> Estado:</label>
+                                                      {{cliente_form.estado}}                                            
+                                              </div>
+                                              <div class="col-md-4">
+                                                  <label for="{{cliente_form.email.id_for_label}}" class="form-label"> E-mail:</label>
+                                                      {{cliente_form.email}}                                            
+                                              </div>
+                                              <div class="col-md-4">
+                                                  <label for="{{cliente_form.telefone.id_for_label}}" class="form-label"> Telefone:</label>
+                                                      {{cliente_form.telefone}}       
+                                                  <div class="form-check">
+                                                      {{cliente_form.whatsapp}} 
+                                                      <label for="{{cliente_form.whatsapp.id_for_label}}" class="form-label"> Whatsapp</label>                                   
+                                                  </div>                                         
+                                              </div>
+                                          </div>
+                                          <!-- Botão para avançar para a próxima aba -->
+                                          <div class="d-flex justify-content-between">
+                                              <a href="javascript:void(0);" class="btn btn-secondary" onclick="showTab('processo')">Avançar</a>
+                                          </div>
+                                      </div>
+                                      <!-- Coluna da Foto -->
+                                      <div class="col-md-4 d-flex justify-content-end">                                                                       
+                                          <div class="photo-container">
+                                              <div class="photo-placeholder">
+                                                  {{ cliente_form.foto }}
+                                                  <div class="invalid-feedback">{{ cliente_form.foto.errors }}</div>
+                                              </div>
+                                          </div>
+                                      </div>                                                                          
+                                  </div>                                
+                              </div>
+  
+                              <!-- Dados do Processo -->
+                              <div class="tab-pane fade" id="processo" role="tabpanel" aria-labelledby="processo-tab">
+                                  <div class="col-md-15">
+                                      <div class="mb-3 row">
+                                          <div class="col-md-8">
+                                            <label for="{{processo_form.cliente.id_for_label}}" class="form-label">
+                                                {{processo_form.cliente}}
+                                            </label>
+                                          </div>    
+                                          <div class="col-md-6">
+                                            <label for="{{processo_form.parceiro.id_for_label}}" class="form-label"> Parceiro:
+                                                {{processo_form.parceiro}}
+                                            </label>
+                                          </div>
+                                          <div class="col-md-6">
+                                            <label for="{{processo_form.advogado.id_for_label}}" class="form-label"> Advogado:
+                                                {{processo_form.advogado}}
+                                            </label>
+                                          </div>
+                                          <div class="col-md-5">
+                                            <label for="{{processo_form.numero_processo.id_for_label}}" class="form-label"> Número do Processo:
+                                                {{processo_form.numero_processo}}
+                                            </label>
+                                            <div class="form-check">
+                                                {{processo_form.prioritario}}
+                                                <label for="{{processo_form.prioritario.id_for_label}}" class="form-label"> Prioritário</label>
+                                            </div>
+                                          </div>
+                                          <div class="col-md-4">
+                                            <label for="{{processo_form.grupo.id_for_label}}" class="form-label"> Grupo:
+                                                {{processo_form.grupo}}
+                                            </label>
+                                          </div>
+                                          <div class="col-md-4">
+                                            <label for="{{processo_form.fase_processo.id_for_label}}" class="form-label"> Fase do Processo:
+                                                {{processo_form.fase_processo}}
+                                            </label>
+                                            <div class="form-check">
+                                                {{processo_form.arquivado}}
+                                                <label for="{{processo_form.arquivado.id_for_label}}" class="form-label"> Arquivado</label>
+                                            </div>
+                                          </div>                                          
+                                          <div class="col-md-4">
+                                            <label for="{{processo_form.data_contrato.id_for_label}}" class="form-label"> Data da Contratação:
+                                                {{processo_form.data_contrato}}
+                                            </label>
+                                            <div class="form-check">
+                                                {{processo_form.fechou_contrato}}
+                                                <label for="{{processo_form.fechou_contrato.id_for_label}}" class="form-label"> Fechou Contrato</label>
+                                            </div>
+                                          </div>                                    
+                                          <div class="col-md-4">
+                                            <label for="{{processo_form.descricao.id_for_label}}" class="form-label"> Descrição:
+                                                {{processo_form.descricao}}
+                                            </label>
+                                          </div>
+                                          <div class="col-md-4">
+                                            <label for="{{processo_form.pendencia.id_for_label}}" class="form-label"> Pendência:
+                                                {{processo_form.pendencia}}
+                                            </label>
+                                          </div>                                    
+                                      </div>
+                                  </div>                     
+                                  <!-- Botões para avançar ou voltar -->
+                                  <div class="d-flex justify-content-between">
+                                      <a href="javascript:void(0);" class="btn btn-secondary" onclick="showTab('tarefa')">Avançar</a>
+                                      <a href="javascript:void(0);" class="btn btn-secondary" onclick="showTab('cliente')">Voltar</a>     
+                                  </div>
+                              </div>
+  
+                              <!-- Dados da Tarefa -->
+                              <div class="tab-pane fade" id="tarefa" role="tabpanel" aria-labelledby="tarefa-tab">
+                                  <div class="col-md-15">
+                                    <div class="mb-3 row">
+                                        <div class="col-md-4">
+                                            <label for="{{tarefa_form.responsaveis.id_for_label}}" class="form-label"> Responsável:
+                                                {{tarefa_form.responsaveis}}
+                                            </label>
+                                        </div>                                       
+                                        <div class="col-md-4">
+                                            <label for="{{tarefa_form.data.id_for_label}}" class="form-label"> Data:
+                                                {{tarefa_form.data}}
+                                            </label>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label for="{{tarefa_form.hora.id_for_label}}" class="form-label"> Horário:
+                                                {{tarefa_form.hora}}
+                                            </label>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label for="{{tarefa_form.tarefa.id_for_label}}" class="form-label"> Tarefa:
+                                                {{tarefa_form.tarefa}}
+                                            </label>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label for="{{tarefa_form.pazo_fatal.id_for_label}}" class="form-label"> Prazo Fatal:
+                                                {{tarefa_form.prazo_fatal}}
+                                            </label>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label for="{{tarefa_form.local.id_for_label}}" class="form-label"> Local:
+                                                {{tarefa_form.local}}
+                                            </label>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-check">
+                                                {{tarefa_form.importante}}
+                                                <label for="{{tarefa_form.importante.id_for_label}}" class="form-label"> Importante:</label>
+                                            </div>
+                                            <div class="form-check">
+                                                {{tarefa_form.urgente}}
+                                                <label for="{{tarefa_form.urgente.id_for_label}}" class="form-label"> Urgente:</label>
+                                            </div>
+                                            <div class="form-check">
+                                                {{tarefa_form.futura}}
+                                                <label for="{{tarefa_form.fatura.id_for_label}}" class="form-label"> Futura:</label>
+                                            </div>
+                                            <div class="form-check">
+                                                {{tarefa_form.retroativa}}
+                                                <label for="{{tarefa_form.retroativa.id_for_label}}" class="form-label"> Retroativa:</label>
+                                            </div>
+                                            <div class="form-check">
+                                                {{tarefa_form.privada}}
+                                                <label for="{{tarefa_form.privada.id_for_label}}" class="form-label"> Privada:</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <label for="{{tarefa_form.descricao.id_for_label}}" class="form-label"> Descrição:
+                                                {{tarefa_form.descricao}}
+                                            </label>
+                                        </div>                                        
                                     </div>
-                                {% endfor %}
-                                <!-- Botão para avançar para a próxima aba -->
-                                <div class="d-flex justify-content-between">
-                                    <a href="javascript:void(0);" class="btn btn-secondary" onclick="showTab('processo')">Avançar</a>
-                                </div>
-                            </div>
-
-                            <!-- Dados do Processo -->
-                            <div class="tab-pane fade" id="processo" role="tabpanel" aria-labelledby="processo-tab">
-                               {% for field in processo_form %}
-                               <div class="mb-3">
-                                   <label for="{{ field.id_for_label }}" class="form-label">
-                                       {{ field.label }}
-                                   </label>
-                                   {% if field.name == 'cliente' %}
-                                   <input type="hidden" name="{{ cliente_nome }}" value="{{ cliente_form.instance.pk }}">
-                                   {% else %}
-                                       {{ field }}
-                                   {% endif %}
-                                   {% if field.errors %}
-                                       <div class="text-danger">{{ field.errors }}</div>
-                                   {% endif %}
-                               </div>
-                               {% endfor %}
-                           
-                                <!-- Botões para avançar ou voltar -->
-                                <div class="d-flex justify-content-between">
-                                    <a href="javascript:void(0);" class="btn btn-secondary" onclick="showTab('tarefa')">Avançar</a>
-                                    <a href="javascript:void(0);" class="btn btn-secondary" onclick="showTab('cliente')">Voltar</a>     
-                                </div>
-                            </div>
-
-                            <!-- Dados da Tarefa -->
-                            <div class="tab-pane fade" id="tarefa" role="tabpanel" aria-labelledby="tarefa-tab">
-                                {% if tarefa_form %}
-                                    {% for field in tarefa_form %}
-                                    <div class="mb-3">
-                                        <label for="{{ field.id_for_label }}" class="form-label">
-                                            {{ field.label }}
-                                        </label>
-                                        {% if field.name == 'processo' %}
-                                        <!-- Campo oculto para associar ao processo -->
-                                        <input type="hidden" name="{{ field.name }}" value="{{ processo_form.instance.pk }}">
-                                        {% else %}
-                                        {{ field }}
-                                        {% endif %}
-                                        {% if field.errors %}
-                                        <div class="text-danger">{{ field.errors }}</div>
-                                        {% endif %}
-                                    </div>
-                                    {% endfor %}                                
-                                {% endif %}
-
-                                <!-- Botões para avançar ou voltar -->
-                                <div class="d-flex justify-content-between">
-                                    <a href="javascript:void(0);" class="btn btn-secondary" onclick="showTab('processo')">Voltar</a>
-                                    <button type="submit" class="btn btn-primary">Salvar</button>
-                                </div>
-                            </div>                            
-                        </div>
-                    </form>
-                  </div>
-              </div>
-          </div>
-      </div>
-  </div>
-</section>
+                                  </div>
+  
+                                  <!-- Botões para avançar ou voltar -->
+                                  <div class="d-flex justify-content-between">
+                                      <a href="javascript:void(0);" class="btn btn-secondary" onclick="showTab('processo')">Voltar</a>
+                                      <button type="submit" class="btn btn-primary">Salvar</button>
+                                  </div>
+                              </div>                            
+                          </div>
+                      </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+  </section>
 </div>
 
 <!-- Botão "Sair" -->
@@ -151,4 +323,4 @@
         }
     }
 </script>
-{% endblock %}
+{% endblock %}d

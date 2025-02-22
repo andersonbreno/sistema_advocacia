@@ -2,11 +2,15 @@ from django import forms
 from .models import Tarefa, Processo
 
 class TarefaForm(forms.ModelForm):
-    numero_processo = forms.ModelChoiceField(
-        queryset=Processo.objects.all(), 
-        required=True, 
-        label="Número do Processo"
-        )
+    numero_processo = forms.IntegerField(
+        required=True,
+        widget=forms.HiddenInput()
+    )
+
+    cliente = forms.IntegerField(
+        required=True,
+        widget=forms.HiddenInput()
+    )
 
     status = forms.ChoiceField(
         choices=Tarefa.STATUS_CHOICES,
@@ -16,11 +20,10 @@ class TarefaForm(forms.ModelForm):
 
     class Meta:
         model = Tarefa
-        fields = '__all__'  # Inclui todos os campos do modelo
+        fields = '__all__'
         widgets = {
-            'numero_processo': forms.Select(attrs={'class': 'form-control'}),
-            'responsaveis': forms.SelectMultiple(attrs={'class': 'form-control'}),
-            'tarefa': forms.Textarea(attrs={'class': 'form-control'}),
+            'responsaveis': forms.Select(attrs={'class': 'form-control'}),
+            'tarefa': forms.TextInput(attrs={'class': 'form-control'}),
             'data': forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}),
             'hora': forms.TimeInput(attrs={'type': 'time', 'class': 'form-control'}),
             'prazo_fatal': forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}),
@@ -32,4 +35,5 @@ class TarefaForm(forms.ModelForm):
             'retroativa': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
             'privada': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
         }
+
 

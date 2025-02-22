@@ -33,16 +33,13 @@
                             <div class="tab-pane fade show active" id="cliente" role="tabpanel" aria-labelledby="cliente-tab">
                                 {% for field in cliente_form %}
                                     <div class="mb-3">
-                                        <label for="{{ field.id_for_label }}" class="form-label">
-                                            {{ field.label }}
-                                        </label>
+                                        <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
                                         {{ field }}
                                         {% if field.errors %}
                                             <div class="text-danger">{{ field.errors }}</div>
                                         {% endif %}
                                     </div>
                                 {% endfor %}
-                                <!-- Botão para avançar para a próxima aba -->
                                 <div class="d-flex justify-content-between">
                                     <a href="javascript:void(0);" class="btn btn-secondary" onclick="showTab('processo')">Avançar</a>
                                 </div>
@@ -52,9 +49,7 @@
                             <div class="tab-pane fade" id="processo" role="tabpanel" aria-labelledby="processo-tab">
                                {% for field in processo_form %}
                                <div class="mb-3">
-                                   <label for="{{ field.id_for_label }}" class="form-label">
-                                       {{ field.label }}
-                                   </label>
+                                   <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
                                    {% if field.name == 'cliente' %}
                                    <input type="hidden" name="{{ cliente_nome }}" value="{{ cliente_form.instance.pk }}">
                                    {% else %}
@@ -65,8 +60,7 @@
                                    {% endif %}
                                </div>
                                {% endfor %}
-                           
-                                <!-- Botões para avançar ou voltar -->
+
                                 <div class="d-flex justify-content-between">
                                     <a href="javascript:void(0);" class="btn btn-secondary" onclick="showTab('tarefa')">Avançar</a>
                                     <a href="javascript:void(0);" class="btn btn-secondary" onclick="showTab('cliente')">Voltar</a>     
@@ -78,11 +72,8 @@
                                 {% if tarefa_form %}
                                     {% for field in tarefa_form %}
                                     <div class="mb-3">
-                                        <label for="{{ field.id_for_label }}" class="form-label">
-                                            {{ field.label }}
-                                        </label>
+                                        <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
                                         {% if field.name == 'processo' %}
-                                        <!-- Campo oculto para associar ao processo -->
                                         <input type="hidden" name="{{ field.name }}" value="{{ processo_form.instance.pk }}">
                                         {% else %}
                                         {{ field }}
@@ -94,7 +85,6 @@
                                     {% endfor %}                                
                                 {% endif %}
 
-                                <!-- Botões para avançar ou voltar -->
                                 <div class="d-flex justify-content-between">
                                     <a href="javascript:void(0);" class="btn btn-secondary" onclick="showTab('processo')">Voltar</a>
                                     <button type="submit" class="btn btn-primary">Salvar</button>

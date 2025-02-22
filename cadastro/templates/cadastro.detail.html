@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container">
+    <h2>Detalhes do Cliente</h2>
+    <p><strong>Nome:</strong> {{ object.nome }}</p>
+    <p><strong>Processo:</strong> {{ object.processo_set.first.nome }}</p>
+    <p><strong>Tarefa:</strong> {{ object.processo_set.first.tarefa_set.first.nome }}</p>
+    <p><strong>Parceiro:</strong> {{ object.parceiro_set.first.nome }}</p>
+    <a href="{% url 'cadastro:list' %}" class="btn btn-secondary">Voltar</a>
+</div>
+{% endblock %}

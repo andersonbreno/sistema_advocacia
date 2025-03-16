@@ -1,17 +1,7 @@
 from django import forms
-from .models import Tarefa, Processo
+from .models import Tarefa
 
 class TarefaForm(forms.ModelForm):
-    numero_processo = forms.IntegerField(
-        required=True,
-        widget=forms.HiddenInput()
-    )
-
-    cliente = forms.IntegerField(
-        required=True,
-        widget=forms.HiddenInput()
-    )
-
     status = forms.ChoiceField(
         choices=Tarefa.STATUS_CHOICES,
         widget=forms.Select(attrs={'class': 'form-control'}),
@@ -20,7 +10,7 @@ class TarefaForm(forms.ModelForm):
 
     class Meta:
         model = Tarefa
-        fields = '__all__'
+        fields = ['status', 'responsaveis', 'tarefa', 'data', 'hora', 'prazo_fatal', 'local', 'descricao', 'importante', 'urgente', 'futura', 'retroativa', 'privada']
         widgets = {
             'responsaveis': forms.Select(attrs={'class': 'form-control'}),
             'tarefa': forms.TextInput(attrs={'class': 'form-control'}),
@@ -35,5 +25,3 @@ class TarefaForm(forms.ModelForm):
             'retroativa': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
             'privada': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
         }
-
-

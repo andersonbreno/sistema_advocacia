@@ -49,35 +49,32 @@
                         <tbody>
                             {% for cliente in clientes %}
                             <tr>
-                                <td>{{ cliente.nome }}</td>
-                                
+                                <td>{{ cliente.nome }}</td>                                
                                 <!-- Processo -->
                                 <td>
-                                    {% with cliente.processo_set.first as processo %}
-                                        {% if processo %}
-                                            {{ processo.nome }}
-                                        {% endif %}
-                                    {% endwith %}
+                                    {% for processo in cliente.processos.all %}
+                                        <li>{{ processo.numero_processo }}</li>
+                                    {% empty %}
+                                        Nenhum processo cadastrado
+                                    {% endfor %}
                                 </td>
-                                
                                 <!-- Tarefa -->
                                 <td>
-                                    {% with cliente.processo_set.first.tarefa_set.first as tarefa %}
-                                        {% if tarefa %}
-                                            {{ tarefa.nome }}
-                                        {% endif %}
-                                    {% endwith %}
-                                </td>
-
+                                    {% for processo in cliente.processos.all %}
+                                        {% for tarefa in processo.tarefas.all %}
+                                            {{ tarefa.descricao }}
+                                        {% endfor %}
+                                    {% endfor %}
                                 <!-- Parceiro -->
                                 <td>
-                                    {% with cliente.parceiro_set.first as parceiro %}
-                                        {% if parceiro %}
-                                            {{ parceiro.nome }}
-                                        {% endif %}
-                                    {% endwith %}
+                                    {% for processo in cliente.processos.all %}
+                                        {% for tarefa in processo.tarefas.all %}
+                                            {% for parceiro in tarefa.parceiros.all %}
+                                                {{ parceiro.nome }}
+                                            {% endfor %}
+                                        {% endfor %}
+                                    {% endfor %}
                                 </td>
-
                                 <td>
                                     <a href="{% url 'cadastro:detail' cliente.pk %}" class="btn btn-info btn-sm">Detalhes</a>
                                     <a href="{% url 'cadastro:update' cliente.pk %}" class="btn btn-warning btn-sm">Editar</a>

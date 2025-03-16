@@ -104,3 +104,38 @@ select.form-control {
     height: auto;
   }
 }
+
+.invalid-feedback {
+  display: none; /* Esconde as mensagens de erro por padrão */
+  color: #dc3545; /* Cor vermelha para indicar erro */
+  font-size: 0.875rem; /* Tamanho menor para não distrair visualmente */
+  margin-top: 0.25rem; /* Espaço acima para separação da borda do campo */
+}
+
+.was-validated .invalid-feedback {
+  display: block; /* Mostra a mensagem quando a validação falhar */
+}
+
+.form-control.is-invalid,.was-validated .form-control:invalid {
+  border-color: #dc3545; /* Realça os campos inválidos com uma borda vermelha */
+  padding-right: calc(1.5em + 0.75rem); /* Ajusta o preenchimento à direita, se necessário */
+  background-image: none !important; /* Remove os ícones de validação */
+  
+}
+
+input.is-invalid:focus, select.is-invalid:focus, textarea.is-invalid:focus {
+  border-color: #dc3545;
+  box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25); /* Realça o campo ao focar */
+}
+
+.form-control.is-valid,.was-validated .form-control:valid {
+  background-image: none !important; /* Remove os ícones de validação */
+}
+
+.form-select.is-valid:not([multiple]):not([size]), .form-select.is-valid:not([multiple])[size="1"], .was-validated .form-select:valid:not([multiple]):not([size]), .was-validated .form-select:valid:not([multiple])[size="1"] {
+  --bs-form-select-bg-icon: none !important;
+}
+
+.form-select.is-invalid:not([multiple]):not([size]), .form-select.is-invalid:not([multiple])[size="1"], .was-validated .form-select:invalid:not([multiple]):not([size]), .was-validated .form-select:invalid:not([multiple])[size="1"] {
+  --bs-form-select-bg-icon: none !important;
+}

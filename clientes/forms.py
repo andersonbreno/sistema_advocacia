@@ -28,9 +28,9 @@ class ClienteForm(forms.ModelForm):
             'foto': ImageInput(attrs={'class': 'form-control'}),
             # Campos adicionados diretamente no modelo Cliente
             'email': forms.EmailInput(attrs={'class': 'form-control'}),
-            'telefone': forms.TextInput(attrs={'class': 'form-control'}),
+            'telefone': forms.TextInput(attrs={'class': 'form-control mask-telefone'}),
             'whatsapp': forms.CheckboxInput(attrs={'class': 'form-check-input checkbox-input'}),
-            'cep': forms.TextInput(attrs={'class': 'form-control'}),
+            'cep': forms.TextInput(attrs={'class': 'form-control mask-cep'}),
             'rua': forms.TextInput(attrs={'class': 'form-control'}),
             'numero': forms.TextInput(attrs={'class': 'form-control'}),
             'complemento': forms.TextInput(attrs={'class': 'form-control'}),

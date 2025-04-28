@@ -22,7 +22,7 @@ services:
     restart: on-failure     
     volumes:
       - ./:/sistema_advocacia      
-      - ./.data/web/media:/data/web/media       
+      - ./media/fotos_clientes:/sistema_advocacia/media/fotos_clientes       
     env_file:
       - .env
     depends_on:

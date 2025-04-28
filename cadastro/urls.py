@@ -1,12 +1,18 @@
 from django.urls import path
-from . import views
+from .views import (
+    CadastroCreateView,
+    CadastroDeleteView,
+    CadastroDetailView,
+    CadastroUpdateView,
+    CadastroListView,
+)
 
 app_name = "cadastro"
 
 urlpatterns = [
-    path('list/', views.CadastroListView.as_view(), name='list'),
-    path('create/', views.CadastroTemplateView.as_view(), name='create'),
-    path('<int:pk>/update/', views.CadastroUpdateView.as_view(), name='update'),
-    path('<int:pk>/detail/', views.CadastroDetailView.as_view(), name='detail'),
-    path('<int:pk>/delete/', views.CadastroDeleteView.as_view(), name='delete'),
+    path('create/', CadastroCreateView.as_view(), name='create'),
+    path('<int:pk>/delete/', CadastroDeleteView.as_view(), name='delete'),
+    path('<int:pk>/detail/', CadastroDetailView.as_view(), name='detail'),
+    path('<int:pk>/update/', CadastroUpdateView.as_view(), name='update'),   
+    path('list/', CadastroListView.as_view(), name='list'),
 ]

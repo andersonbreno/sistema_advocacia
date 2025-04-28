@@ -19,7 +19,7 @@
                with font-awesome or any other icon font library -->
           
           <li class="nav-item">
-            <a href="{% url 'pages:index' %}" class="nav-link">
+            <a href="" class="nav-link">
               <i class="nav-icon fas fa-home"></i>
               <p>
                 Início
@@ -33,39 +33,15 @@
                 Cadastro
               </p>
             </a>
-          </li>
+          </li>          
           <li class="nav-item">
-            <a href="{% url 'clientes:list' %}" class="nav-link">
-              <i class="nav-icon fas fa-users"></i>
-              <p>
-                Clientes
-              </p>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a href="{% url 'processos:list' %}" class="nav-link">
-              <i class="nav-icon fas fa-balance-scale"></i>
-              <p>
-                Processos
-              </p>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a href="{% url 'parceiros:list' %}" class="nav-link">
+            <a href="{% url 'parceiros:create' %}" class="nav-link">
               <i class="nav-icon fas fa-handshake"></i>
               <p>
                 Parceiros
               </p>
-            </a>
-          </li>          
-          <li class="nav-item">
-            <a href="{% url 'tarefas:list' %}" class="nav-link">
-              <i class="nav-icon fas fa-list"></i>
-              <p>
-                Tarefas
-              </p>
-            </a>
-          </li>
+            </a>          
+          </li> 
         </ul>
       </nav>
       <!-- /.sidebar-menu -->

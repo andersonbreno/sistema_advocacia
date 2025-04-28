@@ -58,7 +58,7 @@ class Processo(models.Model):
     data_contrato = models.DateField(null=True, blank=True, verbose_name='Data do Contrato')
     prioritario = models.BooleanField(default=False, verbose_name='Prioritário')
     arquivado = models.BooleanField(default=False, verbose_name='Arquivado')
-    descricao = models.TextField(blank=True, verbose_name='Descrição')
+    descricao_processo = models.TextField(blank=True, verbose_name='Descrição')
 
     class Pendencia(models.TextChoices):
         CNIS = 'CNIS', 'CNIS'

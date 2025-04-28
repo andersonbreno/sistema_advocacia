@@ -1,4 +1,3 @@
-
 {% extends 'base.html' %}
 
 {% load static %}
@@ -15,9 +14,9 @@
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
-                        <li class="breadcrumb-item"><a href="{% url 'pages:index' %}">Início</a></li>
-                        <li class="breadcrumb-item"><a href="{% url 'clientes:list' %}">Clientes</a></li>
-                        <li class="breadcrumb-item active">Deletar Cliente</li>
+                        <!-- <li class="breadcrumb-item"><a href="">Início</a></li>
+                        <li class="breadcrumb-item"><a href="">Clientes</a></li>
+                        <li class="breadcrumb-item active">Deletar Cliente</li> -->
                     </ol>
                 </div>
             </div>
@@ -40,10 +39,10 @@
                         <!-- form start -->
                         <form method="post">
                             {% csrf_token %}
-                            <div class="card-footer">
+                            <!-- <div class="card-footer">
                                 <button type="submit" class="btn btn-danger">Deletar</button>
-                                <a href="{% url 'clientes:list' %}" class="btn btn-secondary">Cancelar</a>
-                            </div>
+                                <a href="" class="btn btn-secondary">Cancelar</a>
+                            </div> -->
                         </form>
                     </div>
                     <!-- /.card -->

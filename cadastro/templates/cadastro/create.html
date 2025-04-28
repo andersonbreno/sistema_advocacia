@@ -1,21 +1,42 @@
 {% extends 'base.html' %}
-
 {% load static %}
 
 {% block content %}
 <div class="content-wrapper">
 <!-- Main content -->
+
+    {% if messages %}
+        <div class="row">
+            <div class="col-lg-12">
+                {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible">
+                    <button type="button" class="close" data-bs-dismiss="alert" aria-hidden="true">&times;</button>
+                    {{ message }}
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+
 <section class="content">
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-12">
                 <div class="card card-primary">
                     <div class="card-header">
-                        <h3 class="card-title">Cadastro</h3>
+                        <h3 class="card-title">
+                            {% if form.instance.pk %}Editar{% else %}Cadastro{% endif %}
+                        </h3>
                     </div>
                     <div class="container-fluid mt-5">
                       <form method="post" enctype="multipart/form-data">
                           {% csrf_token %}
+
+                          <!-- Adicionar campo hidden para operação de edição -->
+                          {% if form.instance.pk %}
+                              <input type="hidden" name="edit_mode" value="true">
+                          {% endif %}
+
                           <ul class="nav nav-tabs" id="formTabs" role="tablist">
                               <li class="nav-item" role="presentation">
                                   <button class="nav-link active" id="cliente-tab" type="button" role="tab" aria-controls="cliente" aria-selected="true" onclick="showTab('cliente')">Dados do Cliente</button>
@@ -35,120 +56,106 @@
                                       <div class="col-md-7">
                                           <div class="mb-3 row">
                                               <div class="col-md-7">
-                                                  <label for="{{cliente_form.nome.id_for_label}}" class="form-label"> Cliente:</label>
-                                                    {{cliente_form.nome}}
-                                                    <div class="invalid-feedback">{{ cliente_form.nome.errors }}</div>
+                                                  <label for="{{form.nome.id_for_label}}" class="form-label"> Cliente:</label>
+                                                    {{form.nome}}
+                                                    <div class="invalid-feedback">{{form.nome.errors}}</div>
                                               </div> 
                                               <div class="col-md-5">
-                                                  <label for="{{cliente_form.cpf.id_for_label}}" class="form-label"> CPF:</label>
-                                                      {{cliente_form.cpf}}
-                                                      <div class="invalid-feedback">{{ cliente_form.nome.errors }}</div>
+                                                  <label for="{{form.cpf.id_for_label}}" class="form-label"> CPF:</label>
+                                                      {{form.cpf}}
+                                                      <div class="invalid-feedback">{{form.cpf.errors}}</div>
                                               </div>
                                               <div class="col-md-4">
-                                                  <label for="{{cliente_form.data_de_nascimento.id_for_label}}" class="form-label"> Data de Nascimento:</label>
-                                                      {{cliente_form.data_de_nascimento}}
-                                                      <div class="invalid-feedback">{{ cliente_form.nome.errors }}</div>                                            
+                                                  <label for="{{form.data_de_nascimento.id_for_label}}" class="form-label"> Data de Nascimento:</label>
+                                                      {{form.data_de_nascimento}}                                                                                                
                                               </div>
                                               <div class="col-md-4">
-                                                  <label for="{{cliente_form.estado_civil.id_for_label}}" class="form-label"> Estado Civil:</label>
-                                                      {{cliente_form.estado_civil}}
-                                                      <div class="invalid-feedback">{{ cliente_form.nome.errors }}</div>                                            
+                                                  <label for="{{form.estado_civil.id_for_label}}" class="form-label"> Estado Civil:</label>
+                                                      {{form.estado_civil}}                                                                                                 
                                               </div>     
                                               <div class="col-md-4">
-                                                  <label for="{{cliente_form.profissao.id_for_label}}" class="form-label"> Profissão:</label>
-                                                      {{cliente_form.profissao}}
-                                                      <div class="invalid-feedback">{{ cliente_form.nome.errors }}</div>                                            
+                                                  <label for="{{form.profissao.id_for_label}}" class="form-label"> Profissão:</label>
+                                                      {{form.profissao}}                                                                                                 
                                               </div>        
                                               <div class="col-md-4">
-                                                  <label for="{{cliente_form.virou_cliente.id_for_label}}" class="form-label"> Virou Cliente:</label>
-                                                      {{cliente_form.virou_cliente}}
-                                                      <div class="invalid-feedback">{{ cliente_form.nome.errors }}</div>   
+                                                  <label for="{{form.virou_cliente.id_for_label}}" class="form-label"> Virou cliente:</label>
+                                                      {{form.virou_cliente}}
+                                                      <div class="invalid-feedback">{{form.virou_cliente.errors}}</div>   
                                                       <div class="form-check">
-                                                          {{cliente_form.cadastrado_advbox}}
-                                                          <div class="invalid-feedback">{{ cliente_form.nome.errors }}</div> 
-                                                          <label for="{{cliente_form.cadastrado_advbox.id_for_label}}" class="form-label">Cadastrado no Advbox</label>
+                                                          {{form.cadastrado_advbox}}                                                          
+                                                          <label for="{{form.cadastrado_advbox.id_for_label}}" class="form-label">Cadastrado no Advbox</label>
                                                       </div>
                                                       <div class="form-check">
-                                                          {{cliente_form.cadastrado_planilha}}
-                                                          <div class="invalid-feedback">{{ cliente_form.nome.errors }}</div>
-                                                          <label for="{{cliente_form.cadastrado_planilha.id_for_label}}" class="form-label"> Cadastrado em Planilha</label>                    
+                                                          {{form.cadastrado_planilha}}                                                          
+                                                          <label for="{{form.cadastrado_planilha.id_for_label}}" class="form-label"> Cadastrado em Planilha</label>                    
                                                       </div>                                         
                                               </div>   
                                               <div class="col-md-4">
-                                                  <label for="{{cliente_form.justificativa.id_for_label}}" class="form-label"> Justificativa:</label>
-                                                      {{cliente_form.justificativa}}
-                                                      <div class="invalid-feedback">{{ cliente_form.nome.errors }}</div>                                            
+                                                  <label for="{{form.justificativa.id_for_label}}" class="form-label"> Justificativa:</label>
+                                                      {{form.justificativa}}                                                                                                 
                                               </div>  
                                               <div class="col-md-4">
-                                                  <label for="{{cliente_form.descricao.id_for_label}}" class="form-label"> Descrição:</label>
-                                                      {{cliente_form.descricao}}
-                                                      <div class="invalid-feedback">{{ cliente_form.nome.errors }}</div>                                            
+                                                  <label for="{{form.descricao.id_for_label}}" class="form-label"> Descrição:</label>
+                                                      {{form.descricao}}                                                                                                 
                                               </div>
                                               <div class="col-md-4">
-                                                  <label for="{{cliente_form.cep.id_for_label}}" class="form-label"> CEP:</label>
-                                                      {{cliente_form.cep}}
-                                                      <div class="invalid-feedback">{{ cliente_form.nome.errors }}</div>                                            
+                                                  <label for="{{form.cep.id_for_label}}" class="form-label"> CEP:</label>
+                                                      {{form.cep}}                                                                                                 
                                               </div>
                                               <div class="col-md-4">
-                                                  <label for="{{cliente_form.rua.id_for_label}}" class="form-label"> Rua:</label>
-                                                      {{cliente_form.rua}}
-                                                      <div class="invalid-feedback">{{ cliente_form.nome.errors }}</div>                                            
+                                                  <label for="{{form.rua.id_for_label}}" class="form-label"> Rua:</label>
+                                                      {{form.rua}}                                                                                                  
                                               </div>
                                               <div class="col-md-4">
-                                                  <label for="{{cliente_form.numero.id_for_label}}" class="form-label"> Número:</label>
-                                                      {{cliente_form.numero}}
-                                                      <div class="invalid-feedback">{{ cliente_form.nome.errors }}</div>                                            
+                                                  <label for="{{form.numero.id_for_label}}" class="form-label"> Número:</label>
+                                                      {{form.numero}}                                                                                                 
                                               </div>
                                               <div class="col-md-4">
-                                                  <label for="{{cliente_form.complemento.id_for_label}}" class="form-label"> Complemento:</label>
-                                                      {{cliente_form.complemento}}
-                                                      <div class="invalid-feedback">{{ cliente_form.nome.errors }}</div>                                            
+                                                  <label for="{{form.complemento.id_for_label}}" class="form-label"> Complemento:</label>
+                                                      {{form.complemento}}                                                                                                 
                                               </div>
                                               <div class="col-md-4">
-                                                  <label for="{{cliente_form.bairro.id_for_label}}" class="form-label"> Bairro:</label>
-                                                      {{cliente_form.bairro}}
-                                                      <div class="invalid-feedback">{{ cliente_form.nome.errors }}</div>                                            
+                                                  <label for="{{form.bairro.id_for_label}}" class="form-label"> Bairro:</label>
+                                                      {{form.bairro}}                                           
                                               </div>
                                               <div class="col-md-4">
-                                                  <label for="{{cliente_form.cidade.id_for_label}}" class="form-label"> Cidade:</label>
-                                                      {{cliente_form.cidade}}                                           
-                                                      <div class="invalid-feedback">{{ cliente_form.nome.errors }}</div> 
+                                                  <label for="{{form.cidade.id_for_label}}" class="form-label"> Cidade:</label>
+                                                      {{form.cidade}}                                 
                                               </div>
                                               <div class="col-md-4">
-                                                  <label for="{{cliente_form.estado.id_for_label}}" class="form-label"> Estado:</label>
-                                                      {{cliente_form.estado}}                                           
-                                                      <div class="invalid-feedback">{{ cliente_form.nome.errors }}</div> 
+                                                  <label for="{{form.estado.id_for_label}}" class="form-label"> Estado:</label>
+                                                      {{form.estado}}                                     
                                               </div>
                                               <div class="col-md-4">
-                                                  <label for="{{cliente_form.email.id_for_label}}" class="form-label"> E-mail:</label>
-                                                      {{cliente_form.email}}                                            
-                                                      <div class="invalid-feedback">{{ cliente_form.nome.errors }}</div>
+                                                  <label for="{{form.email.id_for_label}}" class="form-label"> E-mail:</label>
+                                                      {{form.email}}                                                      
                                               </div>
                                               <div class="col-md-4">
-                                                  <label for="{{cliente_form.telefone.id_for_label}}" class="form-label"> Telefone:</label>
-                                                      {{cliente_form.telefone}}       
-                                                      <div class="invalid-feedback">{{ cliente_form.nome.errors }}</div>
+                                                  <label for="{{form.telefone.id_for_label}}" class="form-label"> Telefone:</label>
+                                                      {{form.telefone}}       
+                                                      <div class="invalid-feedback">{{form.telefone.errors}}</div>
                                                   <div class="form-check">
-                                                      {{cliente_form.whatsapp}} 
-                                                      <div class="invalid-feedback">{{ cliente_form.nome.errors }}</div>
-                                                      <label for="{{cliente_form.whatsapp.id_for_label}}" class="form-label"> Whatsapp</label>                                   
+                                                      {{form.whatsapp}} 
+                                                      <label for="{{form.whatsapp.id_for_label}}" class="form-label"> Whatsapp</label>                                   
                                                   </div>                                         
                                               </div>
                                           </div>
                                           <!-- Botão para avançar para a próxima aba -->
                                           <div class="d-flex justify-content-between">
                                               <a href="javascript:void(0);" class="btn btn-secondary" onclick="showTab('processo')">Avançar</a>
-                                              <button type="submit" class="btn btn-primary">Salvar</button>
                                           </div>
                                       </div>
                                       <!-- Coluna da Foto -->
                                       <div class="col-md-4 d-flex justify-content-end">                                                                       
-                                          <div class="photo-container">
-                                              <div class="photo-placeholder">
-                                                  {{ cliente_form.foto }}
-                                                  <div class="invalid-feedback">{{ cliente_form.foto.errors }}</div>
-                                              </div>
-                                          </div>
+                                        <div class="photo-container">
+                                            {% if form.instance.foto %}
+                                                <img src="{{ form.instance.foto.url }}" alt="Foto do cliente" class="img-thumbnail" id="foto-preview">
+                                            {% else %}
+                                                <div class="photo-placeholder">
+                                                    {{ form.foto }}
+                                                </div>
+                                            {% endif %}
+                                        </div>
                                       </div>                                                                          
                                   </div>                                
                               </div>
@@ -157,6 +164,8 @@
                               <div class="tab-pane fade" id="processo" role="tabpanel" aria-labelledby="processo-tab">
                                   <div class="col-md-15">
                                       <div class="mb-3 row">
+                                          <!-- Campo oculto para armazenar o cliente -->
+                                          <input type="hidden" name="cliente" id="cliente" value="">
                                           <div class="col-md-10">
                                             <label for="{{processo_form.cliente.id_for_label}}" class="form-label">
                                                 {{processo_form.cliente}}
@@ -205,8 +214,8 @@
                                             </div>
                                           </div>                                    
                                           <div class="col-md-4">
-                                            <label for="{{processo_form.descricao.id_for_label}}" class="form-label"> Descrição:
-                                                {{processo_form.descricao}}
+                                            <label for="{{processo_form.descricao_processo.id_for_label}}" class="form-label"> Descrição:
+                                                {{processo_form.descricao_processo}}
                                             </label>
                                           </div>
                                           <div class="col-md-4">
@@ -219,8 +228,7 @@
                                   <!-- Botões para avançar ou voltar -->
                                   <div class="d-flex justify-content-between">
                                       <a href="javascript:void(0);" class="btn btn-secondary" onclick="showTab('tarefa')">Avançar</a>
-                                      <a href="javascript:void(0);" class="btn btn-secondary" onclick="showTab('cliente')">Voltar</a>  
-                                      <button type="submit" class="btn btn-primary">Salvar</button>   
+                                      <a href="javascript:void(0);" class="btn btn-secondary" onclick="showTab('cliente')">Voltar</a>    
                                   </div>
                               </div>
   
@@ -228,6 +236,8 @@
                               <div class="tab-pane fade" id="tarefa" role="tabpanel" aria-labelledby="tarefa-tab">
                                   <div class="col-md-15">
                                     <div class="mb-3 row">
+                                        <!-- Campo oculto para armazenar o Número do Processo -->
+                                        <input type="hidden" name="numero_processo" id="id_numero_processo" value="">
                                         <div class="col-md-4">
                                             <label for="{{tarefa_form.responsaveis.id_for_label}}" class="form-label"> Responsável:
                                                 {{tarefa_form.responsaveis}}
@@ -281,8 +291,13 @@
                                             </div>
                                         </div>
                                         <div class="col-md-8">
-                                            <label for="{{tarefa_form.descricao.id_for_label}}" class="form-label"> Descrição:
-                                                {{tarefa_form.descricao}}
+                                            <label for="{{tarefa_form.status.id_for_label}}" class="form-label"> Status:
+                                                {{tarefa_form.status}}
+                                            </label>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <label for="{{tarefa_form.descricao_tarefa.id_for_label}}" class="form-label"> Descrição:
+                                                {{tarefa_form.descricao_tarefa}}
                                             </label>
                                         </div>                                        
                                     </div>
@@ -316,33 +331,69 @@
 {% block extra_script %}
 <script>
     function showTab(tabName) {
+        if (!tabName) {
+            console.error("String vazia passada para showTab().");
+            return;
+        }
+    
         // Esconde todas as abas
         const tabs = document.querySelectorAll('.tab-pane');
         tabs.forEach(tab => tab.classList.remove('show', 'active'));
-
+    
         // Exibe a aba correspondente
         const activeTab = document.getElementById(tabName);
         if (activeTab) {
             activeTab.classList.add('show', 'active');
+        } else {
+            console.error(`Aba com ID '${tabName}' não encontrada.`);
+            return;
         }
-
+    
         // Altera o estado ativo do botão da aba
         const buttons = document.querySelectorAll('.nav-link');
         buttons.forEach(button => button.classList.remove('active'));
-
+    
         const activeButton = document.querySelector(`#${tabName}-tab`);
         if (activeButton) {
             activeButton.classList.add('active');
+        } else {
+            console.error(`Botão da aba com ID '${tabName}-tab' não encontrado.`);
+            return;
         }
-
+    
         // Se for a aba do processo, preenche o campo oculto com o cliente
         if (tabName === 'processo') {
-            const clienteNome = document.querySelector('[name="nome"]').value;
+            const nomeField = document.querySelector('[name="nome"]');
             const hiddenClienteField = document.querySelector('[name="cliente"]');
-            if (hiddenClienteField) {
-                hiddenClienteField.value = clienteNome;
+    
+            if (!nomeField) {
+                console.error("Campo 'nome' não encontrado.");
+                return;
             }
+    
+            if (!hiddenClienteField) {
+                console.error("Campo oculto 'cliente' não encontrado.");
+                return;
+            }
+    
+            // Preenche o campo oculto com o valor do campo 'nome'
+            hiddenClienteField.value = nomeField.value;
         }
     }
+    // Adicione isso no seu bloco extra_script
+    document.querySelector('form').addEventListener('submit', function(e) {
+        // Validação básica antes de enviar
+        const activeTab = document.querySelector('.tab-pane.active');
+        if (activeTab.id === 'cliente') {
+            const nomeField = document.querySelector('[name="nome"]');
+            if (!nomeField.value.trim()) {
+                alert('Por favor, preencha pelo menos o nome do cliente');
+                e.preventDefault();
+                return false;
+        }
+    }
+    
+        return true;
+});
 </script>
 {% endblock %}

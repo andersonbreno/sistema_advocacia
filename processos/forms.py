@@ -34,7 +34,7 @@ class ProcessoForm(forms.ModelForm):
             'data_contrato': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}), 
             'prioritario': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
             'arquivado': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
-            'descricao': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
+            'descricao_processo': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
             'pendencia': forms.Select(attrs={'class': 'form-control'}),
         }
 

@@ -12,13 +12,13 @@
                 <div class="col-sm-6">
                     <h1>Detalhe do Processo</h1>
                 </div>
-                <div class="col-sm-6">
+                <!-- <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
-                        <li class="breadcrumb-item"><a href="{% url 'pages:index' %}">Início</a></li>
-                        <li class="breadcrumb-item"><a href="{% url 'cadastro:list' %}">Processos</a></li>
+                        <li class="breadcrumb-item"><a href="">Início</a></li>
+                        <li class="breadcrumb-item"><a href="">Processos</a></li>
                         <li class="breadcrumb-item active">Detalhe do Processo</li>
                     </ol>
-                </div>
+                </div> -->
             </div>
         </div><!-- /.container-fluid -->
     </section>
@@ -28,13 +28,13 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-lg-8">
-                    <!-- Basic Card Example -->
+                    <!-- Informações do Cliente -->
                     <div class="card shadow mb-4">
                         <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                             <h6 class="m-0 font-weight-bold text-primary">Informações do Processo</h6>
                             <div>
-                                <a href="{% url 'cadastro:update' cliente.pk %}"
-                                    class="btn btn-warning btn-circle btn-sm" title="Editar">
+                                <a href="{% url 'cadastro:update' object.pk %}"
+                                   class="btn btn-warning btn-circle btn-sm" title="Editar">
                                     <i class="fas fa-edit"></i>
                                 </a>
                             </div>
@@ -43,35 +43,31 @@
                             <div class="mb-3">
                                 <label class="form-label">Nome:</label>
                                 <p>{{ object.nome }}</p>
-                            </div>
+                            </div>                                                        
                             <div class="mb-3">
-                                <label class="form-label">Processo:</label>
-                                <p>{{ object.processo_set.first.nome }}</p>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">Tarefa:</label>
-                                <p>{{ object.processo_set.first.tarefa_set.first.nome }}</p>
-                            </div>
-                            <div class="mb-3">
+                                {% if processos %}
                                 <label class="form-label">Parceiro:</label>
-                                <p>{{ object.parceiro_set.first.nome }}</p>
-                            </div>
-                            <!-- Adicione mais campos conforme necessário -->
+                                    {% for processo in processos %}
+                                    <p>{{ processo.parceiro }}</p>
+                                    {% endfor %}
+                                {% else %}
+                                    <p>Não há parceiro relacionado ao processo.</p>
+                                {% endif %}
+                            </div>                            
                         </div>
                     </div>
 
-                    <!-- Related Processes Card -->
+                    <!-- Processos Relacionados -->
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">
                             <h6 class="m-0 font-weight-bold text-primary">Processos Relacionados</h6>
                         </div>
                         <div class="card-body">
-                            {% if processos_relacionados %}
+                            {% if processos %}
                             <ul class="list-group">
-                                {% for processo_relacionado in processos_relacionados %}
+                                {% for processo in processos %}
                                 <li class="list-group-item">
-                                    Processo nº: {{ processo_relacionado.numero_processo }} - {{ processo_relacionado.descricao }}
-                                    <!-- Adicione outros detalhes que você deseja mostrar -->
+                                    Processo nº: {{ processo.numero_processo }} - {{ processo.descricao }}
                                 </li>
                                 {% endfor %}
                             </ul>
@@ -80,6 +76,27 @@
                             {% endif %}
                         </div>
                     </div>
+
+                    <!-- Tarefas Relacionadas -->
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-primary">Tarefas Relacionadas</h6>
+                        </div>
+                        <div class="card-body">
+                            {% if tarefas %}
+                            <ul class="list-group">
+                                {% for tarefa in tarefas %}
+                                <li class="list-group-item">
+                                    Tarefa: {{ tarefa.nome }} - Status: {{ tarefa.status }}
+                                </li>
+                                {% endfor %}
+                            </ul>
+                            {% else %}
+                            <p>Não há tarefas relacionadas.</p>
+                            {% endif %}
+                        </div>
+                    </div>
+
                 </div>
 
                 <!-- Optional: Include a sidebar with additional information -->

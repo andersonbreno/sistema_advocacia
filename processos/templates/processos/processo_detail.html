@@ -13,11 +13,11 @@
                     <h1>Detalhe do Processo</h1>
                 </div>
                 <div class="col-sm-6">
-                    <ol class="breadcrumb float-sm-right">
+                    <!-- <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="{% url 'pages:index' %}">Início</a></li>
                         <li class="breadcrumb-item"><a href="{% url 'processos:list' %}">Processos</a></li>
                         <li class="breadcrumb-item active">Detalhe do Processo</li>
-                    </ol>
+                    </ol> -->
                 </div>
             </div>
         </div><!-- /.container-fluid -->
@@ -32,12 +32,12 @@
                     <div class="card shadow mb-4">
                         <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                             <h6 class="m-0 font-weight-bold text-primary">Informações do Processo</h6>
-                            <div>
+                            <!-- <div>
                                 <a href="{% url 'processos:processo-update' processo.pk %}"
                                     class="btn btn-warning btn-circle btn-sm" title="Editar">
                                     <i class="fas fa-edit"></i>
                                 </a>
-                            </div>
+                            </div> -->
                         </div>
                         <div class="card-body">
                             <div class="mb-3">
@@ -97,10 +97,10 @@
 </div>
 
 <!-- Botão de Voltar -->
-<div style="position: fixed; bottom: 20px; right: 20px;">
+<!-- <div style="position: fixed; bottom: 20px; right: 20px;">
     <a href="{% url 'processos:list' %}" class="btn btn-secondary" title="Voltar">
         <i class="fas fa-arrow-left"></i> Voltar
     </a>
-</div>
+</div> -->
 
 {% endblock %}

@@ -59,15 +59,15 @@
                                     {% endfor %}
                                 </td>
                                 <!-- Tarefa -->
-                                <!-- <td>
+                                <td>
                                     {% for processo in cliente.processos.all %}
                                         {% for tarefa in processo.tarefas.all %}
                                             {{ tarefa.descricao }}
                                         {% endfor %}
                                     {% endfor %}
-                                </td> -->
+                                </td>
                                 <!-- Parceiro -->
-                                <!-- <td>
+                                <td>
                                     {% for processo in cliente.processos.all %}
                                         {% for tarefa in processo.tarefas.all %}
                                             {% for parceiro in tarefa.parceiros.all %}
@@ -75,7 +75,7 @@
                                             {% endfor %}
                                         {% endfor %}
                                     {% endfor %}
-                                </td> -->
+                                </td>
                                 <td>
                                     <a href="{% url 'cadastro:detail' cliente.pk %}" class="btn btn-info btn-sm">Detalhes</a>
                                     <a href="{% url 'cadastro:update' cliente.pk %}" class="btn btn-warning btn-sm">Editar</a>

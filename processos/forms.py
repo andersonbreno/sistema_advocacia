@@ -27,7 +27,7 @@ class ProcessoForm(forms.ModelForm):
         model = Processo
         fields = '__all__'
         widgets = {
-            'numero_processo': forms.NumberInput(attrs={'class': 'form-control'}),
+            'numero_processo': forms.TextInput(attrs={'class': 'form-control process-mask'}),
             'grupo': forms.Select(attrs={'class': 'form-control'}),
             'fase_processo': forms.Select(attrs={'class': 'form-control'}),
             'fechou_contrato': forms.CheckboxInput(attrs={'class': 'form-check-input'}),

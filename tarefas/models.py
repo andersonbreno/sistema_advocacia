@@ -8,8 +8,8 @@ class Tarefa(models.Model):
     CONCLUIDA = 'CONCLUIDA'
            
     numero_processo = models.ForeignKey(Processo, on_delete=models.CASCADE, null=True, related_name="tarefas")
+    responsaveis = models.ForeignKey(User, on_delete=models.CASCADE, null=True, verbose_name='Responsáveis')
     
-    responsaveis = models.ManyToManyField(User, related_name='tarefas')
     tarefa = models.CharField(max_length=100)
     data = models.DateField()
     hora = models.TimeField(null=True, blank=True)

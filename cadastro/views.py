@@ -55,7 +55,7 @@ class CadastroCreateView(LoginRequiredMixin, CreateView):
 
                 tarefa = tarefa_form.save(commit=False)
                 tarefa.numero_processo = processo
-                tarefa.cliente = self.object  # adicionado
+                tarefa.cliente = self.object
                 tarefa.save()
 
                 messages.success(self.request, 'Cadastro realizado com sucesso!')

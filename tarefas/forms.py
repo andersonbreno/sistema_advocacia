@@ -20,17 +20,18 @@ class TarefaForm(forms.ModelForm):
     )
     
     # Adicione um campo para selecionar múltiplos responsáveis
-    responsaveis = forms.ModelMultipleChoiceField(
-        queryset=User.objects.all(),  # Lista todos os usuários
-        widget=forms.SelectMultiple(attrs={'class': 'form-control'}),
+    responsaveis = forms.ModelChoiceField(
+        queryset=User.objects.all(),
         required=False,
+        label="Responsáveis",
+        widget=forms.Select(attrs={'class': 'form-control'})
+        
     )
 
     class Meta:
         model = Tarefa
         fields = '__all__'
         widgets = {
-            # 'responsaveis': forms.Select(attrs={'class': 'form-control'}),
             'tarefa': forms.TextInput(attrs={'class': 'form-control'}),
             'data': forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}),
             'hora': forms.TimeInput(attrs={'type': 'time', 'class': 'form-control'}),

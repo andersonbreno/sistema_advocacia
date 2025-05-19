@@ -12,7 +12,7 @@ class TarefaForm(forms.ModelForm):
         label="Status da Tarefa"
     )
     
-    numero_processo = forms.ModelChoiceField(
+    processo = forms.ModelChoiceField(
         queryset=Processo.objects.all(),
         required=False,
         label="Processo",

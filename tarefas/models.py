@@ -7,7 +7,7 @@ class Tarefa(models.Model):
     EM_PROGRESSO = 'EM_PROGRESSO'
     CONCLUIDA = 'CONCLUIDA'
            
-    numero_processo = models.ForeignKey(Processo, on_delete=models.CASCADE, null=True, related_name="tarefas")
+    processo = models.ForeignKey(Processo, on_delete=models.CASCADE, null=True, related_name="tarefas")
     responsaveis = models.ForeignKey(User, on_delete=models.CASCADE, null=True, verbose_name='Responsáveis')
     
     tarefa = models.CharField(max_length=100)

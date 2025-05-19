@@ -13,7 +13,12 @@ class Processo(models.Model):
     parceiro = models.ForeignKey(Parceiro, on_delete=models.CASCADE, null=True)
     advogado = models.ForeignKey(Advogado, on_delete=models.CASCADE, verbose_name='Advogado Responsável')
     data_criacao = models.DateTimeField(auto_now_add=True, verbose_name='Data de Criação')
-    numero_processo = models.IntegerField(verbose_name='Número do Processo', null=True, blank=True)    
+    numero_processo = models.CharField(
+        max_length=25,
+        verbose_name='Número do Processo',
+        null=True, 
+        blank=True
+    )    
     
     class Grupo(models.TextChoices):
         ADMINISTRATIVO = 'ADM', 'Administrativo'

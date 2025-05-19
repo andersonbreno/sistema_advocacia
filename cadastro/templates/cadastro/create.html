@@ -29,13 +29,14 @@
                         </h3>
                     </div>
                     <div class="container-fluid mt-5">
-                      <form method="post" enctype="multipart/form-data">
+                      <form id="mainForm" method="post" enctype="multipart/form-data">
                           {% csrf_token %}
-
                           <!-- Adicionar campo hidden para operação de edição -->
                           {% if form.instance.pk %}
-                              <input type="hidden" name="edit_mode" value="true">
+                            <input type="hidden" name="edit_mode" value="true">
                           {% endif %}
+                            <input type="hidden" id="clienteId" name="cliente_id">
+                            <input type="hidden" id="processoId" name="processo_id">
 
                           <ul class="nav nav-tabs" id="formTabs" role="tablist">
                               <li class="nav-item" role="presentation">
@@ -47,8 +48,7 @@
                               <li class="nav-item" role="presentation">
                                   <button class="nav-link" id="tarefa-tab" type="button" role="tab" aria-controls="tarefa" aria-selected="false" onclick="showTab('tarefa')">Dados da Tarefa</button>
                               </li>                                                
-                          </ul>
-  
+                          </ul>  
                           <div class="tab-content mt-4" id="formTabsContent">
                               <!-- Dados do Cliente -->
                               <div class="tab-pane fade show active" id="cliente" role="tabpanel" aria-labelledby="cliente-tab">
@@ -142,12 +142,13 @@
                                           </div>
                                           <!-- Botão para avançar para a próxima aba -->
                                           <div class="d-flex justify-content-between">
-                                              <a href="javascript:void(0);" class="btn btn-secondary" onclick="showTab('processo')">Avançar</a>
+                                              <button type="button" class="btn btn-secondary" onclick="salvarEtapa()">Avançar</button>
                                           </div>
                                       </div>
                                       <!-- Coluna da Foto -->
                                       <div class="col-md-4 d-flex justify-content-end">                                                                       
                                         <div class="photo-container">
+                                            {% comment %}
                                             {% if form.instance.foto %}
                                                 <img src="{{ form.instance.foto.url }}" alt="Foto do cliente" class="img-thumbnail" id="foto-preview">
                                             {% else %}
@@ -155,20 +156,17 @@
                                                     {{ form.foto }}
                                                 </div>
                                             {% endif %}
+                                            {% endcomment %}
                                         </div>
                                       </div>                                                                          
                                   </div>                                
-                              </div>
-  
+                              </div>  
                               <!-- Dados do Processo -->
                               <div class="tab-pane fade" id="processo" role="tabpanel" aria-labelledby="processo-tab">
                                   <div class="col-md-15">
                                       <div class="mb-3 row">
                                           <!-- Campo oculto para armazenar o cliente -->
-                                          <div class="col-md-10">
-                                            <label for="{{processo_form.cliente.id_for_label}}" class="form-label"></label>
-                                                {{processo_form.cliente}}                                            
-                                          </div>    
+                                                {{processo_form.cliente}}                                         
                                           <div class="col-md-4">
                                             <label for="{{processo_form.parceiro.id_for_label}}" class="form-label"> Parceiro:</label>
                                                 {{processo_form.parceiro}}                                            
@@ -217,20 +215,16 @@
                                   </div>
                                   <!-- Botões para avançar ou voltar -->
                                   <div class="d-flex justify-content-between">
-                                      <a href="javascript:void(0);" class="btn btn-secondary" onclick="showTab('tarefa')">Avançar</a>
-                                      <a href="javascript:void(0);" class="btn btn-secondary" onclick="showTab('cliente')">Voltar</a>    
+                                        <a href="javascript:void(0);" class="btn btn-secondary" onclick="voltarParaCliente()">Voltar</a>
+                                        <button type="button" class="btn btn-primary" onclick="salvarEtapa()">Avaçar</button>   
                                   </div>
-                              </div>
-  
+                              </div>  
                               <!-- Dados da Tarefa -->
                               <div class="tab-pane fade" id="tarefa" role="tabpanel" aria-labelledby="tarefa-tab">
                                   <div class="col-md-15">
                                     <div class="mb-3 row">
                                         <!-- Campo oculto para armazenar o Número do Processo -->
-                                        <div class="col-md-10">
-                                            <label for="{{tarefa_form.processo.id_for_label}}" class="form-label"></label>
                                                 {{tarefa_form.processo}}                                            
-                                        </div>    
                                         <div class="col-md-8">
                                             <label for="{{tarefa_form.responsaveis.id_for_label}}" class="form-label"> Responsável:</label>
                                                 {{tarefa_form.responsaveis}}                                            
@@ -290,8 +284,8 @@
   
                                   <!-- Botões para avançar ou voltar -->
                                   <div class="d-flex justify-content-between">
-                                      <a href="javascript:void(0);" class="btn btn-secondary" onclick="showTab('processo')">Voltar</a>
-                                      <button type="submit" class="btn btn-primary">Salvar</button>
+                                        <a href="javascript:void(0);" class="btn btn-secondary" onclick="voltarParaCliente()">Voltar</a>
+                                        <button type="button" class="btn btn-primary" onclick="salvarEtapa()">Salvar </button>
                                   </div>
                               </div>                            
                           </div>
@@ -315,16 +309,21 @@
 
 {% block extra_script %}
 <script>
+    let currentTab = 'cliente';
+    let clienteId = null;
+    let processoId = null;
+
     function showTab(tabName) {
         if (!tabName) {
-            console.error("String vazia passada para showTab().");
-            return;
-        }
-    
+        console.error("String vazia passada para showTab().");
+        return;
+    }
+        currentTab = tabName; // <-- Atualiza a aba atual aqui
+
         // Esconde todas as abas
         const tabs = document.querySelectorAll('.tab-pane');
         tabs.forEach(tab => tab.classList.remove('show', 'active'));
-    
+
         // Exibe a aba correspondente
         const activeTab = document.getElementById(tabName);
         if (activeTab) {
@@ -333,11 +332,11 @@
             console.error(`Aba com ID '${tabName}' não encontrada.`);
             return;
         }
-    
+
         // Altera o estado ativo do botão da aba
         const buttons = document.querySelectorAll('.nav-link');
         buttons.forEach(button => button.classList.remove('active'));
-    
+
         const activeButton = document.querySelector(`#${tabName}-tab`);
         if (activeButton) {
             activeButton.classList.add('active');
@@ -360,71 +359,116 @@
 
         // Se for a aba da tarefa, preenche o campo oculto com o ID do processo
         if (tabName === 'tarefa') {
-            const processoIdField = document.querySelector('[name="processo"]');
-            if (processoIdField) {
-                if (!processoIdField.value){
-                    
-                }
+            const processoIdField = document.querySelector('#tarefa [name="processo"]');
+            if (processoIdField && processoId) {
+                processoIdField.value = processoId;
+            } else if (!processoId) {
+                console.error("processoId ainda não foi definido.");
             }
         }
     }
     
-        // Se for a aba do processo, preenche o campo oculto com o cliente
-        //if (tabName === 'processo') {
-            //const nomeField = document.querySelector('[name="nome"]');
-            //const hiddenClienteField = document.querySelector('[name="cliente"]');
-    
-            //if (!nomeField) {
-                //console.error("Campo 'nome' não encontrado.");
-                //return;
-            //}
-    
-            //if (!hiddenClienteField) {
-                //console.error("Campo oculto 'cliente' não encontrado.");
-                //return;
-            //}
-    
-            // Preenche o campo oculto com o valor do campo 'nome'
-            //hiddenClienteField.value = nomeField.value;
-        //}
-
-        // Se for a aba da tarefa, preenche o campo oculto com o numero do processo (sem formatação)
-        //if (tabName === 'tarefa') {
-            //const processoField = document.querySelector('[name="numero_processo"]');
-            //const hiddenTarefaProcessoField = document.querySelector('[name="processo"]');
-    
-            //if (!processoField) {
-               // console.error("Campo 'numero_processo' não encontrado.");
-                //return;
-            //}
-    
-            //if (!hiddenTarefaProcessoField) {
-                //console.error("Campo oculto 'tarefa-numero_processo' não encontrado.");
-                //return;
-            //}
-    
-            // Remove a formatação (pontos, traços, etc.)
-            //const rawValue = processoField.value.replace(/\D/g, '');
-    
-            // Preenche o campo oculto com o valor sem formatação
-            //hiddenTarefaProcessoField.value = rawValue;
-        //}
-    //}
-
-    
-    document.querySelector('form').addEventListener('submit', function(e) {
-        // Validação básica antes de enviar
-        const activeTab = document.querySelector('.tab-pane.active');
-        if (activeTab.id === 'cliente') {
-            const nomeField = document.querySelector('[name="nome"]');
-            if (!nomeField.value.trim()) {
-                alert('Por favor, preencha pelo menos o nome do cliente');
-                e.preventDefault();
-                return false;
-        }
+    function salvarEtapa() {
+    const formElement = document.getElementById('mainForm');
+    if (!formElement) {
+        console.error('Formulário principal não encontrado');
+        return;
     }
+
+    // Coletar apenas os campos relevantes para a etapa atual
+    const formData = new FormData();
     
-        return true;
-});
+    // Adicionar CSRF token
+    formData.append('csrfmiddlewaretoken', document.querySelector('[name=csrfmiddlewaretoken]').value);
+    
+    // Adicionar a etapa atual
+    formData.append('etapa', currentTab);
+
+    // Coletar campos específicos da etapa atual
+    if (currentTab === 'cliente') {
+        // Adicionar todos os campos do cliente
+        const clienteFields = formElement.querySelectorAll('#cliente input, #cliente select, #cliente textarea');
+        clienteFields.forEach(field => {
+            if (field.name && field.type !== 'file') {
+                formData.append(field.name, field.value);
+            } else if (field.type === 'file' && field.files.length > 0) {
+                formData.append(field.name, field.files[0]);
+            }
+        });
+    } 
+    else if (currentTab === 'processo') {
+        // Adicionar ID do cliente se existir
+        if (clienteId) {
+            formData.append('cliente_id', clienteId);
+        }
+        
+        // Adicionar campos do processo
+        const processoFields = formElement.querySelectorAll('#processo input, #processo select, #processo textarea');
+        processoFields.forEach(field => {
+            if (field.name) {
+                formData.append(field.name, field.value);
+            }
+        });
+    } 
+    else if (currentTab === 'tarefa') {
+        // Adicionar ID do processo se existir
+        if (processoId) {
+            formData.append('processo_id', processoId);
+        }
+        
+        // Adicionar campos da tarefa
+        const tarefaFields = formElement.querySelectorAll('#tarefa input, #tarefa select, #tarefa textarea');
+        tarefaFields.forEach(field => {
+            if (field.name) {
+                formData.append(field.name, field.value);
+            }
+        });
+    }
+
+    fetch("{% url 'cadastro:create' %}", {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest',
+        },
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Erro na resposta do servidor');
+        }
+        return response.json();
+    })
+    .then(data => {
+        if (data.success) {
+            if (currentTab === 'cliente') {
+                clienteId = data.cliente_id;
+                document.getElementById('clienteId').value = clienteId;
+                showTab('processo');
+            } else if (currentTab === 'processo') {
+                processoId = data.processo_id;
+                document.getElementById('processoId').value = processoId;
+                showTab('tarefa');
+            } else if (currentTab === 'tarefa') {
+                window.location.href = data.redirect_url || "{% url 'cadastro:list' %}";
+            }
+        } else {
+            alert('Erros encontrados: ' + JSON.stringify(data.errors));
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Ocorreu um erro ao salvar os dados: ' + error.message);
+    });
+}
+    function voltarParaCliente() {
+        showTab('cliente');
+    }
+
+    function voltarParaProcesso() {
+        showTab('processo');
+    }
+
+    // Inicializa mostrando a aba do cliente
+    showTab('cliente');    
 </script>
 {% endblock %}

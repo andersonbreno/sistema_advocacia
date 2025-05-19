@@ -33,4 +33,4 @@ class Tarefa(models.Model):
     )
 
     def __str__(self):
-        return f"Tarefa para o processo {self.numero_processo} - {self.get_status_display()}"
+        return f"Tarefa para o processo {self.processo} - {self.get_status_display()}"

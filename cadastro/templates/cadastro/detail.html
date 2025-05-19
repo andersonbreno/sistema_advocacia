@@ -67,7 +67,8 @@
                             <ul class="list-group">
                                 {% for processo in processos %}
                                 <li class="list-group-item">
-                                    Processo nº: {{ processo.numero_processo }} - {{ processo.descricao }}
+                                    Processo nº: {{ processo.numero_processo }}<br>
+                                    Descrição:   {{ processo.descricao_processo }}
                                 </li>
                                 {% endfor %}
                             </ul>
@@ -87,7 +88,8 @@
                             <ul class="list-group">
                                 {% for tarefa in tarefas %}
                                 <li class="list-group-item">
-                                    Tarefa: {{ tarefa.nome }} - Status: {{ tarefa.status }}
+                                    Tarefa: {{ tarefa.tarefa }}<br>
+                                    Status: {{ tarefa.get_status_display }}
                                 </li>
                                 {% endfor %}
                             </ul>

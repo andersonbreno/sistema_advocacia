@@ -1,5 +1,7 @@
 from django import forms
 from django.core.exceptions import ValidationError
+
+from clientes.widgets import DatePickerInput
 from .models import Cliente, Processo, Parceiro, Advogado
 import re
 
@@ -33,7 +35,7 @@ class ProcessoForm(forms.ModelForm):
             'grupo': forms.Select(attrs={'class': 'form-control'}),
             'fase_processo': forms.Select(attrs={'class': 'form-control'}),
             'fechou_contrato': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
-            'data_contrato': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}), 
+            'data_contrato': DatePickerInput(attrs={'class': 'form-control'}), 
             'prioritario': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
             'arquivado': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
             'descricao_processo': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
@@ -58,5 +60,10 @@ class ProcessoForm(forms.ModelForm):
         return formatado
     
     def clean(self):
-        super().clean()
-        return self.cleaned_data
+        cleaned_data = super().clean()
+
+        checkbox_fields = ['fechou_contrato', 'prioritario', 'arquivado']
+        for field in checkbox_fields:
+            cleaned_data[field] = bool(self.data.get(field))
+
+        return cleaned_data

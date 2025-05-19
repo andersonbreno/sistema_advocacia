@@ -1,5 +1,7 @@
 from django import forms
 from django.core.validators import validate_email
+
+from .widgets import DatePickerInput
 from .models import Cliente
 # from .validators import validar_cpf
 from .widgets import ImageInput
@@ -17,7 +19,7 @@ class ClienteForm(forms.ModelForm):
         widgets = {
             'nome': forms.TextInput(attrs={'class': 'form-control'}),
             'cpf': forms.TextInput(attrs={'class': 'form-control cpf-mask'}),
-            'data_de_nascimento': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
+            'data_de_nascimento': DatePickerInput(attrs={'class': 'form-control'}),
             'estado_civil': forms.Select(attrs={'class': 'form-control'}),
             'profissao': forms.TextInput(attrs={'class': 'form-control'}),
             'virou_cliente': forms.Select(attrs={'class': 'form-control'}),
@@ -41,11 +43,17 @@ class ClienteForm(forms.ModelForm):
     
     def __init__(self, *args, **kwargs):
         super(ClienteForm, self).__init__(*args, **kwargs)
-
+        
         self.fields['profissao'].required = False
         self.fields['foto'].required = False
         self.fields['telefone'].required = True
-        self.fields['data_de_nascimento'].input_formats = ['%Y-%m-%d', '%d/%m/%Y', '%d-%m-%Y']
+        #self.fields['data_de_nascimento'].input_formats = ['%Y-%m-%d', '%d/%m/%Y', '%d-%m-%Y']
+        
+        # Campos booleanos
+        for field in ['cadastrado_planilha', 'cadastrado_advbox', 'whatsapp']:
+            self.fields[field].required = False
+            self.fields[field].initial = False
+            
 
     def clean_cpf(self):
         cpf = self.cleaned_data.get('cpf')
@@ -66,6 +74,16 @@ class ClienteForm(forms.ModelForm):
             if len(telefone) != 11:
                 raise forms.ValidationError('O telefone deve conter exatamente 11 dígitos.')
         return telefone
+    
+    def clean(self):
+        cleaned_data = super().clean()
+
+        checkbox_fields = ['cadastrado_advbox', 'cadastrado_planilha', 'whatsapp']
+        for field in checkbox_fields:
+            # Garantir que o valor seja booleano coerente
+            cleaned_data[field] = bool(cleaned_data.get(field, False))
+
+        return cleaned_data
 
 
     #def clean(self):

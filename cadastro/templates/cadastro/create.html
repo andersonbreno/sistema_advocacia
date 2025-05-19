@@ -82,12 +82,14 @@
                                                       {{form.virou_cliente}}
                                                       <div class="invalid-feedback">{{form.virou_cliente.errors}}</div>   
                                                       <div class="form-check">
-                                                          {{form.cadastrado_advbox}}                                                          
-                                                          <label for="{{form.cadastrado_advbox.id_for_label}}" class="form-label">Cadastrado no Advbox</label>
+                                                        <input type="hidden" name="{{form.cadastrado_advbox.name}}" value="off">
+                                                        {{form.cadastrado_advbox}}                                                          
+                                                         <label for="{{form.cadastrado_advbox.id_for_label}}" class="form-label">Cadastrado no Advbox</label>
                                                       </div>
                                                       <div class="form-check">
-                                                          {{form.cadastrado_planilha}}                                                          
-                                                          <label for="{{form.cadastrado_planilha.id_for_label}}" class="form-label"> Cadastrado em Planilha</label>                    
+                                                        <input type="hidden" name="{{form.cadastrado_planilha.name}}" value="off">
+                                                        {{form.cadastrado_planilha}}                                                          
+                                                        <label for="{{form.cadastrado_planilha.id_for_label}}" class="form-label"> Cadastrado em Planilha</label>                    
                                                       </div>                                         
                                               </div>   
                                               <div class="col-md-4">
@@ -135,8 +137,9 @@
                                                       {{form.telefone}}       
                                                       <div class="invalid-feedback">{{form.telefone.errors}}</div>
                                                   <div class="form-check">
-                                                      {{form.whatsapp}} 
-                                                      <label for="{{form.whatsapp.id_for_label}}" class="form-label"> Whatsapp</label>                                   
+                                                    <input type="hidden" name="{{form.whatsapp.name}}" value="off">
+                                                    {{form.whatsapp}} 
+                                                    <label for="{{form.whatsapp.id_for_label}}" class="form-label"> Whatsapp</label>                                   
                                                   </div>                                         
                                               </div>
                                           </div>

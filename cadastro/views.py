@@ -118,16 +118,22 @@ class CadastroCreateView(LoginRequiredMixin, CreateView):
                 
                 processo.save()
                 
-                # 3. Configura e salva a tarefa associada ao processo
-                tarefa = tarefa_form.save(commit=False)
-                tarefa.numero_processo = processo
-                tarefa.cliente = cliente
+                # 3. Verifica se existe alguma tarefa pendente ou em progresso para o processo
+                tarefas_pendentes = Tarefa.objects.filter(
+                    processo=processo
+                ).exclude(status=Tarefa.CONCLUIDA)
+
+                if tarefas_pendentes.exists():
+                    messages.error(self.request, 'Não é possível criar uma nova tarefa enquanto a tarefa anterior não estiver concluída.')
+                    return self.form_invalid(form, processo_form, tarefa_form)
                 
-                # Valida a tarefa com o processo já definido
+                 # 4. Configura e salva a tarefa associada ao processo
+                tarefa = tarefa_form.save(commit=False)
+                tarefa.processo = processo
+                                
                 tarefa_form.instance = tarefa
                 if not tarefa_form.is_valid():
                     return self.form_invalid(form, processo_form, tarefa_form)
-                
                 tarefa.save()
 
                 messages.success(self.request, 'Cadastro realizado com sucesso!')

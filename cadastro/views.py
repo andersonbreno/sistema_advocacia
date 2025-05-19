@@ -18,6 +18,7 @@ from clientes.forms import ClienteForm
 from processos.forms import ProcessoForm
 from tarefas.forms import TarefaForm
 
+# CadastroCreateView
 class CadastroCreateView(LoginRequiredMixin, CreateView):
     model = Cliente
     form_class = ClienteForm
@@ -27,20 +28,21 @@ class CadastroCreateView(LoginRequiredMixin, CreateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         if self.request.POST:
-            context['processo_form'] = ProcessoForm(self.request.POST, self.request.FILES)
+            context['processo_form'] = ProcessoForm(self.request.POST)
             context['tarefa_form'] = TarefaForm(self.request.POST)
         else:
-            context['processo_form'] = ProcessoForm()
-            context['tarefa_form'] = TarefaForm()
+            context['processo_form'] = ProcessoForm(initial={'cliente': None})
+            context['tarefa_form'] = TarefaForm(initial={'numero_processo': None, 'cliente': None})
         return context
 
     def post(self, request, *args, **kwargs):
         self.object = None
         form = self.get_form()
-        processo_form = ProcessoForm(self.request.POST, self.request.FILES)
+        processo_form = ProcessoForm(self.request.POST)
         tarefa_form = TarefaForm(self.request.POST)
 
-        if form.is_valid() and processo_form.is_valid() and tarefa_form.is_valid():
+        # Primeiro valida apenas o formulário do cliente
+        if form.is_valid():
             return self.form_valid(form, processo_form, tarefa_form)
         else:
             return self.form_invalid(form, processo_form, tarefa_form)
@@ -48,21 +50,38 @@ class CadastroCreateView(LoginRequiredMixin, CreateView):
     def form_valid(self, form, processo_form, tarefa_form):
         try:
             with transaction.atomic():
-                self.object = form.save()
+                # 1. Salva o cliente primeiro
+                cliente = form.save()
+                
+                # 2. Configura e salva o processo associado ao cliente
                 processo = processo_form.save(commit=False)
-                processo.cliente = self.object
+                processo.cliente = cliente
+                
+                # Valida o processo com o cliente já definido
+                processo_form.instance = processo
+                if not processo_form.is_valid():
+                    return self.form_invalid(form, processo_form, tarefa_form)
+                
                 processo.save()
-
+                
+                # 3. Configura e salva a tarefa associada ao processo
                 tarefa = tarefa_form.save(commit=False)
                 tarefa.numero_processo = processo
-                tarefa.cliente = self.object
+                tarefa.cliente = cliente
+                
+                # Valida a tarefa com o processo já definido
+                tarefa_form.instance = tarefa
+                if not tarefa_form.is_valid():
+                    return self.form_invalid(form, processo_form, tarefa_form)
+                
                 tarefa.save()
 
                 messages.success(self.request, 'Cadastro realizado com sucesso!')
                 return redirect(self.get_success_url())
+                
         except Exception as e:
             messages.error(self.request, f'Ocorreu um erro ao salvar: {str(e)}')
-            return self.form_invalid(form, processo_form, tarefa_form)        
+            return self.form_invalid(form, processo_form, tarefa_form)
 
     def form_invalid(self, form, processo_form, tarefa_form):
         # Adiciona mensagens de erro específicas para cada formulário
@@ -70,13 +89,15 @@ class CadastroCreateView(LoginRequiredMixin, CreateView):
             for error in errors:
                 messages.error(self.request, f'Cliente - {field}: {error}')
         
-        for field, errors in processo_form.errors.items():
-            for error in errors:
-                messages.error(self.request, f'Processo - {field}: {error}')
+        if hasattr(processo_form, 'errors'):
+            for field, errors in processo_form.errors.items():
+                for error in errors:
+                    messages.error(self.request, f'Processo - {field}: {error}')
         
-        for field, errors in tarefa_form.errors.items():
-            for error in errors:
-                messages.error(self.request, f'Tarefa - {field}: {error}')
+        if hasattr(tarefa_form, 'errors'):
+            for field, errors in tarefa_form.errors.items():
+                for error in errors:
+                    messages.error(self.request, f'Tarefa - {field}: {error}')
 
         return self.render_to_response(
             self.get_context_data(
@@ -106,55 +127,105 @@ class CadastroDetailView(LoginRequiredMixin, DetailView):
 
 # CadastroUpdateView
 class CadastroUpdateView(LoginRequiredMixin, UpdateView):
-    template_name = "cadastro/create.html"  # Define o template que será renderizado
-    model = Cliente  # Define o modelo que será utilizado
-    form_class = ClienteForm  # Define o formulário que será utilizado
-    success_url = reverse_lazy("cadastro:list")  # Define a URL de redirecionamento após o sucesso
+    template_name = "cadastro/create.html"
+    model = Cliente
+    form_class = ClienteForm
+    success_url = reverse_lazy("cadastro:list")
+
+    def get_object(self, queryset=None):
+        """Garante que o objeto seja carregado corretamente"""
+        obj = super().get_object(queryset)
+        return obj
 
     def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)        
-        cliente = self.get_object()  # Obtém o objeto Cliente que está sendo atualizado
-
-        # Busca os objetos relacionados ou retorna None
+        """Prepara o contexto para o template"""
+        context = super().get_context_data(**kwargs)
+        cliente = self.object
+        
+        # Busca objetos relacionados
         processo = Processo.objects.filter(cliente=cliente).first()
         tarefa = Tarefa.objects.filter(numero_processo=processo).first() if processo else None
 
-        # Adiciona os formulários ao contexto
-        context["cliente_form"] = self.form_class(instance=cliente)
-        context["processo_form"] = ProcessoForm(instance=processo) if processo else ProcessoForm()
-        context["tarefa_form"] = TarefaForm(instance=tarefa) if tarefa else TarefaForm()
+        # Inicializa os formulários
+        if self.request.POST:
+            context['cliente_form'] = self.form_class(
+                self.request.POST, 
+                self.request.FILES, 
+                instance=cliente
+            )
+            context['processo_form'] = ProcessoForm(
+                self.request.POST, 
+                instance=processo
+            ) if processo else ProcessoForm(self.request.POST)
+            context['tarefa_form'] = TarefaForm(
+                self.request.POST, 
+                instance=tarefa
+            ) if tarefa else TarefaForm(self.request.POST)
+        else:
+            context['cliente_form'] = self.form_class(instance=cliente)
+            context['processo_form'] = ProcessoForm(instance=processo) if processo else ProcessoForm()
+            context['tarefa_form'] = TarefaForm(instance=tarefa) if tarefa else TarefaForm()
         
         return context
 
     def post(self, request, *args, **kwargs):
-        cliente = self.get_object()  # Obtém o objeto Cliente que está sendo atualizado
-        processo = Processo.objects.filter(cliente=cliente).first()
-        tarefa = Tarefa.objects.filter(numero_processo=processo).first() if processo else None
+        """Processa o formulário de atualização"""
+        self.object = self.get_object()
+        return super().post(request, *args, **kwargs)
 
-        # Valida os formulários
-        cliente_form = self.form_class(request.POST, request.FILES, instance=cliente)
-        processo_form = ProcessoForm(request.POST, request.FILES, instance=processo) if processo else ProcessoForm(request.POST, request.FILES)
-        tarefa_form = TarefaForm(request.POST, instance=tarefa) if tarefa else TarefaForm(request.POST)
+    def form_valid(self, form):
+        """Processa os dados quando todos os formulários são válidos"""
+        context = self.get_context_data()
+        cliente_form = form
+        processo_form = context['processo_form']
+        tarefa_form = context['tarefa_form']
 
-        # Se todos os formulários forem válidos, salva as alterações
-        if all([cliente_form.is_valid(), processo_form.is_valid(), tarefa_form.is_valid()]):
-            cliente_form.save()
-            processo = processo_form.save(commit=False)
-            processo.cliente = cliente
-            processo.save()
+        try:
+            with transaction.atomic():
+                # Salva o cliente
+                cliente = cliente_form.save()
+                
+                # Salva o processo
+                processo = processo_form.save(commit=False)
+                processo.cliente = cliente
+                processo.save()
+                
+                # Salva a tarefa
+                if tarefa_form.has_changed():  # Só salva se houver alterações
+                    tarefa = tarefa_form.save(commit=False)
+                    tarefa.numero_processo = processo
+                    tarefa.save()
+                
+                messages.success(self.request, 'Cadastro atualizado com sucesso!')
+                return redirect(self.get_success_url())
+                
+        except Exception as e:
+            messages.error(self.request, f'Erro ao atualizar: {str(e)}')
+            return self.form_invalid(form)
 
-            tarefa = tarefa_form.save(commit=False)
-            tarefa.processo = processo
-            tarefa.save()
+    def form_invalid(self, form):
+        """Processa erros de validação"""
+        context = self.get_context_data()
+        cliente_form = form
+        processo_form = context['processo_form']
+        tarefa_form = context['tarefa_form']
+        
+        # Coleta todos os erros
+        for field, errors in cliente_form.errors.items():
+            for error in errors:
+                messages.error(self.request, f'Cliente - {field}: {error}')
+        
+        if processo_form.errors:
+            for field, errors in processo_form.errors.items():
+                for error in errors:
+                    messages.error(self.request, f'Processo - {field}: {error}')
+        
+        if tarefa_form.errors:
+            for field, errors in tarefa_form.errors.items():
+                for error in errors:
+                    messages.error(self.request, f'Tarefa - {field}: {error}')
 
-            return redirect(self.success_url)
-
-        # Se algum formulário não for válido, re-renderiza a página com os erros
-        return self.render_to_response(self.get_context_data(
-            cliente_form=cliente_form,
-            processo_form=processo_form,
-            tarefa_form=tarefa_form,
-        ))
+        return self.render_to_response(self.get_context_data(form=form))
 
 # CadastroListView
 class CadastroListView(LoginRequiredMixin, ListView):

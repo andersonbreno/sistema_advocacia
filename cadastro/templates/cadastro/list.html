@@ -53,7 +53,13 @@
                                 <!-- Processo -->
                                 <td>
                                     {% for processo in cliente.processos.all %}
-                                        <li>{{ processo.numero_processo }}</li>
+                                    
+                                        {% if processo.numero_processo %}
+                                            {{ processo.numero_processo }}
+                                        {% else %}
+                                           Nenhum processo cadastrado
+                                        {% endif %}
+                                    
                                     {% empty %}
                                         Nenhum processo cadastrado
                                     {% endfor %}

@@ -165,7 +165,6 @@
                                   <div class="col-md-15">
                                       <div class="mb-3 row">
                                           <!-- Campo oculto para armazenar o cliente -->
-                                          <input type="hidden" name="cliente" id="cliente" value="">
                                           <div class="col-md-10">
                                             <label for="{{processo_form.cliente.id_for_label}}" class="form-label"></label>
                                                 {{processo_form.cliente}}                                            
@@ -228,7 +227,10 @@
                                   <div class="col-md-15">
                                     <div class="mb-3 row">
                                         <!-- Campo oculto para armazenar o Número do Processo -->
-                                        <input type="hidden" name="numero_processo" id="id_numero_processo" value="">
+                                        <div class="col-md-10">
+                                            <label for="{{tarefa_form.processo.id_for_label}}" class="form-label"></label>
+                                                {{tarefa_form.processo}}                                            
+                                        </div>    
                                         <div class="col-md-8">
                                             <label for="{{tarefa_form.responsaveis.id_for_label}}" class="form-label"> Responsável:</label>
                                                 {{tarefa_form.responsaveis}}                                            
@@ -343,27 +345,73 @@
             console.error(`Botão da aba com ID '${tabName}-tab' não encontrado.`);
             return;
         }
-    
-        // Se for a aba do processo, preenche o campo oculto com o cliente
+
+        // Se for a aba do processo, preenche o campo oculto com o ID do cliente
         if (tabName === 'processo') {
-            const nomeField = document.querySelector('[name="nome"]');
-            const hiddenClienteField = document.querySelector('[name="cliente"]');
-    
-            if (!nomeField) {
-                console.error("Campo 'nome' não encontrado.");
-                return;
+            const clienteIdField = document.querySelector('[name="cliente"]');
+            if (clienteIdField) {
+                // Se já houver um valor (em caso de edição), não sobrescreva
+                if (!clienteIdField.value) {
+                    // Você precisará ter acesso ao ID do cliente aqui
+                    // Isso pode exigir uma solução mais elaborada
+                }
             }
-    
-            if (!hiddenClienteField) {
-                console.error("Campo oculto 'cliente' não encontrado.");
-                return;
+        }
+
+        // Se for a aba da tarefa, preenche o campo oculto com o ID do processo
+        if (tabName === 'tarefa') {
+            const processoIdField = document.querySelector('[name="processo"]');
+            if (processoIdField) {
+                if (!processoIdField.value){
+                    
+                }
             }
-    
-            // Preenche o campo oculto com o valor do campo 'nome'
-            hiddenClienteField.value = nomeField.value;
         }
     }
-    // Adicione isso no seu bloco extra_script
+    
+        // Se for a aba do processo, preenche o campo oculto com o cliente
+        //if (tabName === 'processo') {
+            //const nomeField = document.querySelector('[name="nome"]');
+            //const hiddenClienteField = document.querySelector('[name="cliente"]');
+    
+            //if (!nomeField) {
+                //console.error("Campo 'nome' não encontrado.");
+                //return;
+            //}
+    
+            //if (!hiddenClienteField) {
+                //console.error("Campo oculto 'cliente' não encontrado.");
+                //return;
+            //}
+    
+            // Preenche o campo oculto com o valor do campo 'nome'
+            //hiddenClienteField.value = nomeField.value;
+        //}
+
+        // Se for a aba da tarefa, preenche o campo oculto com o numero do processo (sem formatação)
+        //if (tabName === 'tarefa') {
+            //const processoField = document.querySelector('[name="numero_processo"]');
+            //const hiddenTarefaProcessoField = document.querySelector('[name="processo"]');
+    
+            //if (!processoField) {
+               // console.error("Campo 'numero_processo' não encontrado.");
+                //return;
+            //}
+    
+            //if (!hiddenTarefaProcessoField) {
+                //console.error("Campo oculto 'tarefa-numero_processo' não encontrado.");
+                //return;
+            //}
+    
+            // Remove a formatação (pontos, traços, etc.)
+            //const rawValue = processoField.value.replace(/\D/g, '');
+    
+            // Preenche o campo oculto com o valor sem formatação
+            //hiddenTarefaProcessoField.value = rawValue;
+        //}
+    //}
+
+    
     document.querySelector('form').addEventListener('submit', function(e) {
         // Validação básica antes de enviar
         const activeTab = document.querySelector('.tab-pane.active');

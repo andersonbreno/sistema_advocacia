@@ -11,8 +11,7 @@ class ClienteForm(forms.ModelForm):
         model = Cliente
         fields = [
             'nome','cpf','data_de_nascimento', 'estado_civil', 'profissao',
-            'virou_cliente', 'cadastrado_advbox', 'cadastrado_planilha',
-            'justificativa', 'descricao', 'foto', 'email', 'telefone',
+            'virou_cliente', 'origem_cadastrado','justificativa', 'descricao', 'foto', 'email', 'telefone',
             'whatsapp', 'cep', 'rua', 'numero', 'complemento', 'bairro',
             'cidade', 'estado'
         ]
@@ -23,15 +22,14 @@ class ClienteForm(forms.ModelForm):
             'estado_civil': forms.Select(attrs={'class': 'form-control'}),
             'profissao': forms.TextInput(attrs={'class': 'form-control'}),
             'virou_cliente': forms.Select(attrs={'class': 'form-control'}),
-            'cadastrado_advbox': forms.CheckboxInput(attrs={'class': 'form-check-input checkbox-input'}),
-            'cadastrado_planilha': forms.CheckboxInput(attrs={'class': 'form-check-input checkbox-input'}),
+            'origem_cadastrado': forms.Select(attrs={'class': 'form-control'}),
             'justificativa': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
             'descricao': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
             'foto': ImageInput(attrs={'class': 'form-control'}),
             # Campos adicionados diretamente no modelo Cliente
             'email': forms.EmailInput(attrs={'class': 'form-control'}),
             'telefone': forms.TextInput(attrs={'class': 'form-control mask-telefone', 'maxlength': '15'}),
-            'whatsapp': forms.CheckboxInput(attrs={'class': 'form-check-input checkbox-input'}),
+            'whatsapp': forms.Select(attrs={'class': 'form-control'}),
             'cep': forms.TextInput(attrs={'class': 'form-control mask-cep'}),
             'rua': forms.TextInput(attrs={'class': 'form-control'}),
             'numero': forms.TextInput(attrs={'class': 'form-control'}),
@@ -47,23 +45,29 @@ class ClienteForm(forms.ModelForm):
         self.fields['profissao'].required = False
         self.fields['foto'].required = False
         self.fields['telefone'].required = True
-        #self.fields['data_de_nascimento'].input_formats = ['%Y-%m-%d', '%d/%m/%Y', '%d-%m-%Y']
-        
-        # Campos booleanos
-        for field in ['cadastrado_planilha', 'cadastrado_advbox', 'whatsapp']:
-            self.fields[field].required = False
-            self.fields[field].initial = False
-            
-
+                
+      
     def clean_cpf(self):
         cpf = self.cleaned_data.get('cpf')
-        if Cliente.objects.filter(cpf=cpf).exclude(pk=self.instance.pk).exists():
+        # Verifica se é uma edição (instance existe e tem PK)
+        if self.instance and self.instance.pk:
+            # Se o CPF não foi alterado, não precisa validar
+            if self.instance.cpf == cpf:
+                return cpf
+        # Validação para novo cadastro ou CPF alterado
+        if Cliente.objects.filter(cpf=cpf).exists():
             raise forms.ValidationError("Cliente com este CPF já existe.")
         return cpf
     
     def clean_email(self):
         email = self.cleaned_data.get('email')
-        if Cliente.objects.filter(email=email).exclude(pk=self.instance.pk).exists():
+        # Verifica se é uma edição (instance existe e tem PK)
+        if self.instance and self.instance.pk:
+            # Se o email não foi alterado, não precisa validar
+            if self.instance.email == email:
+                return email
+        # Validação para novo cadastro ou email alterado
+        if email and Cliente.objects.filter(email=email).exists():  # Verifica se email não é vazio
             raise forms.ValidationError("Este email já está em uso.")
         return email
     
@@ -75,17 +79,11 @@ class ClienteForm(forms.ModelForm):
                 raise forms.ValidationError('O telefone deve conter exatamente 11 dígitos.')
         return telefone
     
-    def clean(self):
-        cleaned_data = super().clean()
-
-        checkbox_fields = ['cadastrado_advbox', 'cadastrado_planilha', 'whatsapp']
-        for field in checkbox_fields:
-            # Garantir que o valor seja booleano coerente
-            cleaned_data[field] = bool(cleaned_data.get(field, False))
-
-        return cleaned_data
-
-
+    def clean_field(self):
+        data = self.cleaned_data["field"]
+        
+        return data
+    
     #def clean(self):
         #cleaned_data = super().clean()
         #foto = cleaned_data.get('foto')

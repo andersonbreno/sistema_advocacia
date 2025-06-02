@@ -77,26 +77,19 @@
                                                   <label for="{{form.profissao.id_for_label}}" class="form-label"> Profissão:</label>
                                                       {{form.profissao}}                                                                                                 
                                               </div>        
-                                              <div class="col-md-4">
+                                              <div class="col-md-6">
                                                   <label for="{{form.virou_cliente.id_for_label}}" class="form-label"> Virou cliente:</label>
-                                                      {{form.virou_cliente}}
-                                                      <div class="invalid-feedback">{{form.virou_cliente.errors}}</div>   
-                                                      <div class="form-check">
-                                                        <input type="hidden" name="{{form.cadastrado_advbox.name}}" value="off">
-                                                        {{form.cadastrado_advbox}}                                                          
-                                                         <label for="{{form.cadastrado_advbox.id_for_label}}" class="form-label">Cadastrado no Advbox</label>
-                                                      </div>
-                                                      <div class="form-check">
-                                                        <input type="hidden" name="{{form.cadastrado_planilha.name}}" value="off">
-                                                        {{form.cadastrado_planilha}}                                                          
-                                                        <label for="{{form.cadastrado_planilha.id_for_label}}" class="form-label"> Cadastrado em Planilha</label>                    
-                                                      </div>                                         
+                                                      {{form.virou_cliente}}                                                                                               
                                               </div>   
-                                              <div class="col-md-4">
+                                              <div class="col-md-6">
+                                                  <label for="{{form.origem_cadastrado.id_for_label}}" class="form-label"> Origem:</label>
+                                                      {{form.origem_cadastrado}}
+                                              </div>
+                                              <div class="col-md-6">
                                                   <label for="{{form.justificativa.id_for_label}}" class="form-label"> Justificativa:</label>
                                                       {{form.justificativa}}                                                                                                 
                                               </div>  
-                                              <div class="col-md-4">
+                                              <div class="col-md-6">
                                                   <label for="{{form.descricao.id_for_label}}" class="form-label"> Descrição:</label>
                                                       {{form.descricao}}                                                                                                 
                                               </div>
@@ -104,19 +97,19 @@
                                                   <label for="{{form.cep.id_for_label}}" class="form-label"> CEP:</label>
                                                       {{form.cep}}                                                                                                 
                                               </div>
-                                              <div class="col-md-4">
+                                              <div class="col-md-8">
                                                   <label for="{{form.rua.id_for_label}}" class="form-label"> Rua:</label>
                                                       {{form.rua}}                                                                                                  
                                               </div>
-                                              <div class="col-md-4">
+                                              <div class="col-md-2">
                                                   <label for="{{form.numero.id_for_label}}" class="form-label"> Número:</label>
                                                       {{form.numero}}                                                                                                 
                                               </div>
-                                              <div class="col-md-4">
+                                              <div class="col-md-5">
                                                   <label for="{{form.complemento.id_for_label}}" class="form-label"> Complemento:</label>
                                                       {{form.complemento}}                                                                                                 
                                               </div>
-                                              <div class="col-md-4">
+                                              <div class="col-md-5">
                                                   <label for="{{form.bairro.id_for_label}}" class="form-label"> Bairro:</label>
                                                       {{form.bairro}}                                           
                                               </div>
@@ -135,13 +128,12 @@
                                               <div class="col-md-4">
                                                   <label for="{{form.telefone.id_for_label}}" class="form-label"> Telefone:</label>
                                                       {{form.telefone}}       
-                                                      <div class="invalid-feedback">{{form.telefone.errors}}</div>
-                                                  <div class="form-check">
-                                                    <input type="hidden" name="{{form.whatsapp.name}}" value="off">
-                                                    {{form.whatsapp}} 
-                                                    <label for="{{form.whatsapp.id_for_label}}" class="form-label"> Whatsapp</label>                                   
-                                                  </div>                                         
+                                                      <div class="invalid-feedback">{{form.telefone.errors}}</div>                                                                                         
                                               </div>
+                                              <div class="col-md-4">                                                 
+                                                    <label for="{{form.whatsapp.id_for_label}}" class="form-label"> Whatsapp</label>                                   
+                                                      {{form.whatsapp}}
+                                              </div>  
                                           </div>
                                           <!-- Botão para avançar para a próxima aba -->
                                           <div class="d-flex justify-content-between">
@@ -180,11 +172,11 @@
                                           </div>
                                           <div class="col-md-4">
                                             <label for="{{processo_form.numero_processo.id_for_label}}" class="form-label"> Número do Processo:</label>
-                                                {{processo_form.numero_processo}}                            
-                                            <div class="form-check">
-                                                {{processo_form.prioritario}}
-                                                <label for="{{processo_form.prioritario.id_for_label}}" class="form-label"> Prioritário</label>
-                                            </div>
+                                                {{processo_form.numero_processo}}
+                                          </div>
+                                          <div class="col-md-4">
+                                            <label for="{{processo_form.processo_status.id_for_label}}" class="form-label"> Prioritário:</label>
+                                                {{processo_form.processo_status}}
                                           </div>
                                           <div class="col-md-4">
                                             <label for="{{processo_form.grupo.id_for_label}}" class="form-label"> Grupo:</label>
@@ -192,28 +184,28 @@
                                           </div>
                                           <div class="col-md-4">
                                             <label for="{{processo_form.fase_processo.id_for_label}}" class="form-label"> Fase do Processo:</label>
-                                                {{processo_form.fase_processo}}                                            
-                                            <div class="form-check">
-                                                {{processo_form.arquivado}}
-                                                <label for="{{processo_form.arquivado.id_for_label}}" class="form-label"> Arquivado</label>
-                                            </div>
+                                                {{processo_form.fase_processo}}
+                                          </div>
+                                          <div class="col-md-4">
+                                            <label for="{{processo_form.processo_status.id_for_label}}" class="form-label"> Status:</label>
+                                                {{processo_form.processo_status}}
                                           </div>                                          
                                           <div class="col-md-4">
                                             <label for="{{processo_form.data_contrato.id_for_label}}" class="form-label"> Data da Contratação:</label>
-                                                {{processo_form.data_contrato}}                                            
-                                            <div class="form-check">
+                                                {{processo_form.data_contrato}}
+                                          </div>                               
+                                          <div class="col-md-4">                                                
+                                            <label for="{{processo_form.fechou_contrato.id_for_label}}" class="form-label"> Fechou Contrato</label>
                                                 {{processo_form.fechou_contrato}}
-                                                <label for="{{processo_form.fechou_contrato.id_for_label}}" class="form-label"> Fechou Contrato</label>
-                                            </div>
-                                          </div>                                    
-                                          <div class="col-md-4">
-                                            <label for="{{processo_form.descricao_processo.id_for_label}}" class="form-label"> Descrição:</label>
-                                                {{processo_form.descricao_processo}}                                            
-                                          </div>
+                                          </div>   
                                           <div class="col-md-4">
                                             <label for="{{processo_form.pendencia.id_for_label}}" class="form-label"> Pendência:</label>
                                                 {{processo_form.pendencia}}                                            
-                                          </div>                                    
+                                          </div>   
+                                          <div class="col-md-4">
+                                            <label for="{{processo_form.descricao_processo.id_for_label}}" class="form-label"> Descrição:</label>
+                                                {{processo_form.descricao_processo}}                                            
+                                          </div>                                                                             
                                       </div>
                                   </div>
                                   <!-- Botões para avançar ou voltar -->
@@ -253,32 +245,14 @@
                                                 {{tarefa_form.local}}                                            
                                         </div>
                                         <div class="col-md-4">
-                                            <div class="form-check">
-                                                {{tarefa_form.importante}}
-                                                <label for="{{tarefa_form.importante.id_for_label}}" class="form-label"> Importante:</label>
-                                            </div>
-                                            <div class="form-check">
-                                                {{tarefa_form.urgente}}
-                                                <label for="{{tarefa_form.urgente.id_for_label}}" class="form-label"> Urgente:</label>
-                                            </div>
-                                            <div class="form-check">
-                                                {{tarefa_form.futura}}
-                                                <label for="{{tarefa_form.futura.id_for_label}}" class="form-label"> Futura:</label>
-                                            </div>
-                                            <div class="form-check">
-                                                {{tarefa_form.retroativa}}
-                                                <label for="{{tarefa_form.retroativa.id_for_label}}" class="form-label"> Retroativa:</label>
-                                            </div>
-                                            <div class="form-check">
-                                                {{tarefa_form.privada}}
-                                                <label for="{{tarefa_form.privada.id_for_label}}" class="form-label"> Privada:</label>
-                                            </div>
+                                            <label for="{{tarefa_form.prioridade_tarefa.id_for_label}}" class="form-label"> Importante:</label>
+                                                {{tarefa_form.prioridade_tarefa}}
                                         </div>
-                                        <div class="col-md-8">
+                                        <div class="col-md-4">
                                             <label for="{{tarefa_form.status.id_for_label}}" class="form-label"> Status:</label>
                                                 {{tarefa_form.status}}                                            
                                         </div>
-                                        <div class="col-md-8">
+                                        <div class="col-md-4">
                                             <label for="{{tarefa_form.descricao_tarefa.id_for_label}}" class="form-label"> Descrição:</label>
                                                 {{tarefa_form.descricao_tarefa}}                                            
                                         </div>                                        
@@ -470,6 +444,16 @@
     function voltarParaProcesso() {
         showTab('processo');
     }
+
+    window.addEventListener('DOMContentLoaded', function () {
+        const horaInput = document.querySelector('#tarefa input[name="hora"]');
+        if (horaInput && !horaInput.value) {
+            const now = new Date();
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            horaInput.value = `${hours}:${minutes}`;
+        }
+    });
 
     // Inicializa mostrando a aba do cliente
     showTab('cliente');    

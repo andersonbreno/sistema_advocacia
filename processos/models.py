@@ -7,6 +7,14 @@ class Advogado(models.Model):
 
     def __str__(self):
         return self.nome
+
+class ProcessoStatus(models.TextChoices):
+    PRIORITARIO = 'Prioritário', 'Prioritário'
+    ARQUIVADO = 'Arquivado', 'Arquivado'
+
+class FechouContrato(models.TextChoices):
+    SIM = 'Sim', 'Sim'
+    NAO = 'Não', 'Não'
     
 class Processo(models.Model):
     cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE, null=True, related_name="processos")
@@ -59,10 +67,9 @@ class Processo(models.Model):
         verbose_name='Fase do Processo'
     )
 
-    fechou_contrato = models.BooleanField(default=False, verbose_name='Fechou Contrato')
+    fechou_contrato = models.CharField(max_length=20, choices=FechouContrato.choices, blank=False, null=False) 
     data_contrato = models.DateField(null=True, blank=True, verbose_name='Data do Contrato')
-    prioritario = models.BooleanField(default=False, verbose_name='Prioritário')
-    arquivado = models.BooleanField(default=False, verbose_name='Arquivado')
+    processo_status = models.CharField(max_length=50, choices=ProcessoStatus.choices, blank=False, null=False)
     descricao_processo = models.TextField(blank=True, verbose_name='Descrição')
 
     class Pendencia(models.TextChoices):

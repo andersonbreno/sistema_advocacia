@@ -34,10 +34,9 @@ class ProcessoForm(forms.ModelForm):
             'numero_processo': forms.TextInput(attrs={'class': 'form-control process-mask'}),
             'grupo': forms.Select(attrs={'class': 'form-control'}),
             'fase_processo': forms.Select(attrs={'class': 'form-control'}),
-            'fechou_contrato': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+            'fechou_contrato': forms.Select(attrs={'class': 'form-control'}),
             'data_contrato': DatePickerInput(attrs={'class': 'form-control'}), 
-            'prioritario': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
-            'arquivado': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+            'processo_status':forms.Select(attrs={'class': 'form-control'}),
             'descricao_processo': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
             'pendencia': forms.Select(attrs={'class': 'form-control'}),
         }
@@ -59,11 +58,3 @@ class ProcessoForm(forms.ModelForm):
     
         return formatado
     
-    def clean(self):
-        cleaned_data = super().clean()
-
-        checkbox_fields = ['fechou_contrato', 'prioritario', 'arquivado']
-        for field in checkbox_fields:
-            cleaned_data[field] = bool(self.data.get(field))
-
-        return cleaned_data

@@ -2,15 +2,17 @@ from django import forms
 from django.contrib.auth import get_user_model
 
 from clientes.widgets import DatePickerInput
-from .models import Processo, Tarefa
+from .models import Processo, Tarefa, PrioridadeTarefa, Status_Tarefa, ModelTarefa
+
 
 User = get_user_model()
 
 class TarefaForm(forms.ModelForm):
     status = forms.ChoiceField(
-        choices=Tarefa.STATUS_CHOICES,
+        choices=Status_Tarefa.choices,  
         widget=forms.Select(attrs={'class': 'form-control'}),
-        label="Status da Tarefa"
+        label="Status da Tarefa",
+        initial=Status_Tarefa.PENDENTE  
     )
     
     processo = forms.ModelChoiceField(
@@ -28,22 +30,28 @@ class TarefaForm(forms.ModelForm):
         widget=forms.Select(attrs={'class': 'form-control'})
         
     )
+    prioridade_tarefa = forms.ChoiceField(
+        choices=PrioridadeTarefa.choices,
+        required=True,
+        label="Tarefa",
+        widget=forms.Select(attrs={'class': 'form-control'})
+    )
+    tarefa = forms.ModelChoiceField(
+        queryset=ModelTarefa.objects.all(),
+        required=True,
+        label="Tarefas",
+        widget=forms.Select(attrs={'class': 'form-control'})
+    )
 
     class Meta:
         model = Tarefa
         fields = '__all__'
-        widgets = {
-            'tarefa': forms.TextInput(attrs={'class': 'form-control'}),
+        widgets = {            
             'data': DatePickerInput(attrs={'class': 'form-control'}),
             'hora': forms.TimeInput(attrs={'type': 'time', 'class': 'form-control'}),
             'prazo_fatal': DatePickerInput(attrs={'class': 'form-control'}),
             'local': forms.TextInput(attrs={'class': 'form-control'}),
             'descricao_tarefa': forms.Textarea(attrs={'class': 'form-control'}),
-            'importante': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
-            'urgente': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
-            'futura': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
-            'retroativa': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
-            'privada': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
         }
         
     def clean(self):

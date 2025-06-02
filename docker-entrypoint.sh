@@ -36,5 +36,5 @@ if not User.objects.filter(username='$DJANGO_SUPERUSER_USERNAME').exists():
     User.objects.create_superuser('$DJANGO_SUPERUSER_USERNAME', '$DJANGO_SUPERUSER_EMAIL', '$DJANGO_SUPERUSER_PASSWORD')
 EOF
 
-exec gunicorn --bind 0.0.0.0:8000 config.wsgi:application
-#python3 manage.py runserver 0.0.0.0:8000 --noreload
+#exec gunicorn --bind 0.0.0.0:8000 config.wsgi:application
+python3 manage.py runserver 0.0.0.0:8000 --noreload

@@ -1,6 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import User
 from processos.models import Processo
+from django.utils import timezone
+
 
 class ModelTarefa(models.Model):
     tipo_tarefa = models.CharField(max_length=150)
@@ -36,6 +38,11 @@ class Tarefa(models.Model):
     descricao_tarefa = models.TextField(null=True, blank=True)
     prioridade_tarefa = models.CharField(max_length=50, choices=PrioridadeTarefa.choices, blank=False, null=False)
     status = models.CharField(max_length=20, choices=Status_Tarefa.choices, default=Status_Tarefa.PENDENTE)
+
+    def save(self, *args, **kwargs):
+        if not self.hora:
+            self.hora = timezone.now().time()
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return f"Tarefa para o processo {self.processo} - {self.get_status_display()}"

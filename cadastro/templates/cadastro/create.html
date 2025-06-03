@@ -175,7 +175,7 @@
                                                 {{processo_form.numero_processo}}
                                           </div>
                                           <div class="col-md-4">
-                                            <label for="{{processo_form.processo_status.id_for_label}}" class="form-label"> Prioritário:</label>
+                                            <label for="{{processo_form.processo_status.id_for_label}}" class="form-label"> Status:</label>
                                                 {{processo_form.processo_status}}
                                           </div>
                                           <div class="col-md-4">
@@ -185,11 +185,7 @@
                                           <div class="col-md-4">
                                             <label for="{{processo_form.fase_processo.id_for_label}}" class="form-label"> Fase do Processo:</label>
                                                 {{processo_form.fase_processo}}
-                                          </div>
-                                          <div class="col-md-4">
-                                            <label for="{{processo_form.processo_status.id_for_label}}" class="form-label"> Status:</label>
-                                                {{processo_form.processo_status}}
-                                          </div>                                          
+                                          </div>                                                                                    
                                           <div class="col-md-4">
                                             <label for="{{processo_form.data_contrato.id_for_label}}" class="form-label"> Data da Contratação:</label>
                                                 {{processo_form.data_contrato}}
@@ -292,10 +288,11 @@
 
     function showTab(tabName) {
         if (!tabName) {
-        console.error("String vazia passada para showTab().");
-        return;
-    }
-        currentTab = tabName; // <-- Atualiza a aba atual aqui
+            console.error("String vazia passada para showTab().");
+            return;
+        }
+        
+        currentTab = tabName;
 
         // Esconde todas as abas
         const tabs = document.querySelectorAll('.tab-pane');
@@ -322,121 +319,140 @@
             return;
         }
 
-        // Se for a aba do processo, preenche o campo oculto com o ID do cliente
+        // Preenche campos ocultos com IDs
         if (tabName === 'processo') {
             const clienteIdField = document.querySelector('[name="cliente"]');
-            if (clienteIdField) {
-                // Se já houver um valor (em caso de edição), não sobrescreva
-                if (!clienteIdField.value) {
-                    // Você precisará ter acesso ao ID do cliente aqui
-                    // Isso pode exigir uma solução mais elaborada
-                }
+            if (clienteIdField && clienteId) {
+                clienteIdField.value = clienteId;
             }
         }
 
-        // Se for a aba da tarefa, preenche o campo oculto com o ID do processo
         if (tabName === 'tarefa') {
             const processoIdField = document.querySelector('#tarefa [name="processo"]');
             if (processoIdField && processoId) {
                 processoIdField.value = processoId;
-            } else if (!processoId) {
-                console.error("processoId ainda não foi definido.");
             }
         }
     }
     
     function salvarEtapa() {
-    const formElement = document.getElementById('mainForm');
-    if (!formElement) {
-        console.error('Formulário principal não encontrado');
-        return;
+        const formElement = document.getElementById('mainForm');
+        if (!formElement) {
+            console.error('Formulário principal não encontrado');
+            return;
+        }
+
+        const isUpdate = window.location.pathname.includes('/update/');
+        const url = isUpdate ? window.location.pathname : "{% url 'cadastro:create' %}";
+
+        const formData = new FormData(formElement);
+        formData.append('etapa', currentTab);
+
+        // Limpa mensagens de erro anteriores
+        clearErrors();
+
+        fetch(url, {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+            },
+        })
+        .then(response => {
+            if (!response.ok) {
+                return response.json().then(err => {
+                    throw err;
+                }).catch(() => {
+                    throw new Error('Erro no servidor');
+                });
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.success) {
+                // Atualiza IDs
+                if (data.cliente_id) clienteId = data.cliente_id;
+                if (data.processo_id) processoId = data.processo_id;
+
+                // Navegação
+                if (currentTab === 'cliente' && data.next_etapa === 'processo') {
+                    showTab('processo');
+                } else if (currentTab === 'processo' && data.next_etapa === 'tarefa') {
+                    showTab('tarefa');
+                } else if (data.redirect_url) {
+                    window.location.href = data.redirect_url;
+                }
+                
+                if (data.message) {
+                    alert(data.message); // Ou exibir em um toast
+                }
+            } else {
+                throw data;
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            if (error.errors) {
+                showFieldErrors(error.errors);
+            } else {
+                alert('Erro: ' + (error.message || 'Ocorreu um erro desconhecido'));
+            }
+        });
     }
 
-    // Coletar apenas os campos relevantes para a etapa atual
-    const formData = new FormData();
-    
-    // Adicionar CSRF token
-    formData.append('csrfmiddlewaretoken', document.querySelector('[name=csrfmiddlewaretoken]').value);
-    
-    // Adicionar a etapa atual
-    formData.append('etapa', currentTab);
 
-    // Coletar campos específicos da etapa atual
-    if (currentTab === 'cliente') {
-        // Adicionar todos os campos do cliente
-        const clienteFields = formElement.querySelectorAll('#cliente input, #cliente select, #cliente textarea');
-        clienteFields.forEach(field => {
-            if (field.name && field.type !== 'file') {
-                formData.append(field.name, field.value);
-            } else if (field.type === 'file' && field.files.length > 0) {
-                formData.append(field.name, field.files[0]);
-            }
+    function clearErrors() {
+        document.querySelectorAll('.is-invalid').forEach(el => {
+            el.classList.remove('is-invalid');
         });
-    } 
-    else if (currentTab === 'processo') {
-        // Adicionar ID do cliente se existir
-        if (clienteId) {
-            formData.append('cliente_id', clienteId);
-        }
-        
-        // Adicionar campos do processo
-        const processoFields = formElement.querySelectorAll('#processo input, #processo select, #processo textarea');
-        processoFields.forEach(field => {
-            if (field.name) {
-                formData.append(field.name, field.value);
-            }
-        });
-    } 
-    else if (currentTab === 'tarefa') {
-        // Adicionar ID do processo se existir
-        if (processoId) {
-            formData.append('processo_id', processoId);
-        }
-        
-        // Adicionar campos da tarefa
-        const tarefaFields = formElement.querySelectorAll('#tarefa input, #tarefa select, #tarefa textarea');
-        tarefaFields.forEach(field => {
-            if (field.name) {
-                formData.append(field.name, field.value);
-            }
+        document.querySelectorAll('.invalid-feedback').forEach(el => {
+            el.textContent = '';
         });
     }
 
-    fetch("{% url 'cadastro:create' %}", {
-        method: 'POST',
-        body: formData,
-        headers: {
-            'X-Requested-With': 'XMLHttpRequest',
-        },
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Erro na resposta do servidor');
-        }
-        return response.json();
-    })
-    .then(data => {
-        if (data.success) {
-            if (currentTab === 'cliente') {
-                clienteId = data.cliente_id;
-                document.getElementById('clienteId').value = clienteId;
-                showTab('processo');
-            } else if (currentTab === 'processo') {
-                processoId = data.processo_id;
-                document.getElementById('processoId').value = processoId;
-                showTab('tarefa');
-            } else if (currentTab === 'tarefa') {
-                window.location.href = data.redirect_url || "{% url 'cadastro:list' %}";
+    function showFieldErrors(errors) {
+        for (const field in errors) {
+            const input = document.querySelector(`[name="${field}"]`);
+            if (!input) {
+                console.warn(`Campo ${field} não encontrado no formulário`);
+                continue;
             }
-        } else {
-            alert('Erros encontrados: ' + JSON.stringify(data.errors));
+            
+            // Adiciona classe de erro ao input
+            input.classList.add('is-invalid');
+            
+            // Tenta encontrar o elemento de mensagem de erro de várias formas
+            let errorElement = null;
+            
+            // 1. Verifica se há um irmão com a classe invalid-feedback
+            errorElement = input.nextElementSibling;
+            if (errorElement && errorElement.classList.contains('invalid-feedback')) {
+                errorElement.textContent = errors[field].join(', ');
+                continue;
+            }
+            
+            // 2. Procura dentro do grupo de formulário
+            const formGroup = input.closest('.mb-3, .form-group, .col-md-4, .col-md-6, .col-md-8');
+            if (formGroup) {
+                errorElement = formGroup.querySelector('.invalid-feedback');
+                if (errorElement) {
+                    errorElement.textContent = errors[field].join(', ');
+                    continue;
+                }
+            }
+            
+            // 3. Se não encontrou, cria um elemento temporário
+            console.warn(`Elemento de erro não encontrado para o campo ${field}`);
+            const errorDiv = document.createElement('div');
+            errorDiv.className = 'invalid-feedback';
+            errorDiv.textContent = errors[field].join(', ');
+            errorDiv.style.color = 'red';
+            
+            // Insere após o input ou no final do container
+            input.parentNode.insertBefore(errorDiv, input.nextSibling);
         }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        alert('Ocorreu um erro ao salvar os dados: ' + error.message);
-    });
-}
+    }
+
     function voltarParaCliente() {
         showTab('cliente');
     }
@@ -446,12 +462,21 @@
     }
 
     window.addEventListener('DOMContentLoaded', function () {
+        // Preenche hora atual se vazio
         const horaInput = document.querySelector('#tarefa input[name="hora"]');
         if (horaInput && !horaInput.value) {
             const now = new Date();
-            const hours = String(now.getHours()).padStart(2, '0');
-            const minutes = String(now.getMinutes()).padStart(2, '0');
-            horaInput.value = `${hours}:${minutes}`;
+            horaInput.value = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+        }
+        
+        // Carrega IDs se for update
+        if (window.location.pathname.includes('/update/')) {
+            clienteId = window.location.pathname.split('/').filter(Boolean).pop();
+            
+            const processoIdField = document.querySelector('#tarefa [name="processo"]');
+            if (processoIdField?.value) {
+                processoId = processoIdField.value;
+            }
         }
     });
 

@@ -1,16 +1,12 @@
-# from django.urls import path
-# from .views import (
-#     TarefaCreateView, TarefaListView, TarefaUpdateView, 
-#     TarefaDeleteView, TarefaDetailView
-# )
+from django.urls import path
+from . import views
 
-# app_name = 'tarefas'
+app_name = 'tarefas'
 
-# urlpatterns = [
-#     path('', TarefaListView.as_view(), name='list'),
-#     path('nova/', TarefaCreateView.as_view(), name='create'),
-#     path('<int:pk>/detalhe', TarefaDetailView.as_view(), name='detail'),
-#     path('<int:pk>/editar/', TarefaUpdateView.as_view(), name='tarefa-update'),
-#     path('<int:pk>/excluir/', TarefaDeleteView.as_view(), name='delete'),
-    
-# ]
+urlpatterns = [
+    path('', views.TarefaListView.as_view(), name='list'),
+    path('<int:pk>/', views.TarefaDetailView.as_view(), name='detail'),
+    path('<int:pk>/editar/', views.TarefaUpdateView.as_view(), name='tarefa-update'),
+    path('<int:pk>/excluir/', views.TarefaDeleteView.as_view(), name='delete'),
+    path('<int:pk>/duplicar/', views.tarefa_duplicar_view, name='tarefa-duplicar'),
+]

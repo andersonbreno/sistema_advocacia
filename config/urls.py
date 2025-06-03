@@ -33,7 +33,7 @@ urlpatterns = [
     # path('clientes/', include('clientes.urls')),  # Inclui as URLs do app clientes
     path('parceiros/', include('parceiros.urls')), # Inclui as URLs do app parceiros
     # path('processos/', include('processos.urls')),  # Inclui as URLs do app processos
-    # path('tarefas/', include('tarefas.urls')), # Inclui as URLs do app tarefas
+    path('tarefas/', include('tarefas.urls')), # Inclui as URLs do app tarefas
     path('', include('usuarios.urls')),
     # Redirecionar /favicon.ico para o favicon nos arquivos estáticos
     path('favicon.ico', RedirectView.as_view(url='/static/favicon.ico', permanent=True)),

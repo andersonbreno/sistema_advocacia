@@ -39,125 +39,125 @@ class CadastroCreateView(LoginRequiredMixin, CreateView):
 
     def post(self, request, *args, **kwargs):
         self.object = None
-        form = self.get_form()
-        processo_form = ProcessoForm(self.request.POST or None)
-        tarefa_form = TarefaForm(self.request.POST or None)
-
+        
         # Verifica se é uma requisição AJAX para salvar em etapas
         if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
-            etapa = request.POST.get('etapa')
+            return self.handle_ajax_request(request)
             
+        # Se não for AJAX, mantém o comportamento original
+        form = self.get_form()
+        processo_form = ProcessoForm(self.request.POST)
+        tarefa_form = TarefaForm(self.request.POST)
+
+        if form.is_valid() and processo_form.is_valid() and tarefa_form.is_valid():
+            return self.form_valid(form, processo_form, tarefa_form)
+        return self.form_invalid(form, processo_form, tarefa_form)
+        
+    def handle_ajax_request(self, request):
+        etapa = request.POST.get('etapa')
+        form_data = {
+            'cliente': self.get_form(),
+            'processo': ProcessoForm(request.POST),
+            'tarefa': TarefaForm(request.POST)
+        }
+        
+        try:
             if etapa == 'cliente':
+                form = form_data['cliente']
                 if form.is_valid():
                     cliente = form.save()
-                    self.object = cliente
                     return JsonResponse({
                         'success': True,
                         'cliente_id': cliente.id,
-                        'next_etapa': 'processo'
+                        'next_etapa': 'processo',
+                        'message': 'Dados do cliente salvos com sucesso!'
                     })
-                else:
-                    return JsonResponse({
-                        'success': False,
-                        'errors': form.errors
-                    })
+                return self.json_error_response(form.errors)
                     
             elif etapa == 'processo':
-                if processo_form.is_valid():
-                    processo = processo_form.save(commit=False)
-                    processo.cliente_id = request.POST.get('cliente_id')
+                cliente_id = request.POST.get('cliente_id')
+                if not cliente_id:
+                    return self.json_error_response(
+                        {'cliente': ['ID do cliente não fornecido']}, 
+                        status=400
+                    )
+                    
+                form = form_data['processo']
+                if form.is_valid():
+                    processo = form.save(commit=False)
+                    processo.cliente_id = cliente_id
                     processo.save()
-                    self.object = processo 
                     return JsonResponse({
                         'success': True,
                         'processo_id': processo.id,
-                        'next_etapa': 'tarefa'
+                        'next_etapa': 'tarefa',
+                        'message': 'Dados do processo salvos com sucesso!'
                     })
-                else:
-                    return JsonResponse({
-                        'success': False,
-                        'errors': processo_form.errors
-                    })
+                return self.json_error_response(form.errors)
                     
             elif etapa == 'tarefa':
-                if tarefa_form.is_valid():
-                    tarefa = tarefa_form.save(commit=False)
-                    tarefa.numero_processo_id = request.POST.get('processo_id')
+                processo_id = request.POST.get('processo_id')
+                if not processo_id:
+                    return self.json_error_response(
+                        {'processo': ['ID do processo não fornecido']}, 
+                        status=400
+                    )
+                    
+                form = form_data['tarefa']
+                if form.is_valid():
+                    tarefa = form.save(commit=False)
+                    tarefa.processo_id = processo_id
                     tarefa.save()
-                    self.object = tarefa
                     return JsonResponse({
                         'success': True,
-                        'redirect_url': self.get_success_url()
+                        'redirect_url': str(self.get_success_url()),
+                        'message': 'Tarefa salva com sucesso!'
                     })
-                else:
-                    return JsonResponse({
-                        'success': False,
-                        'errors': tarefa_form.errors
-                    })
+                return self.json_error_response(form.errors)
+                
+        except Exception as e:
+            return self.json_error_response(
+                {'server': [str(e)]}, 
+                status=500
+            )
 
-        # Se não for AJAX, mantém o comportamento original
-        if form.is_valid():
-            return self.form_valid(form, processo_form, tarefa_form)
-        else:
-            return self.form_invalid(form, processo_form, tarefa_form)
-        
+    def json_error_response(self, errors, status=400):
+        """Helper para retornar erros formatados"""
+        return JsonResponse({
+            'success': False,
+            'errors': errors
+        }, status=status)
+
     def form_valid(self, form, processo_form, tarefa_form):
         try:
             with transaction.atomic():
-                # 1. Salva o cliente primeiro
                 cliente = form.save()
-                
-                # 2. Configura e salva o processo associado ao cliente
                 processo = processo_form.save(commit=False)
                 processo.cliente = cliente
-                
-                # Valida o processo com o cliente já definido
-                processo_form.instance = processo
-                if not processo_form.is_valid():
-                    return self.form_invalid(form, processo_form, tarefa_form)
-                
                 processo.save()
-                
-                # 3. Verifica se existe alguma tarefa pendente ou em progresso para o processo
-                tarefas_pendentes = Tarefa.objects.filter(
-                    processo=processo
-                ).exclude(status=Tarefa.CONCLUIDA)
-
-                if tarefas_pendentes.exists():
-                    messages.error(self.request, 'Não é possível criar uma nova tarefa enquanto a tarefa anterior não estiver concluída.')
-                    return self.form_invalid(form, processo_form, tarefa_form)
-                
-                 # 4. Configura e salva a tarefa associada ao processo
                 tarefa = tarefa_form.save(commit=False)
                 tarefa.processo = processo
-                                
-                tarefa_form.instance = tarefa
-                if not tarefa_form.is_valid():
-                    return self.form_invalid(form, processo_form, tarefa_form)
                 tarefa.save()
 
                 messages.success(self.request, 'Cadastro realizado com sucesso!')
                 return redirect(self.get_success_url())
                 
         except Exception as e:
-            messages.error(self.request, f'Ocorreu um erro ao salvar: {str(e)}')
+            messages.error(self.request, f'Erro ao salvar: {str(e)}')
             return self.form_invalid(form, processo_form, tarefa_form)
 
     def form_invalid(self, form, processo_form, tarefa_form):
-        # Adiciona mensagens de erro específicas para cada formulário
         for field, errors in form.errors.items():
             for error in errors:
                 messages.error(self.request, f'Cliente - {field}: {error}')
         
-        if hasattr(processo_form, 'errors'):
-            for field, errors in processo_form.errors.items():
-                for error in errors:
-                    messages.error(self.request, f'Processo - {field}: {error}')
+        for field, errors in processo_form.errors.items():
+            for error in errors:
+                messages.error(self.request, f'Processo - {field}: {error}')
         
-        if hasattr(tarefa_form, 'errors'):
-            for field, errors in tarefa_form.errors.items():
-                for error in errors:
-                    messages.error(self.request, f'Tarefa - {field}: {error}')
+        for field, errors in tarefa_form.errors.items():
+            for error in errors:
+                messages.error(self.request, f'Tarefa - {field}: {error}')
 
         return self.render_to_response(
             self.get_context_data(
@@ -166,7 +166,7 @@ class CadastroCreateView(LoginRequiredMixin, CreateView):
                 tarefa_form=tarefa_form
             )
         )
-            
+                    
 # CadastroDeleteView
 class CadastroDeleteView(LoginRequiredMixin, DeleteView):
     model = Cliente  # Define o modelo que será utilizado
@@ -192,69 +192,126 @@ class CadastroUpdateView(LoginRequiredMixin, UpdateView):
     form_class = ClienteForm
     success_url = reverse_lazy("cadastro:list")
 
-    def get_object(self, queryset=None):
-        """Garante que o objeto seja carregado corretamente"""
-        obj = super().get_object(queryset)
-        return obj
-
     def get_context_data(self, **kwargs):
-        """Prepara o contexto para o template"""
         context = super().get_context_data(**kwargs)
         cliente = self.object
-        
-        # Busca objetos relacionados
         processo = Processo.objects.filter(cliente=cliente).first()
         tarefa = Tarefa.objects.filter(processo=processo).first() if processo else None
 
-        # Inicializa os formulários
         if self.request.POST:
-            context['cliente_form'] = self.form_class(
-                self.request.POST, 
-                self.request.FILES, 
-                instance=cliente
-            )
             context['processo_form'] = ProcessoForm(
                 self.request.POST, 
                 instance=processo
-            ) if processo else ProcessoForm(self.request.POST)
+            )
             context['tarefa_form'] = TarefaForm(
-                self.request.POST, 
+                self.request.POST,
                 instance=tarefa
-            ) if tarefa else TarefaForm(self.request.POST)
+            )
         else:
-            context['cliente_form'] = self.form_class(instance=cliente)
-            context['processo_form'] = ProcessoForm(instance=processo) if processo else ProcessoForm()
-            context['tarefa_form'] = TarefaForm(instance=tarefa) if tarefa else TarefaForm()
+            context['processo_form'] = ProcessoForm(instance=processo)
+            context['tarefa_form'] = TarefaForm(instance=tarefa)
         
         return context
 
     def post(self, request, *args, **kwargs):
-        """Processa o formulário de atualização"""
         self.object = self.get_object()
+        
+        # Verifica se é AJAX
+        if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+            return self.handle_ajax_request(request)
+            
         return super().post(request, *args, **kwargs)
 
+    def handle_ajax_request(self, request):
+        etapa = request.POST.get('etapa')
+        cliente = self.object
+        processo = Processo.objects.filter(cliente=cliente).first()
+        tarefa = Tarefa.objects.filter(processo=processo).first() if processo else None
+
+        try:
+            if etapa == 'cliente':
+                form = self.get_form()
+                if form.is_valid():
+                    form.save()
+                    return JsonResponse({
+                        'success': True,
+                        'cliente_id': cliente.id,
+                        'next_etapa': 'processo'
+                    })
+                return JsonResponse({
+                    'success': False,
+                    'errors': form.errors
+                }, status=400)
+
+            elif etapa == 'processo':
+                processo_form = ProcessoForm(
+                    request.POST, 
+                    instance=processo
+                ) if processo else ProcessoForm(request.POST)
+                
+                if processo_form.is_valid():
+                    processo = processo_form.save(commit=False)
+                    processo.cliente = cliente
+                    processo.save()
+                    return JsonResponse({
+                        'success': True,
+                        'processo_id': processo.id,
+                        'next_etapa': 'tarefa'
+                    })
+                return JsonResponse({
+                    'success': False,
+                    'errors': processo_form.errors
+                }, status=400)
+
+            elif etapa == 'tarefa':
+                if not processo:
+                    return JsonResponse({
+                        'success': False,
+                        'errors': {'processo': ['Processo não encontrado']}
+                    }, status=400)
+                
+                tarefa_form = TarefaForm(
+                    request.POST,
+                    instance=tarefa
+                ) if tarefa else TarefaForm(request.POST)
+                
+                if tarefa_form.is_valid():
+                    tarefa = tarefa_form.save(commit=False)
+                    tarefa.processo = processo
+                    tarefa.save()
+                    return JsonResponse({
+                        'success': True,
+                        'redirect_url': self.get_success_url()
+                    })
+                return JsonResponse({
+                    'success': False,
+                    'errors': tarefa_form.errors
+                }, status=400)
+
+        except Exception as e:
+            return JsonResponse({
+                'success': False,
+                'errors': {'server': [str(e)]}
+            }, status=500)
+
     def form_valid(self, form):
-        """Processa os dados quando todos os formulários são válidos"""
         context = self.get_context_data()
-        cliente_form = form
         processo_form = context['processo_form']
         tarefa_form = context['tarefa_form']
 
         try:
             with transaction.atomic():
-                # Salva o cliente
-                cliente = cliente_form.save()
+                cliente = form.save()
                 
-                # Salva o processo
-                processo = processo_form.save(commit=False)
-                processo.cliente = cliente
-                processo.save()
-                
-                # Salva a tarefa
-                if tarefa_form.has_changed():  # Só salva se houver alterações
-                    tarefa = tarefa_form.save(commit=False)
-                    tarefa.processo = processo
-                    tarefa.save()
+                if processo_form.is_valid():
+                    processo = processo_form.save(commit=False)
+                    processo.cliente = cliente
+                    processo.save()
+                    
+                    if tarefa_form.is_valid() and tarefa_form.has_changed():
+                        tarefa = tarefa_form.save(commit=False)
+                        tarefa.processo = processo
+                        tarefa.save()
                 
                 messages.success(self.request, 'Cadastro atualizado com sucesso!')
                 return redirect(self.get_success_url())
@@ -262,31 +319,7 @@ class CadastroUpdateView(LoginRequiredMixin, UpdateView):
         except Exception as e:
             messages.error(self.request, f'Erro ao atualizar: {str(e)}')
             return self.form_invalid(form)
-
-    def form_invalid(self, form):
-        """Processa erros de validação"""
-        context = self.get_context_data()
-        cliente_form = form
-        processo_form = context['processo_form']
-        tarefa_form = context['tarefa_form']
         
-        # Coleta todos os erros
-        for field, errors in cliente_form.errors.items():
-            for error in errors:
-                messages.error(self.request, f'Cliente - {field}: {error}')
-        
-        if processo_form.errors:
-            for field, errors in processo_form.errors.items():
-                for error in errors:
-                    messages.error(self.request, f'Processo - {field}: {error}')
-        
-        if tarefa_form.errors:
-            for field, errors in tarefa_form.errors.items():
-                for error in errors:
-                    messages.error(self.request, f'Tarefa - {field}: {error}')
-
-        return self.render_to_response(self.get_context_data(form=form))
-
 # CadastroListView
 class CadastroListView(LoginRequiredMixin, ListView):
     template_name = 'cadastro/list.html'

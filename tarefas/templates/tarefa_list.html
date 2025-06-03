@@ -35,25 +35,29 @@
                     <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                         <thead>
                             <tr>                              
-                                <th>Data</th>
-                                <th>Prazo</th>
+                                <th>Processo</th>
+                                <th>Tarefa</th>
+                                <th>Prazo Fatal</th>
+                                <th>Status</th>
                                 <th>Ações</th>
                             </tr>
                         </thead>
-                        <!-- <tbody>
+                        <tbody>
                             {% for tarefa in tarefas %}
                             <tr>                                
-                                <td>{{ tarefa.responsaveis.all|join:", " }}</td>
-                                <td><a href="{% url 'tarefas:tarefa-update' tarefa.pk %}"></a>{{ tarefa.tarefa }}</td>
+                                <td>{{ tarefa.processo}}</td>
+                                <td>{{ tarefa.tarefa }}</td>
                                 <td>{{ tarefa.prazo_fatal }}</td>
+                                <td>{{ tarefa.status }}</td>
                                 <td>
-                                    <a href="{% url 'tarefas:detail' tarefa.pk %}" 
-                                        class="btn btn-warning btn-sm" title="Editar">
+                                    <a href="{% url 'tarefas:detail' tarefa.pk %}" class="btn btn-success btn-sm" title="Detalhes">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                    <a href="{% url 'tarefas:tarefa-update' tarefa.pk %}" class="btn btn-warning btn-sm" title="Editar">
                                         <i class="fas fa-pencil-alt"></i>
                                     </a>
-                                    <a href="{% url 'tarefas:tarefa-update' tarefa.pk %}" 
-                                        class="btn btn-success btn-sm" title="Detalhes">
-                                        <i class="fas fa-eye"></i>
+                                    <a href="{% url 'tarefas:tarefa-duplicar' tarefa.pk %}" class="btn btn-primary btn-sm" title="Criar nova baseada nesta">
+                                        <i class="fas fa-copy"></i>
                                     </a>
                                     <a href="{% url 'tarefas:delete' tarefa.pk %}" 
                                         class="btn btn-danger btn-sm" title="Excluir">
@@ -66,7 +70,7 @@
                                 <td colspan="5">Nenhum registro encontrado.</td>
                             </tr>
                             {% endfor %}
-                        </tbody> -->
+                        </tbody>
                     </table>
                 </div>                
             </div>

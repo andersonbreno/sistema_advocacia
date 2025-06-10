@@ -137,7 +137,7 @@
                                           </div>
                                           <!-- Botão para avançar para a próxima aba -->
                                           <div class="d-flex justify-content-between">
-                                              <button type="button" class="btn btn-secondary" onclick="salvarEtapa()">Avançar</button>
+                                              <button type="button" class="btn btn-primary" onclick="salvarEtapa()">Salvar e Avançar</button>
                                           </div>
                                       </div>
                                       <!-- Coluna da Foto -->
@@ -206,8 +206,7 @@
                                   </div>
                                   <!-- Botões para avançar ou voltar -->
                                   <div class="d-flex justify-content-between">
-                                        <a href="javascript:void(0);" class="btn btn-secondary" onclick="voltarParaCliente()">Voltar</a>
-                                        <button type="button" class="btn btn-primary" onclick="salvarEtapa()">Avaçar</button>   
+                                        <button type="button" class="btn btn-primary" onclick="salvarEtapa()">Salvar e Avançar</button>   
                                   </div>
                               </div>  
                               <!-- Dados da Tarefa -->
@@ -257,8 +256,7 @@
   
                                   <!-- Botões para avançar ou voltar -->
                                   <div class="d-flex justify-content-between">
-                                        <a href="javascript:void(0);" class="btn btn-secondary" onclick="voltarParaCliente()">Voltar</a>
-                                        <button type="button" class="btn btn-primary" onclick="salvarEtapa()">Salvar </button>
+                                        <button type="button" class="btn btn-primary" onclick="salvarEtapa()">Salvar</button>
                                   </div>
                               </div>                            
                           </div>
@@ -282,124 +280,114 @@
 
 {% block extra_script %}
 <script>
-    let currentTab = 'cliente';
-    let clienteId = null;
-    let processoId = null;
+let currentTab = 'cliente';
+let clienteId = null;
+let processoId = null;
 
-    function showTab(tabName) {
-        if (!tabName) {
-            console.error("String vazia passada para showTab().");
-            return;
-        }
-        
-        currentTab = tabName;
+function showTab(tabName) {
+    if (!tabName) return;
+    
+    currentTab = tabName;
 
-        // Esconde todas as abas
-        const tabs = document.querySelectorAll('.tab-pane');
-        tabs.forEach(tab => tab.classList.remove('show', 'active'));
+    // Esconde todas as abas
+    document.querySelectorAll('.tab-pane').forEach(tab => {
+        tab.classList.remove('show', 'active');
+    });
 
-        // Exibe a aba correspondente
-        const activeTab = document.getElementById(tabName);
-        if (activeTab) {
-            activeTab.classList.add('show', 'active');
-        } else {
-            console.error(`Aba com ID '${tabName}' não encontrada.`);
-            return;
-        }
+    // Exibe a aba correspondente
+    const activeTab = document.getElementById(tabName);
+    if (activeTab) {
+        activeTab.classList.add('show', 'active');
+    }
 
-        // Altera o estado ativo do botão da aba
-        const buttons = document.querySelectorAll('.nav-link');
-        buttons.forEach(button => button.classList.remove('active'));
+    // Atualiza botões de navegação
+    document.querySelectorAll('.nav-link').forEach(btn => {
+        btn.classList.remove('active');
+    });
+    
+    const activeButton = document.getElementById(`${tabName}-tab`);
+    if (activeButton) {
+        activeButton.classList.add('active');
+    }
 
-        const activeButton = document.querySelector(`#${tabName}-tab`);
-        if (activeButton) {
-            activeButton.classList.add('active');
-        } else {
-            console.error(`Botão da aba com ID '${tabName}-tab' não encontrado.`);
-            return;
-        }
-
-        // Preenche campos ocultos com IDs
-        if (tabName === 'processo') {
-            const clienteIdField = document.querySelector('[name="cliente"]');
-            if (clienteIdField && clienteId) {
-                clienteIdField.value = clienteId;
-            }
-        }
-
-        if (tabName === 'tarefa') {
-            const processoIdField = document.querySelector('#tarefa [name="processo"]');
-            if (processoIdField && processoId) {
-                processoIdField.value = processoId;
-            }
-        }
+    // Atualiza campos ocultos
+    if (clienteId) {
+        document.getElementById('clienteId').value = clienteId;
+        document.querySelector('[name="cliente"]')?.setAttribute('value', clienteId);
     }
     
-    function salvarEtapa() {
-        const formElement = document.getElementById('mainForm');
-        if (!formElement) {
-            console.error('Formulário principal não encontrado');
-            return;
-        }
+    if (processoId) {
+        document.getElementById('processoId').value = processoId;
+        document.querySelector('[name="processo"]')?.setAttribute('value', processoId);
+    }
+}
 
-        const isUpdate = window.location.pathname.includes('/update/');
-        const url = isUpdate ? window.location.pathname : "{% url 'cadastro:create' %}";
+async function salvarEtapa() {
+    const formElement = document.getElementById('mainForm');
+    if (!formElement) return;
 
-        const formData = new FormData(formElement);
-        formData.append('etapa', currentTab);
+    const isUpdate = window.location.pathname.includes('/update/');
+    const url = isUpdate ? window.location.pathname : "{% url 'cadastro:create' %}";
 
-        // Limpa mensagens de erro anteriores
-        clearErrors();
+    const formData = new FormData(formElement);
+    formData.append('etapa', currentTab);
+    
+    // Adiciona IDs se existirem
+    if (clienteId) formData.append('cliente_id', clienteId);
+    if (processoId) formData.append('processo_id', processoId);
 
-        fetch(url, {
+    clearErrors();
+
+    try {
+        const response = await fetch(url, {
             method: 'POST',
             body: formData,
             headers: {
                 'X-Requested-With': 'XMLHttpRequest',
             },
-        })
-        .then(response => {
-            if (!response.ok) {
-                return response.json().then(err => {
-                    throw err;
-                }).catch(() => {
-                    throw new Error('Erro no servidor');
-                });
-            }
-            return response.json();
-        })
-        .then(data => {
-            if (data.success) {
-                // Atualiza IDs
-                if (data.cliente_id) clienteId = data.cliente_id;
-                if (data.processo_id) processoId = data.processo_id;
-
-                // Navegação
-                if (currentTab === 'cliente' && data.next_etapa === 'processo') {
-                    showTab('processo');
-                } else if (currentTab === 'processo' && data.next_etapa === 'tarefa') {
-                    showTab('tarefa');
-                } else if (data.redirect_url) {
-                    window.location.href = data.redirect_url;
-                }
-                
-                if (data.message) {
-                    alert(data.message); // Ou exibir em um toast
-                }
-            } else {
-                throw data;
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            if (error.errors) {
-                showFieldErrors(error.errors);
-            } else {
-                alert('Erro: ' + (error.message || 'Ocorreu um erro desconhecido'));
-            }
         });
-    }
 
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw data;
+        }
+
+        if (data.success) {
+            // Atualiza IDs recebidos do servidor
+            if (data.cliente_id) {
+                clienteId = data.cliente_id;
+                document.getElementById('clienteId').value = clienteId;
+            }
+            if (data.processo_id) {
+                processoId = data.processo_id;
+                document.getElementById('processoId').value = processoId;
+            }
+
+            // Navegação entre abas
+            if (currentTab === 'cliente' && data.next_etapa === 'processo') {
+                showTab('processo');
+            } else if (currentTab === 'processo' && data.next_etapa === 'tarefa') {
+                showTab('tarefa');
+            } else if (data.redirect_url) {
+                window.location.href = data.redirect_url;
+            }
+
+            if (data.message) {
+                showToast(data.message, 'success');
+            }
+        } else {
+            throw data;
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        if (error.errors) {
+            showFieldErrors(error.errors);
+        } else {
+            showToast('Erro: ' + (error.message || 'Ocorreu um erro desconhecido'), 'error');
+        }
+    }
+}
 
     function clearErrors() {
         document.querySelectorAll('.is-invalid').forEach(el => {

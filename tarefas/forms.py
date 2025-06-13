@@ -1,5 +1,6 @@
 from django import forms
 from django.contrib.auth import get_user_model
+from datetime import datetime
 
 from clientes.widgets import DatePickerInput
 from .models import Processo, Tarefa, PrioridadeTarefa, Status_Tarefa, ModelTarefa
@@ -53,6 +54,10 @@ class TarefaForm(forms.ModelForm):
             'local': forms.TextInput(attrs={'class': 'form-control'}),
             'descricao_tarefa': forms.Textarea(attrs={'class': 'form-control'}),
         }
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.initial['data'] = datetime.now().date()
         
     def clean(self):
         cleaned_data = super().clean()

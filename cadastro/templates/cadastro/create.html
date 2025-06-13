@@ -25,18 +25,15 @@
                 <div class="card card-primary">
                     <div class="card-header">
                         <h3 class="card-title">
-                            {% if form.instance.pk %}Editar{% else %}Cadastro{% endif %}
+                            Cadastro
                         </h3>
                     </div>
                     <div class="container-fluid mt-5">
                       <form id="mainForm" method="post" enctype="multipart/form-data">
-                          {% csrf_token %}
-                          <!-- Adicionar campo hidden para operação de edição -->
-                          {% if form.instance.pk %}
-                            <input type="hidden" name="edit_mode" value="true">
-                          {% endif %}
-                            <input type="hidden" id="clienteId" name="cliente_id">
-                            <input type="hidden" id="processoId" name="processo_id">
+                          {% csrf_token %}                        
+                             <!-- Campos ocultos para armazenar os IDs -->
+                          <input type="hidden" name="cliente_id" value="{{ cliente_id }}">
+                          <input type="hidden" name="processo_id" value="{{ processo_id }}">
 
                           <ul class="nav nav-tabs" id="formTabs" role="tablist">
                               <li class="nav-item" role="presentation">
@@ -137,7 +134,7 @@
                                           </div>
                                           <!-- Botão para avançar para a próxima aba -->
                                           <div class="d-flex justify-content-between">
-                                              <button type="button" class="btn btn-primary" onclick="salvarEtapa()">Salvar e Avançar</button>
+                                              <button type="sumit" name="etapa" value="cliente" class="btn btn-primary" onclick="salvarEtapa()">Salvar e Avançar</button>
                                           </div>
                                       </div>
                                       <!-- Coluna da Foto -->
@@ -159,9 +156,7 @@
                               <!-- Dados do Processo -->
                               <div class="tab-pane fade" id="processo" role="tabpanel" aria-labelledby="processo-tab">
                                   <div class="col-md-15">
-                                      <div class="mb-3 row">
-                                          <!-- Campo oculto para armazenar o cliente -->
-                                                {{processo_form.cliente}}                                         
+                                      <div class="mb-3 row">                                     
                                           <div class="col-md-4">
                                             <label for="{{processo_form.parceiro.id_for_label}}" class="form-label"> Parceiro:</label>
                                                 {{processo_form.parceiro}}                                            
@@ -206,15 +201,13 @@
                                   </div>
                                   <!-- Botões para avançar ou voltar -->
                                   <div class="d-flex justify-content-between">
-                                        <button type="button" class="btn btn-primary" onclick="salvarEtapa()">Salvar e Avançar</button>   
+                                        <button type="sumit" name="etapa" value="processo" class="btn btn-primary" onclick="salvarEtapa()">Salvar e Avançar</button>   
                                   </div>
                               </div>  
                               <!-- Dados da Tarefa -->
                               <div class="tab-pane fade" id="tarefa" role="tabpanel" aria-labelledby="tarefa-tab">
                                   <div class="col-md-15">
-                                    <div class="mb-3 row">
-                                        <!-- Campo oculto para armazenar o Número do Processo -->
-                                                {{tarefa_form.processo}}                                            
+                                    <div class="mb-3 row">                                                                                  
                                         <div class="col-md-8">
                                             <label for="{{tarefa_form.responsaveis.id_for_label}}" class="form-label"> Responsável:</label>
                                                 {{tarefa_form.responsaveis}}                                            
@@ -256,7 +249,7 @@
   
                                   <!-- Botões para avançar ou voltar -->
                                   <div class="d-flex justify-content-between">
-                                        <button type="button" class="btn btn-primary" onclick="salvarEtapa()">Salvar</button>
+                                        <button type="sumit" name="etapa" value="tarefa" class="btn btn-primary">Salvar</button>
                                   </div>
                               </div>                            
                           </div>
@@ -281,8 +274,6 @@
 {% block extra_script %}
 <script>
 let currentTab = 'cliente';
-let clienteId = null;
-let processoId = null;
 
 function showTab(tabName) {
     if (!tabName) return;
@@ -309,166 +300,54 @@ function showTab(tabName) {
     if (activeButton) {
         activeButton.classList.add('active');
     }
+}
 
-    // Atualiza campos ocultos
+// Função para focar no primeiro campo inválido
+function focusFirstInvalidField() {
+    const invalidFields = document.querySelectorAll('.is-invalid');
+    if (invalidFields.length > 0) {
+        // Tenta focar no primeiro campo inválido que não seja readonly ou disabled
+        for (let field of invalidFields) {
+            if (!field.readOnly && !field.disabled) {
+                try {
+                    field.focus();
+                    // Rola a página até o campo
+                    field.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    break;
+                } catch (e) {
+                    console.warn('Could not focus on invalid field:', e);
+                }
+            }
+        }
+    }
+}
+
+// Inicialização
+window.addEventListener('DOMContentLoaded', function() {
+    // Mostra a aba inicial
+    showTab('cliente');
+
+    // Habilita/desabilita abas conforme IDs existentes
+    const clienteId = "{{ cliente_id }}";
+    const processoId = "{{ processo_id }}";
+    
     if (clienteId) {
-        document.getElementById('clienteId').value = clienteId;
-        document.querySelector('[name="cliente"]')?.setAttribute('value', clienteId);
+        document.getElementById('processo-tab').disabled = false;
     }
     
     if (processoId) {
-        document.getElementById('processoId').value = processoId;
-        document.querySelector('[name="processo"]')?.setAttribute('value', processoId);
+        document.getElementById('tarefa-tab').disabled = false;
     }
-}
-
-async function salvarEtapa() {
-    const formElement = document.getElementById('mainForm');
-    if (!formElement) return;
-
-    const isUpdate = window.location.pathname.includes('/update/');
-    const url = isUpdate ? window.location.pathname : "{% url 'cadastro:create' %}";
-
-    const formData = new FormData(formElement);
-    formData.append('etapa', currentTab);
     
-    // Adiciona IDs se existirem
-    if (clienteId) formData.append('cliente_id', clienteId);
-    if (processoId) formData.append('processo_id', processoId);
-
-    clearErrors();
-
-    try {
-        const response = await fetch(url, {
-            method: 'POST',
-            body: formData,
-            headers: {
-                'X-Requested-With': 'XMLHttpRequest',
-            },
-        });
-
-        const data = await response.json();
-
-        if (!response.ok) {
-            throw data;
-        }
-
-        if (data.success) {
-            // Atualiza IDs recebidos do servidor
-            if (data.cliente_id) {
-                clienteId = data.cliente_id;
-                document.getElementById('clienteId').value = clienteId;
-            }
-            if (data.processo_id) {
-                processoId = data.processo_id;
-                document.getElementById('processoId').value = processoId;
-            }
-
-            // Navegação entre abas
-            if (currentTab === 'cliente' && data.next_etapa === 'processo') {
-                showTab('processo');
-            } else if (currentTab === 'processo' && data.next_etapa === 'tarefa') {
-                showTab('tarefa');
-            } else if (data.redirect_url) {
-                window.location.href = data.redirect_url;
-            }
-
-            if (data.message) {
-                showToast(data.message, 'success');
-            }
-        } else {
-            throw data;
-        }
-    } catch (error) {
-        console.error('Error:', error);
-        if (error.errors) {
-            showFieldErrors(error.errors);
-        } else {
-            showToast('Erro: ' + (error.message || 'Ocorreu um erro desconhecido'), 'error');
-        }
-    }
-}
-
-    function clearErrors() {
-        document.querySelectorAll('.is-invalid').forEach(el => {
-            el.classList.remove('is-invalid');
-        });
-        document.querySelectorAll('.invalid-feedback').forEach(el => {
-            el.textContent = '';
-        });
+    // Preenche hora atual se vazio
+    const horaInput = document.querySelector('#tarefa input[name="hora"]');
+    if (horaInput && !horaInput.value) {
+        const now = new Date();
+        horaInput.value = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
     }
 
-    function showFieldErrors(errors) {
-        for (const field in errors) {
-            const input = document.querySelector(`[name="${field}"]`);
-            if (!input) {
-                console.warn(`Campo ${field} não encontrado no formulário`);
-                continue;
-            }
-            
-            // Adiciona classe de erro ao input
-            input.classList.add('is-invalid');
-            
-            // Tenta encontrar o elemento de mensagem de erro de várias formas
-            let errorElement = null;
-            
-            // 1. Verifica se há um irmão com a classe invalid-feedback
-            errorElement = input.nextElementSibling;
-            if (errorElement && errorElement.classList.contains('invalid-feedback')) {
-                errorElement.textContent = errors[field].join(', ');
-                continue;
-            }
-            
-            // 2. Procura dentro do grupo de formulário
-            const formGroup = input.closest('.mb-3, .form-group, .col-md-4, .col-md-6, .col-md-8');
-            if (formGroup) {
-                errorElement = formGroup.querySelector('.invalid-feedback');
-                if (errorElement) {
-                    errorElement.textContent = errors[field].join(', ');
-                    continue;
-                }
-            }
-            
-            // 3. Se não encontrou, cria um elemento temporário
-            console.warn(`Elemento de erro não encontrado para o campo ${field}`);
-            const errorDiv = document.createElement('div');
-            errorDiv.className = 'invalid-feedback';
-            errorDiv.textContent = errors[field].join(', ');
-            errorDiv.style.color = 'red';
-            
-            // Insere após o input ou no final do container
-            input.parentNode.insertBefore(errorDiv, input.nextSibling);
-        }
-    }
-
-    function voltarParaCliente() {
-        showTab('cliente');
-    }
-
-    function voltarParaProcesso() {
-        showTab('processo');
-    }
-
-    window.addEventListener('DOMContentLoaded', function () {
-        // Preenche hora atual se vazio
-        const horaInput = document.querySelector('#tarefa input[name="hora"]');
-        if (horaInput && !horaInput.value) {
-            const now = new Date();
-            horaInput.value = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
-        }
-        
-        // Carrega IDs se for update
-        if (window.location.pathname.includes('/update/')) {
-            clienteId = window.location.pathname.split('/').filter(Boolean).pop();
-            
-            const processoIdField = document.querySelector('#tarefa [name="processo"]');
-            if (processoIdField?.value) {
-                processoId = processoIdField.value;
-            }
-        }
-    });
-
-    // Inicializa mostrando a aba do cliente
-    showTab('cliente');    
+    // Foca no primeiro campo inválido, se houver
+    focusFirstInvalidField();
+});
 </script>
 {% endblock %}

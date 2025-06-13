@@ -104,3 +104,14 @@ select.form-control {
     height: auto;
   }
 }
+
+/*Mensagens de error*/
+.is-invalid {
+    border-color: #dc3545 !important;
+    background-color: #fff8f8 !important;
+}
+.invalid-feedback {
+    display: block;
+    color: #dc3545;
+    font-size: 0.875em;
+}

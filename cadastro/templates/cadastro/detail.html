@@ -1,0 +1,125 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block content %}
+
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>Detalhe do Processo</h1>
+                </div>
+                <!-- <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="">Início</a></li>
+                        <li class="breadcrumb-item"><a href="">Processos</a></li>
+                        <li class="breadcrumb-item active">Detalhe do Processo</li>
+                    </ol>
+                </div> -->
+            </div>
+        </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-8">
+                    <!-- Informações do Cliente -->
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                            <h6 class="m-0 font-weight-bold text-primary">Informações do Processo</h6>
+                            <div>
+                                <a href="#"
+                                   class="btn btn-warning btn-circle btn-sm" title="Editar">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <label class="form-label">Nome:</label>
+                                <p>{{ object.nome }}</p>
+                            </div>                                                        
+                            <div class="mb-3">
+                                {% if processos %}
+                                <label class="form-label">Parceiro:</label>
+                                    {% for processo in processos %}
+                                    <p>{{ processo.parceiro }}</p>
+                                    {% endfor %}
+                                {% else %}
+                                    <p>Não há parceiro relacionado ao processo.</p>
+                                {% endif %}
+                            </div>                            
+                        </div>
+                    </div>
+
+                    <!-- Processos Relacionados -->
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-primary">Processos Relacionados</h6>
+                        </div>
+                        <div class="card-body">
+                            {% if processos %}
+                            <ul class="list-group">
+                                {% for processo in processos %}
+                                <li class="list-group-item">
+                                    Processo nº: {{ processo.numero_processo }}<br>
+                                    Descrição:   {{ processo.descricao_processo }}
+                                </li>
+                                {% endfor %}
+                            </ul>
+                            {% else %}
+                            <p>Não há processos relacionados.</p>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <!-- Tarefas Relacionadas -->
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-primary">Tarefas Relacionadas</h6>
+                        </div>
+                        <div class="card-body">
+                            {% if tarefas %}
+                            <ul class="list-group">
+                                {% for tarefa in tarefas %}
+                                <li class="list-group-item">
+                                    Tarefa: {{ tarefa.tarefa }}<br>
+                                    Status: {{ tarefa.get_status_display }}
+                                </li>
+                                {% endfor %}
+                            </ul>
+                            {% else %}
+                            <p>Não há tarefas relacionadas.</p>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Optional: Include a sidebar with additional information -->
+                <div class="col-lg-4">
+                    <!-- Status Card -->
+                    <!-- ... -->
+
+                    <!-- Recent Activities -->
+                    <!-- ... -->
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- /.content -->
+</div>
+
+<!-- Botão de Voltar -->
+<div style="position: fixed; bottom: 20px; right: 20px;">
+    <a href="{% url 'cadastro:list' %}" class="btn btn-secondary" title="Voltar">
+        <i class="fas fa-arrow-left"></i> Voltar
+    </a>
+</div>
+
+{% endblock %}

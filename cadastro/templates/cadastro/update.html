@@ -1,0 +1,102 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block content %}
+<div class="content-wrapper">
+<!-- Main content -->
+<section class="content">
+  <div class="container-fluid">
+      <div class="row">
+          <div class="col-md-12">
+              <div class="card card-primary">
+                  <div class="card-header">
+                      <h3 class="card-title">Atualização de Cadastro</h3>
+                  </div>
+                  <div class="container mt-5">
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <ul class="nav nav-tabs" id="formTabs" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active" id="cliente-tab" type="button" role="tab" aria-controls="cliente" aria-selected="true" onclick="showTab('cliente')">Dados do Cliente</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="processo-tab" type="button" role="tab" aria-controls="processo" aria-selected="false" onclick="showTab('processo')">Dados do Processo</button>
+                            </li>       
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="tarefa-tab" type="button" role="tab" aria-controls="tarefa" aria-selected="false" onclick="showTab('tarefa')">Dados da Tarefa</button>
+                            </li>                                                
+                        </ul>
+
+                        <div class="tab-content mt-4" id="formTabsContent">
+                            <!-- Dados do Cliente -->
+                            <div class="tab-pane fade show active" id="cliente" role="tabpanel" aria-labelledby="cliente-tab">
+                                {% for field in cliente_form %}
+                                    <div class="mb-3">
+                                        <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                                        {{ field }}
+                                        {% if field.errors %}
+                                            <div class="text-danger">{{ field.errors }}</div>
+                                        {% endif %}
+                                    </div>
+                                {% endfor %}
+                                <div class="d-flex justify-content-between">
+                                    <a href="javascript:void(0);" class="btn btn-secondary" onclick="showTab('processo')">Avançar</a>
+                                </div>
+                            </div>
+
+                            <!-- Dados do Processo -->
+                            <div class="tab-pane fade" id="processo" role="tabpanel" aria-labelledby="processo-tab">
+                               {% for field in processo_form %}
+                               <div class="mb-3">
+                                   <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                                   {% if field.name == 'cliente' %}
+                                   <input type="hidden" name="{{ cliente_nome }}" value="{{ cliente_form.instance.pk }}">
+                                   {% else %}
+                                       {{ field }}
+                                   {% endif %}
+                                   {% if field.errors %}
+                                       <div class="text-danger">{{ field.errors }}</div>
+                                   {% endif %}
+                               </div>
+                               {% endfor %}
+
+                                <div class="d-flex justify-content-between">
+                                    <a href="javascript:void(0);" class="btn btn-secondary" onclick="showTab('tarefa')">Avançar</a>
+                                    <a href="javascript:void(0);" class="btn btn-secondary" onclick="showTab('cliente')">Voltar</a>     
+                                </div>
+                            </div>
+
+                            <!-- Dados da Tarefa -->
+                            <div class="tab-pane fade" id="tarefa" role="tabpanel" aria-labelledby="tarefa-tab">
+                                {% if tarefa_form %}
+                                    {% for field in tarefa_form %}
+                                    <div class="mb-3">
+                                        <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                                        {% if field.name == 'processo' %}
+                                        <input type="hidden" name="{{ field.name }}" value="{{ processo_form.instance.pk }}">
+                                        {% else %}
+                                        {{ field }}
+                                        {% endif %}
+                                        {% if field.errors %}
+                                        <div class="text-danger">{{ field.errors }}</div>
+                                        {% endif %}
+                                    </div>
+                                    {% endfor %}                                
+                                {% endif %}
+
+                                <div class="d-flex justify-content-between">
+                                    <a href="javascript:void(0);" class="btn btn-secondary" onclick="showTab('processo')">Voltar</a>
+                                    <button type="submit" class="btn btn-primary">Salvar</button>
+                                </div>
+                            </div>                            
+                        </div>
+                    </form>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+</section>
+</div>
+{% endblock %}

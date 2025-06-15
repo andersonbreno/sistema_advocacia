@@ -14,9 +14,9 @@
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
-                        <li class="breadcrumb-item"><a href="{% url 'pages:index' %}">Início</a></li>
-                        <li class="breadcrumb-item"><a href="{% url 'clientes:list' %}">Clientes</a></li>
-                        <li class="breadcrumb-item active">Detalhe do Cliente</li>
+                        <!-- <li class="breadcrumb-item"><a href="">Início</a></li>
+                        <li class="breadcrumb-item"><a href="">Clientes</a></li>
+                        <li class="breadcrumb-item active">Detalhe do Cliente</li> -->
                     </ol>
                 </div>
             </div>
@@ -33,10 +33,10 @@
                         <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                             <h6 class="m-0 font-weight-bold text-primary">Informações Pessoais</h6>
                             <div>
-                                <a href="{% url 'clientes:cliente-update' cliente.pk %}"
+                                <!-- <a href=""
                                     class="btn btn-warning btn-circle btn-sm" title="Editar">
                                     <i class="fas fa-edit"></i>
-                                </a>
+                                </a> -->
                             </div>
                         </div>
                         <div class="card-body">
@@ -93,9 +93,9 @@
 
 <!-- Botão de Voltar -->
 <div style="position: fixed; bottom: 20px; right: 20px;">
-    <a href="{% url 'clientes:list' %}" class="btn btn-secondary" title="Voltar">
+    <!-- <a href="" class="btn btn-secondary" title="Voltar">
         <i class="fas fa-arrow-left"></i> Voltar
-    </a>
+    </a> -->
 </div>
 
 {% endblock %}

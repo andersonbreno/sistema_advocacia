@@ -14,11 +14,11 @@
                     <h1>Novo Processo</h1>
                 </div>
                 <div class="col-sm-6">
-                    <ol class="breadcrumb float-sm-right">
+                    <!-- <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="{% url 'pages:index' %}">Início</a></li>
                         <li class="breadcrumb-item"><a href="{% url 'processos:list' %}">Processos</a></li>
                         <li class="breadcrumb-item active">Novo Processo</li>
-                    </ol>
+                    </ol> -->
                 </div>
             </div>
         </div><!-- /.container-fluid -->
@@ -40,15 +40,23 @@
                             <div class="card-body">
                                 {% for field in form %}
                                     <div class="form-group">
-                                        {% if field.field.widget.input_type == 'checkbox' %}
+                                        {% if field.name == 'cliente' %}
+                                            <label for="{{ field.id_for_label }}" class="{% if field.field.required %}required-field{% endif %}">
+                                                {{ field.label }}
+                                                {% if field.field.required %}
+                                                    <span class="text-danger">*</span> <!-- Asterisco vermelho para o campo cliente -->
+                                                {% endif %}
+                                            </label>
+                                            <input type="text" value="{% if field.value %}{{ field.value }}{% else %}{{ '' }}{% endif %}" class="form-control" disabled>
+                                        {% elif field.field.widget.input_type == 'checkbox' %}
                                             <div class="form-check">
                                                 {{ field|add_class:"form-check-input" }}
                                                 <label class="form-check-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
                                             </div>
-                                        {% elif field.name == 'cliente' or field.name == 'advogado' %}
+                                        {% elif field.name == 'parceiro' or field.name == 'advogado' %}
                                             <label for="{{ field.id_for_label }}" class="{% if field.field.required %}required-field{% endif %}">
                                                 {{ field.label }}
-                                                {% if field.field.required or field.name == 'cliente' or field.name == 'advogado' %}
+                                                {% if field.field.required or field.name == 'advogado' %}
                                                     <span class="text-danger">*</span> <!-- Asterisco vermelho para os campos específicos -->
                                                 {% endif %}
                                             </label>
@@ -80,9 +88,9 @@
 <!-- /.content-wrapper -->
 
 <div style="position: fixed; bottom: 20px; right: 20px;">
-    <a href="{% url 'processos:list' %}" class="btn btn-secondary" title="Voltar">
+    <!-- <a href="{% url 'processos:list' %}" class="btn btn-secondary" title="Voltar">
         <i class="fas fa-arrow-left"></i> Voltar
-    </a>
+    </a> -->
 </div>
 
 {% endblock %}

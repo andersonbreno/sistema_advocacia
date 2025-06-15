@@ -1,218 +1,221 @@
 {% load static %}
 
-<div id="camera" class="camera">
-	<video id="video">Video tag não disponível</video>
-	<video id="video_src" hidden>Video tag não disponível</video>
-	<canvas id="canvas" hidden>Canvas não disponível</canvas>
-	<canvas id="canvas_src" hidden>Canvas não disponível</canvas>
+<div class="card mt-2 shadow">
+    <h5 class="m-2">Foto<span class="text-danger fs-7"> *</span></h5>
+    <div class="card-body d-flex flex-column align-items-center justify-content-center">
+        <div id="camera" class="camera">
+            <video id="video">Video tag não disponível</video>
+            <video id="video_src" hidden>Video tag não disponível</video>
+            <canvas id="canvas" hidden>Canvas não disponível</canvas>
+            <canvas id="canvas_src" hidden>Canvas não disponível</canvas>
+        </div>
+        {% if not widget.value %}
+        <svg class="pfp pfp-placeholder" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+            <path
+                d="M224 256c70.7 0 128-57.3 128-128S294.7 0 224 0 96 57.3 96 128s57.3 128 128 128zm89.6 32h-16.7c-22.2 10.2-46.9 16-72.9 16s-50.6-5.8-72.9-16h-16.7C60.2 288 0 348.2 0 422.4V464c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48v-41.6c0-74.2-60.2-134.4-134.4-134.4z" />
+        </svg>
+        {% endif %}
+        <img id="foto" class="pfp" src="{% if widget.value %}{{ widget.value.url }}{% endif %}" alt="Foto cadastrada para o cliente" height="240" />
+        <div class="mt-2">
+            <button type="button" id="capturar_{{ widget.name }}_bt" class="btn btn-primary">
+                Capturar
+            </button>
+            <button type="button" id="reverter_{{ widget.name }}_bt" class="btn btn-outline-secondary">
+                Reverter
+            </button>
+            <button type="button" id="{{ widget.name }}_bt" class="btn btn-primary">
+                {% if not widget.value %}
+                Novo
+                {% else %}
+                Alterar
+                {% endif %}
+            </button>
+        </div>
+
+        <input type="{{ widget.type }}" name="{{ widget.name }}" hidden {% include "django/forms/widgets/attrs.html" %}>
+    </div>
 </div>
-{% if not widget.value %}
-<svg class="pfp pfp-placeholder" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
-	<path
-		d="M224 256c70.7 0 128-57.3 128-128S294.7 0 224 0 96 57.3 96 128s57.3 128 128 128zm89.6 32h-16.7c-22.2 10.2-46.9 16-72.9 16s-50.6-5.8-72.9-16h-16.7C60.2 288 0 348.2 0 422.4V464c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48v-41.6c0-74.2-60.2-134.4-134.4-134.4z" />
-</svg>
-{% endif %}
-<img id="foto" class="pfp" src="{{ widget.value.url }}" alt="Foto cadastrada para o cliente" height="240" />
-<button type="button" id="capturar_{{ widget.name }}_bt" class="btn btn-primary">
-	Capturar
-</button>
-<button type="button" id="reverter_{{ widget.name }}_bt" class="btn btn-outline-secondary">
-	Reverter
-</button>
-<button type="button" id="{{ widget.name }}_bt" class="btn btn-primary">
-	{% if not widget.value %}
-	Novo
-	{% else %}
-	Alterar
-	{% endif %}
-</button>
-<input type="{{ widget.type }}" name="{{ widget.name }}" hidden {% include "django/forms/widgets/attrs.html" %}>
 
 <script>
-	(function () {
-		const camera = document.getElementById("camera");
-		camera.style.display = "none";
-		let fator = 0;
-		const height = 240;
-		let width = 0;
+    (function () {
+        const camera = document.getElementById("camera");
+        camera.style.display = "none";
+        let fator = 0;
+        const height = 240;
+        let width = 0;
 
-		let streaming = false;
+        let streaming = false;
 
-		let video = null;
-		let video_src = null;
-		let canvas = null;
-		let canvas_src = null;
-		let foto = null;
-		let foto_src = null;
-		let foto_bt = null;
-		let capturar_bt = null;
-		let reverter_bt = null;
+        let video = null;
+        let video_src = null;
+        let canvas = null;
+        let canvas_src = null;
+        let foto = null;
+        let foto_src = null;
+        let foto_bt = null;
+        let capturar_bt = null;
+        let reverter_bt = null;
 
-		const imagem_cadastrada = "{{ widget.value.url }}" ? true : false;
-		let imagem_capturada = false;
+        const imagem_cadastrada = "{% if widget.value %}{{ widget.value.url }}{% endif %}" ? true : false;
+        let imagem_capturada = false;
 
-		function carregar_data_uri(blob) {
-			let fileName = "foto_perfil.jpeg";
-			let file = new File(
-				[blob],
-				fileName,
-				{ type: "image/jpeg", lastModified: new Date().getTime() },
-				"utf-8",
-			);
-			let container = new DataTransfer();
-			container.items.add(file);
-			foto_src.files = container.files;
-		}
+        function carregar_data_uri(blob) {
+            let fileName = "foto_perfil.jpeg";
+            let file = new File(
+                [blob],
+                fileName,
+                { type: "image/jpeg", lastModified: new Date().getTime() },
+                "utf-8",
+            );
+            let container = new DataTransfer();
+            container.items.add(file);
+            foto_src.files = container.files;
+        }
 
-		function inicializacao() {
-			video = document.getElementById("video");
-			video_src = document.getElementById("video_src");
-			canvas = document.getElementById("canvas");
-			canvas_src = document.getElementById("canvas_src");
-			foto = document.getElementById("foto");
-			foto_src = document.getElementById("{{ widget.attrs.id }}");
-			foto_bt = document.getElementById("{{ widget.name }}_bt");
-			capturar_bt = document.getElementById("capturar_{{ widget.name }}_bt");
-			capturar_bt.style.display = "none";
-			reverter_bt = document.getElementById("reverter_{{ widget.name }}_bt");
-			reverter_bt.style.display = "none";
+        function inicializacao() {
+            video = document.getElementById("video");
+            video_src = document.getElementById("video_src");
+            canvas = document.getElementById("canvas");
+            canvas_src = document.getElementById("canvas_src");
+            foto = document.getElementById("foto");
+            foto_src = document.getElementById("{{ widget.attrs.id }}");
+            foto_bt = document.getElementById("{{ widget.name }}_bt");
+            capturar_bt = document.getElementById("capturar_{{ widget.name }}_bt");
+            capturar_bt.style.display = "none";
+            reverter_bt = document.getElementById("reverter_{{ widget.name }}_bt");
+            reverter_bt.style.display = "none";
 
-			if (!imagem_cadastrada) {
-				foto.style.display = "none";
-			}
+            if (!imagem_cadastrada) {
+                foto.style.display = "none";
+            }
 
-			navigator.mediaDevices
-				.getUserMedia({ video: true, audio: false })
-				.then(function (stream) {
-					const h = stream.getVideoTracks()[0].getSettings().height;
-					const w = stream.getVideoTracks()[0].getSettings().width;
-					fator = w / h;
-					video.srcObject = stream;
-					video.play();
-					video_src.srcObject = stream;
-					video_src.play();
-				})
-				.catch(function (erro) {
-					console.log("Ocorreu um erro: " + erro);
-				});
+            navigator.mediaDevices
+                .getUserMedia({ video: true, audio: false })
+                .then(function (stream) {
+                    const h = stream.getVideoTracks()[0].getSettings().height;
+                    const w = stream.getVideoTracks()[0].getSettings().width;
+                    fator = w / h;
+                    video.srcObject = stream;
+                    video.play();
+                    video_src.srcObject = stream;
+                    video_src.play();
+                })
+                .catch(function (erro) {
+                    console.log("Ocorreu um erro: " + erro);
+                });
 
-			video.addEventListener(
-				"canplay",
-				function (ev) {
-					if (!streaming) {
-						width = height * video.videoWidth / video.videoHeight;
-						video.setAttribute("width", width);
-						video.setAttribute("height", height);
-						video_src.setAttribute("width", fator * width);
-						video_src.setAttribute("height", fator * height);
-						canvas.setAttribute("width", width);
-						canvas.setAttribute("height", height);
-						canvas_src.setAttribute("width", fator * width);
-						canvas_src.setAttribute("height", fator * height);
-						streaming = true;
-					}
-				},
-				false,
-			);
+            video.addEventListener(
+                "canplay",
+                function (ev) {
+                    if (!streaming) {
+                        width = height * video.videoWidth / video.videoHeight;
+                        video.setAttribute("width", width);
+                        video.setAttribute("height", height);
+                        video_src.setAttribute("width", fator * width);
+                        video_src.setAttribute("height", fator * height);
+                        canvas.setAttribute("width", width);
+                        canvas.setAttribute("height", height);
+                        canvas_src.setAttribute("width", fator * width);
+                        canvas_src.setAttribute("height", fator * height);
+                        streaming = true;
+                    }
+                },
+                false,
+            );
 
+            capturar_bt.addEventListener(
+                "click",
+                function (ev) {
+                    ev.preventDefault();
+                    limpar_foto();
+                    capturar_foto();
+                    camera.style.display = "none";
+                    foto.style.display = "";
+                    this.disabled = true;
+                    this.style.display = "none";
+                    reverter_bt.disabled = false;
+                    reverter_bt.style.display = "";
+                },
+                false,
+            );
 
-			capturar_bt.addEventListener(
-				"click",
-				function (ev) {
-					ev.preventDefault();
-					limpar_foto();
-					capturar_foto();
-					camera.style.display = "none";
-					foto.style.display = "";
-					this.disabled = true;
-					this.style.display = "none";
-					reverter_bt.disabled = false;
-					reverter_bt.style.display = "";
-				},
-				false,
-			);
+            foto_bt.addEventListener(
+                "click",
+                function (ev) {
+                    ev.preventDefault();
+                    if (!imagem_cadastrada) {
+                        let pfp_placeholder = document.querySelector(".pfp-placeholder");
+                        pfp_placeholder.style.display = "none";
+                    }
+                    foto.style.display = "none";
+                    camera.style.display = "";
+                    this.disabled = true;
+                    this.style.display = "none";
+                    capturar_bt.disabled = false;
+                    capturar_bt.style.display = "";
+                    reverter_bt.disabled = true;
+                    reverter_bt.style.display = "none";
+                },
+                false,
+            );
 
-			foto_bt.addEventListener(
-				"click",
-				function (ev) {
-					ev.preventDefault();
-					if (!imagem_cadastrada) {
-						let pfp_placeholder = document.querySelector(".pfp-placeholder");
-						pfp_placeholder.style.display = "none";
-					}
-					foto.style.display = "none";
-					camera.style.display = "";
-					this.disabled = true;
-					this.style.display = "none";
-					capturar_bt.disabled = false;
-					capturar_bt.style.display = "";
-					reverter_bt.disabled = true;
-					reverter_bt.style.display = "none";
-				},
-				false,
-			);
+            reverter_bt.addEventListener(
+                "click",
+                function (ev) {
+                    ev.preventDefault();
+                    limpar_foto();
+                    this.disabled = true;
+                    this.style.display = "none";
+                    if (imagem_cadastrada) {
+                        foto_bt.disabled = false;
+                        foto_bt.style.display = "";
+                        camera.style.display = "none";
+                        foto.setAttribute("src", "{% if widget.value %}{{ widget.value.url }}{% endif %}");
+                        foto.style.display = "";
+                    } else {
+                        capturar_bt.disabled = false;
+                        capturar_bt.style.display = "";
+                        camera.style.display = "";
+                        foto.style.display = "none";
+                    }
+                },
+                false,
+            );
+        }
 
-			reverter_bt.addEventListener(
-				"click",
-				function (ev) {
-					ev.preventDefault();
-					limpar_foto();
-					this.disabled = true;
-					this.style.display = "none";
-					if (imagem_cadastrada) {
-						foto_bt.disabled = false;
-						foto_bt.style.display = "";
-						camera.style.display = "none";
-						foto.setAttribute("src", "{{ widget.value.url }}");
-						foto.style.display = "";
-					} else {
-						capturar_bt.disabled = false;
-						capturar_bt.style.display = "";
-						camera.style.display = "";
-						foto.style.display = "none";
-					}
-				},
-				false,
-			);
+        function limpar_foto() {
+            if (foto_src) {
+                let context = canvas.getContext("2d");
+                context.fillStyle = "#DDD";
+                context.fillRect(0, 0, canvas.width, canvas.height);
 
-		}
+                let data = canvas.toDataURL("image/jpeg", 1.0);
+                foto.setAttribute("src", data);
+                foto_src.value = "";
+            } else {
+                console.error('Elemento foto_src não encontrado');
+            }
+        }
 
-		function limpar_foto() {
-			// Certifique-se de que foto_src não é null
-			if (foto_src) {
-				let context = canvas.getContext("2d");
-				context.fillStyle = "#DDD";
-				context.fillRect(0, 0, canvas.width, canvas.height);
+        function capturar_foto() {
+            let context = canvas.getContext("2d");
+            let context_src = canvas_src.getContext("2d");
+            if (width && height) {
+                context.drawImage(video, 0, 0, canvas.width, canvas.height);
+                context_src.drawImage(video_src, 0, 0, canvas_src.width, canvas_src.height);
 
-				let data = canvas.toDataURL("image/jpeg", 1.0);
-				foto.setAttribute("src", data);
-				foto_src.value = "";
-			} else {
-				console.error('Elemento foto_src não encontrado');
-			}
-		}
+                let data = canvas.toDataURL("image/jpeg", 1.0);
+                foto.setAttribute("src", data);
+                foto.setAttribute("class", "pfp");
+                canvas_src.toBlob(carregar_data_uri, "image/jpeg", 1.0);
+            } else {
+                limpar_foto();
+            }
+        }
 
-
-		function capturar_foto() {
-			let context = canvas.getContext("2d");
-			let context_src = canvas_src.getContext("2d");
-			if (width && height) {
-				context.drawImage(video, 0, 0, canvas.width, canvas.height);
-				context_src.drawImage(video_src, 0, 0, canvas_src.width, canvas_src.height);
-
-				let data = canvas.toDataURL("image/jpeg", 1.0);
-				foto.setAttribute("src", data);
-				foto.setAttribute("class", "pfp");
-				canvas_src.toBlob(carregar_data_uri, "image/jpeg", 1.0);
-			} else {
-				limpar_foto();
-			}
-		}
-
-		window.addEventListener("load", inicializacao, false);
-	})();
+        window.addEventListener("load", inicializacao, false);
+    })();
 </script>
-
 
 <!-- Estrutura HTML -->
 <!-- <div class="camera">

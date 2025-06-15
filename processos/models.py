@@ -1,18 +1,32 @@
 from django.db import models
 from clientes.models import Cliente
-
+from parceiros.models import Parceiro
 
 class Advogado(models.Model):
     nome = models.CharField(max_length=255)
 
     def __str__(self):
         return self.nome
+
+class ProcessoStatus(models.TextChoices):
+    PRIORITARIO = 'Prioritário', 'Prioritário'
+    ARQUIVADO = 'Arquivado', 'Arquivado'
+
+class FechouContrato(models.TextChoices):
+    SIM = 'Sim', 'Sim'
+    NAO = 'Não', 'Não'
     
 class Processo(models.Model):
-    cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE)    
+    cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE, null=True, related_name="processos")
+    parceiro = models.ForeignKey(Parceiro, on_delete=models.CASCADE, null=True)
     advogado = models.ForeignKey(Advogado, on_delete=models.CASCADE, verbose_name='Advogado Responsável')
     data_criacao = models.DateTimeField(auto_now_add=True, verbose_name='Data de Criação')
-    numero_processo = models.IntegerField(verbose_name='Número do Processo')    
+    numero_processo = models.CharField(
+        max_length=25,
+        verbose_name='Número do Processo',
+        null=True, 
+        blank=True
+    )    
     
     class Grupo(models.TextChoices):
         ADMINISTRATIVO = 'ADM', 'Administrativo'
@@ -53,11 +67,10 @@ class Processo(models.Model):
         verbose_name='Fase do Processo'
     )
 
-    fechou_contrato = models.BooleanField(default=False, verbose_name='Fechou Contrato')
+    fechou_contrato = models.CharField(max_length=20, choices=FechouContrato.choices, blank=False, null=False) 
     data_contrato = models.DateField(null=True, blank=True, verbose_name='Data do Contrato')
-    prioritario = models.BooleanField(default=False, verbose_name='Prioritário')
-    arquivado = models.BooleanField(default=False, verbose_name='Arquivado')
-    descricao = models.TextField(blank=True, verbose_name='Descrição')
+    processo_status = models.CharField(max_length=50, choices=ProcessoStatus.choices, blank=False, null=False)
+    descricao_processo = models.TextField(blank=True, verbose_name='Descrição')
 
     class Pendencia(models.TextChoices):
         CNIS = 'CNIS', 'CNIS'

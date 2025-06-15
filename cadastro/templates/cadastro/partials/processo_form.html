@@ -1,0 +1,70 @@
+<div class="tab-pane fade" id="processo" role="tabpanel" aria-labelledby="processo-tab">
+    <div class="col-md-15">
+        <div class="mb-3 row">                                     
+            <div class="col-md-4">
+              <label for="{{processo_form.parceiro.id_for_label}}" class="form-label {% if processo_form.parceiro.field.required %}required-field{% endif %}"> Parceiro:</label>
+                  {{processo_form.parceiro}}
+                  {% if processo_form.parceiro.errors %}
+                      <div class="invalid-feedback d-block">
+                          {{ processo_form.parceiro.errors }}
+                      </div>
+                  {% endif %}                                            
+            </div>
+            <div class="col-md-4">
+              <label for="{{processo_form.advogado.id_for_label}}" class="form-label {% if processo_form.advogado.field.required %}required-field{% endif %}"> Advogado:</label>
+                  {{processo_form.advogado}}
+                  {% if processo_form.advogado.errors %}
+                      <div class="invalid-feedback d-block">
+                          {{ processo_form.advogado.errors }}
+                      </div>
+                  {% endif %}                                            
+            </div>
+            <div class="col-md-4">
+              <label for="{{processo_form.numero_processo.id_for_label}}" class="form-label {% if processo_form.numero_processo.field.required %}required-field{% endif %}"> Número do Processo:</label>
+                  {{processo_form.numero_processo}}
+                  {% if processo_form.numero_processo.errors %}
+                      <div class="invalid-feedback d-block">
+                          {{ processo_form.numero_processo.errors }}
+                      </div>
+                  {% endif %}
+            </div>
+            <div class="col-md-4">
+              <label for="{{processo_form.processo_status.id_for_label}}" class="form-label {% if processo_form.processo_status.field.required %}required-field{% endif %}"> Status:</label>
+                  {{processo_form.processo_status}}
+                  {% if processo_form.processo_status.errors %}
+                      <div class="invalid-feedback d-block">
+                          {{ processo_form.processo_status.errors }}
+                      </div>
+                  {% endif %}
+            </div>
+            <div class="col-md-4">
+              <label for="{{processo_form.grupo.id_for_label}}" class="form-label"> Grupo:</label>
+                  {{processo_form.grupo}}
+            </div>
+            <div class="col-md-4">
+              <label for="{{processo_form.fase_processo.id_for_label}}" class="form-label"> Fase do Processo:</label>
+                  {{processo_form.fase_processo}}
+            </div>                                                                                    
+            <div class="col-md-4">
+              <label for="{{processo_form.data_contrato.id_for_label}}" class="form-label"> Data da Contratação:</label>
+                  {{processo_form.data_contrato}}
+            </div>                               
+            <div class="col-md-4">                                                
+              <label for="{{processo_form.fechou_contrato.id_for_label}}" class="form-label"> Fechou Contrato</label>
+                  {{processo_form.fechou_contrato}}
+            </div>   
+            <div class="col-md-4">
+              <label for="{{processo_form.pendencia.id_for_label}}" class="form-label"> Pendência:</label>
+                  {{processo_form.pendencia}}                                            
+            </div>   
+            <div class="col-md-4">
+              <label for="{{processo_form.descricao_processo.id_for_label}}" class="form-label"> Descrição:</label>
+                  {{processo_form.descricao_processo}}                                            
+            </div>                                                                             
+        </div>
+    </div>
+    <!-- Botões para avançar ou voltar -->
+    <div class="d-flex justify-content-between">
+          <button type="submit" name="etapa" value="processo" class="btn btn-primary">Salvar e Avançar</button>   
+    </div>
+</div> 

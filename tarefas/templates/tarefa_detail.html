@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}Detalhes da Tarefa{% endblock %}
+{% block header %}Detalhes da Tarefa{% endblock %}
+{% block content %}
+<div class="content-wrapper">
+    <div >
+    {% comment %} <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>Confirmação de Deleção</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="{% url 'pages:index' %}">Início</a></li>
+                        <li class="breadcrumb-item"><a href="{% url 'processos:list' %}">Processos</a></li>
+                        <li class="breadcrumb-item active">Deletar Processo</li>
+                    </ol>
+                </div>
+            </div>
+        </div><!-- /.container-fluid -->
+    </section> {% endcomment %}
+    <!-- Main content -->
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <!-- General form elements -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">{{ tarefa.processo }}</h3>
+                        </div>
+                        <div class="card-body">
+                            <p><strong>Responsáveis:</strong> {{ tarefa.responsaveis}}</p>
+                            <p><strong>Descrição:</strong> {{ tarefa.descricao_tarefa }}</p>
+                            <p><strong>Data:</strong> {{ tarefa.data }}</p>
+                            <p><strong>Prazo Fatal:</strong> {{ tarefa.prazo_fatal }}</p>
+                            <p><strong>Local:</strong> {{ tarefa.local }}</p>
+                        </div>
+                        <div class="card-footer">
+                            <a href="{% url 'tarefas:tarefa-update' tarefa.pk %}" class="btn btn-warning btn-sm">Editar</a>
+                            <a href="{% url 'tarefas:list' %}" class="btn btn-secondary btn-sm">Voltar</a>
+                        </div>
+                    </div>
+                    <!-- /.card -->
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- /.content -->
+</div>
+</div>
+{% endblock %}

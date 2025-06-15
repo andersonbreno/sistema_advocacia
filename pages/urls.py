@@ -9,6 +9,6 @@ urlpatterns = [
     path('', views.DashboardView.as_view(), name='index'),
     path('busca-global/', views.BuscaGlobalView.as_view(), name='busca_global'),
     # path('graficos/', views.GraficosView.as_view(), name='graficos'),
-    path('create_chart/', views.DataPointCreateView.as_view(), name='create_chart'),
+    path('create_/', views.DataPointCreateView.as_view(), name='create_'),
     path('view_chart/', views.ChartView.as_view(), name='view_chart'),
 ]

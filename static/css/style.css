@@ -47,8 +47,8 @@
   
   /* Placeholder para a área da imagem quando não houver imagem capturada */
   .pfp-placeholder {
-    width: 240px;
-    height: 240px;
+    width: 150px;
+    height: 150px;
     background-color: #f0f0f0;
     border-radius: 50%;
     display: flex;
@@ -96,3 +96,33 @@
   content: " *";
   color: red;
 }
+
+/* stylelint-disable-next-line no-duplicate-selectors*/
+select.form-control {
+  &[size],
+  &[multiple] {
+    height: auto;
+  }
+}
+
+/* Estilo para campos inválidos */
+.is-invalid {
+    border-color: #dc3545 !important;
+}
+
+.invalid-feedback {
+    display: block;
+    color: #dc3545;
+    font-size: 0.875em;
+    margin-top: 0.25rem;
+}
+
+/* Para selects com Select2 */
+.select2-container--default .select2-selection--single.is-invalid {
+    border: 1px solid #dc3545 !important;
+}
+
+.required-field::after {
+        content: " *";
+        color: red;
+    }

@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', function() {
-    console.log("Estou sendo carregado")
+    //console.log("Estou sendo carregado")
     // Função para mostrar/esconder a justificativa
     function toggleJustificativa() {
         const cadastradoPlanilha = document.getElementById('id_cadastrado_planilha').checked;

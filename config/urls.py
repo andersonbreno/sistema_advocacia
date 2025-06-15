@@ -18,8 +18,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from django.conf.urls.static import static
-from django.contrib.auth import views as auth_views
-
+from django.views.generic import RedirectView
 from config import settings
 
 admin.site.site_header = settings.ADMIN_SITE_HEADER
@@ -30,11 +29,16 @@ admin.site.index_title = settings.ADMIN_INDEX_TITLE
 urlpatterns = [
     path("admin/", admin.site.urls),
     path('', include(('pages.urls', 'pages'), namespace='pages')),  # Inclui as URLs do app pages
-    path('clientes/', include('clientes.urls')),  # Inclui as URLs do app clientes
+    path('cadastro/', include('cadastro.urls')), # Inclui as URLs do app cadastro
+    # path('clientes/', include('clientes.urls')),  # Inclui as URLs do app clientes
     path('parceiros/', include('parceiros.urls')), # Inclui as URLs do app parceiros
-    path('processos/', include('processos.urls')),  # Inclui as URLs do app processos
+    # path('processos/', include('processos.urls')),  # Inclui as URLs do app processos
+    path('tarefas/', include('tarefas.urls')), # Inclui as URLs do app tarefas
     path('', include('usuarios.urls')),
+    # Redirecionar /favicon.ico para o favicon nos arquivos estáticos
+    path('favicon.ico', RedirectView.as_view(url='/static/favicon.ico', permanent=True)),
 ]
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

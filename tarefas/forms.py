@@ -58,6 +58,19 @@ class TarefaForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.initial['data'] = datetime.now().date()
+    
+    def clean(self):
+        cleaned_data = super().clean()
+        processo = cleaned_data.get('processo')
+        
+        # Se processo foi fornecido no form (não apenas pelo hidden)
+        if processo and not isinstance(processo, Processo):
+            try:
+                cleaned_data['processo'] = Processo.objects.get(pk=processo)
+            except (ValueError, Processo.DoesNotExist):
+                self.add_error('processo', 'Processo inválido')
+        
+        return cleaned_data
         
     def clean(self):
         cleaned_data = super().clean()

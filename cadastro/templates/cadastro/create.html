@@ -48,210 +48,11 @@
                           </ul>  
                           <div class="tab-content mt-4" id="formTabsContent">
                               <!-- Dados do Cliente -->
-                              <div class="tab-pane fade show active" id="cliente" role="tabpanel" aria-labelledby="cliente-tab">
-                                  <div class="row g-5">
-                                      <div class="col-md-7">
-                                          <div class="mb-3 row">
-                                              <div class="col-md-7">
-                                                  <label for="{{form.nome.id_for_label}}" class="form-label"> Cliente:</label>
-                                                    {{form.nome}}
-                                                    <div class="invalid-feedback">{{form.nome.errors}}</div>
-                                              </div> 
-                                              <div class="col-md-5">
-                                                  <label for="{{form.cpf.id_for_label}}" class="form-label"> CPF:</label>
-                                                      {{form.cpf}}
-                                                      <div class="invalid-feedback">{{form.cpf.errors}}</div>
-                                              </div>
-                                              <div class="col-md-4">
-                                                  <label for="{{form.data_de_nascimento.id_for_label}}" class="form-label"> Data de Nascimento:</label>
-                                                      {{form.data_de_nascimento}}                                                                                                
-                                              </div>
-                                              <div class="col-md-4">
-                                                  <label for="{{form.estado_civil.id_for_label}}" class="form-label"> Estado Civil:</label>
-                                                      {{form.estado_civil}}                                                                                                 
-                                              </div>     
-                                              <div class="col-md-4">
-                                                  <label for="{{form.profissao.id_for_label}}" class="form-label"> Profissão:</label>
-                                                      {{form.profissao}}                                                                                                 
-                                              </div>        
-                                              <div class="col-md-6">
-                                                  <label for="{{form.virou_cliente.id_for_label}}" class="form-label"> Virou cliente:</label>
-                                                      {{form.virou_cliente}}                                                                                               
-                                              </div>   
-                                              <div class="col-md-6">
-                                                  <label for="{{form.origem_cadastrado.id_for_label}}" class="form-label"> Origem:</label>
-                                                      {{form.origem_cadastrado}}
-                                              </div>
-                                              <div class="col-md-6">
-                                                  <label for="{{form.justificativa.id_for_label}}" class="form-label"> Justificativa:</label>
-                                                      {{form.justificativa}}                                                                                                 
-                                              </div>  
-                                              <div class="col-md-6">
-                                                  <label for="{{form.descricao.id_for_label}}" class="form-label"> Descrição:</label>
-                                                      {{form.descricao}}                                                                                                 
-                                              </div>
-                                              <div class="col-md-4">
-                                                  <label for="{{form.cep.id_for_label}}" class="form-label"> CEP:</label>
-                                                      {{form.cep}}                                                                                                 
-                                              </div>
-                                              <div class="col-md-8">
-                                                  <label for="{{form.rua.id_for_label}}" class="form-label"> Rua:</label>
-                                                      {{form.rua}}                                                                                                  
-                                              </div>
-                                              <div class="col-md-2">
-                                                  <label for="{{form.numero.id_for_label}}" class="form-label"> Número:</label>
-                                                      {{form.numero}}                                                                                                 
-                                              </div>
-                                              <div class="col-md-5">
-                                                  <label for="{{form.complemento.id_for_label}}" class="form-label"> Complemento:</label>
-                                                      {{form.complemento}}                                                                                                 
-                                              </div>
-                                              <div class="col-md-5">
-                                                  <label for="{{form.bairro.id_for_label}}" class="form-label"> Bairro:</label>
-                                                      {{form.bairro}}                                           
-                                              </div>
-                                              <div class="col-md-4">
-                                                  <label for="{{form.cidade.id_for_label}}" class="form-label"> Cidade:</label>
-                                                      {{form.cidade}}                                 
-                                              </div>
-                                              <div class="col-md-4">
-                                                  <label for="{{form.estado.id_for_label}}" class="form-label"> Estado:</label>
-                                                      {{form.estado}}                                     
-                                              </div>
-                                              <div class="col-md-4">
-                                                  <label for="{{form.email.id_for_label}}" class="form-label"> E-mail:</label>
-                                                      {{form.email}}                                                      
-                                              </div>
-                                              <div class="col-md-4">
-                                                  <label for="{{form.telefone.id_for_label}}" class="form-label"> Telefone:</label>
-                                                      {{form.telefone}}       
-                                                      <div class="invalid-feedback">{{form.telefone.errors}}</div>                                                                                         
-                                              </div>
-                                              <div class="col-md-4">                                                 
-                                                    <label for="{{form.whatsapp.id_for_label}}" class="form-label"> Whatsapp</label>                                   
-                                                      {{form.whatsapp}}
-                                              </div>  
-                                          </div>
-                                          <!-- Botão para avançar para a próxima aba -->
-                                          <div class="d-flex justify-content-between">
-                                              <button type="sumit" name="etapa" value="cliente" class="btn btn-primary" onclick="salvarEtapa()">Salvar e Avançar</button>
-                                          </div>
-                                      </div>
-                                      <!-- Coluna da Foto -->
-                                      <div class="col-md-4 d-flex justify-content-end">                                                                       
-                                        <div class="photo-container">
-                                            {% comment %}
-                                            {% if form.instance.foto %}
-                                                <img src="{{ form.instance.foto.url }}" alt="Foto do cliente" class="img-thumbnail" id="foto-preview">
-                                            {% else %}
-                                                <div class="photo-placeholder">
-                                                    {{ form.foto }}
-                                                </div>
-                                            {% endif %}
-                                            {% endcomment %}
-                                        </div>
-                                      </div>                                                                          
-                                  </div>                                
-                              </div>  
+                                {% include 'cadastro/partials/cliente_form.html' %}
                               <!-- Dados do Processo -->
-                              <div class="tab-pane fade" id="processo" role="tabpanel" aria-labelledby="processo-tab">
-                                  <div class="col-md-15">
-                                      <div class="mb-3 row">                                     
-                                          <div class="col-md-4">
-                                            <label for="{{processo_form.parceiro.id_for_label}}" class="form-label"> Parceiro:</label>
-                                                {{processo_form.parceiro}}                                            
-                                          </div>
-                                          <div class="col-md-4">
-                                            <label for="{{processo_form.advogado.id_for_label}}" class="form-label"> Advogado:</label>
-                                                {{processo_form.advogado}}                                            
-                                          </div>
-                                          <div class="col-md-4">
-                                            <label for="{{processo_form.numero_processo.id_for_label}}" class="form-label"> Número do Processo:</label>
-                                                {{processo_form.numero_processo}}
-                                          </div>
-                                          <div class="col-md-4">
-                                            <label for="{{processo_form.processo_status.id_for_label}}" class="form-label"> Status:</label>
-                                                {{processo_form.processo_status}}
-                                          </div>
-                                          <div class="col-md-4">
-                                            <label for="{{processo_form.grupo.id_for_label}}" class="form-label"> Grupo:</label>
-                                                {{processo_form.grupo}}
-                                          </div>
-                                          <div class="col-md-4">
-                                            <label for="{{processo_form.fase_processo.id_for_label}}" class="form-label"> Fase do Processo:</label>
-                                                {{processo_form.fase_processo}}
-                                          </div>                                                                                    
-                                          <div class="col-md-4">
-                                            <label for="{{processo_form.data_contrato.id_for_label}}" class="form-label"> Data da Contratação:</label>
-                                                {{processo_form.data_contrato}}
-                                          </div>                               
-                                          <div class="col-md-4">                                                
-                                            <label for="{{processo_form.fechou_contrato.id_for_label}}" class="form-label"> Fechou Contrato</label>
-                                                {{processo_form.fechou_contrato}}
-                                          </div>   
-                                          <div class="col-md-4">
-                                            <label for="{{processo_form.pendencia.id_for_label}}" class="form-label"> Pendência:</label>
-                                                {{processo_form.pendencia}}                                            
-                                          </div>   
-                                          <div class="col-md-4">
-                                            <label for="{{processo_form.descricao_processo.id_for_label}}" class="form-label"> Descrição:</label>
-                                                {{processo_form.descricao_processo}}                                            
-                                          </div>                                                                             
-                                      </div>
-                                  </div>
-                                  <!-- Botões para avançar ou voltar -->
-                                  <div class="d-flex justify-content-between">
-                                        <button type="sumit" name="etapa" value="processo" class="btn btn-primary" onclick="salvarEtapa()">Salvar e Avançar</button>   
-                                  </div>
-                              </div>  
+                                {% include 'cadastro/partials/processo_form.html' %}
                               <!-- Dados da Tarefa -->
-                              <div class="tab-pane fade" id="tarefa" role="tabpanel" aria-labelledby="tarefa-tab">
-                                  <div class="col-md-15">
-                                    <div class="mb-3 row">                                                                                  
-                                        <div class="col-md-8">
-                                            <label for="{{tarefa_form.responsaveis.id_for_label}}" class="form-label"> Responsável:</label>
-                                                {{tarefa_form.responsaveis}}                                            
-                                        </div>                                       
-                                        <div class="col-md-4">
-                                            <label for="{{tarefa_form.data.id_for_label}}" class="form-label"> Data:</label>
-                                                {{tarefa_form.data}}                                            
-                                        </div>
-                                        <div class="col-md-4">
-                                            <label for="{{tarefa_form.hora.id_for_label}}" class="form-label"> Horário:</label>
-                                                {{tarefa_form.hora}}                                            
-                                        </div>
-                                        <div class="col-md-4">
-                                            <label for="{{tarefa_form.tarefa.id_for_label}}" class="form-label"> Tarefa:</label>
-                                                {{tarefa_form.tarefa}}                                            
-                                        </div>
-                                        <div class="col-md-4">
-                                            <label for="{{tarefa_form.prazo_fatal.id_for_label}}" class="form-label"> Prazo Fatal:</label>
-                                                {{tarefa_form.prazo_fatal}}                                            
-                                        </div>
-                                        <div class="col-md-4">
-                                            <label for="{{tarefa_form.local.id_for_label}}" class="form-label"> Local:</label>
-                                                {{tarefa_form.local}}                                            
-                                        </div>
-                                        <div class="col-md-4">
-                                            <label for="{{tarefa_form.prioridade_tarefa.id_for_label}}" class="form-label"> Importante:</label>
-                                                {{tarefa_form.prioridade_tarefa}}
-                                        </div>
-                                        <div class="col-md-4">
-                                            <label for="{{tarefa_form.status.id_for_label}}" class="form-label"> Status:</label>
-                                                {{tarefa_form.status}}                                            
-                                        </div>
-                                        <div class="col-md-4">
-                                            <label for="{{tarefa_form.descricao_tarefa.id_for_label}}" class="form-label"> Descrição:</label>
-                                                {{tarefa_form.descricao_tarefa}}                                            
-                                        </div>                                        
-                                    </div>
-                                  </div>
-  
-                                  <!-- Botões para avançar ou voltar -->
-                                  <div class="d-flex justify-content-between">
-                                        <button type="sumit" name="etapa" value="tarefa" class="btn btn-primary">Salvar</button>
-                                  </div>
-                              </div>                            
+                                {% include 'cadastro/partials/tarefa_form.html' %}
                           </div>
                       </form>
                     </div>
@@ -273,81 +74,134 @@
 
 {% block extra_script %}
 <script>
-let currentTab = 'cliente';
-
-function showTab(tabName) {
-    if (!tabName) return;
-    
-    currentTab = tabName;
-
-    // Esconde todas as abas
-    document.querySelectorAll('.tab-pane').forEach(tab => {
-        tab.classList.remove('show', 'active');
-    });
-
-    // Exibe a aba correspondente
-    const activeTab = document.getElementById(tabName);
-    if (activeTab) {
-        activeTab.classList.add('show', 'active');
+document.addEventListener('DOMContentLoaded', function() {
+    // Função para verificar IDs válidos
+    function isValidId(id) {
+        return id && id !== 'None' && id !== 'null' && id !== '' && !isNaN(id);
     }
 
-    // Atualiza botões de navegação
-    document.querySelectorAll('.nav-link').forEach(btn => {
-        btn.classList.remove('active');
-    });
-    
-    const activeButton = document.getElementById(`${tabName}-tab`);
-    if (activeButton) {
-        activeButton.classList.add('active');
-    }
-}
-
-// Função para focar no primeiro campo inválido
-function focusFirstInvalidField() {
-    const invalidFields = document.querySelectorAll('.is-invalid');
-    if (invalidFields.length > 0) {
-        // Tenta focar no primeiro campo inválido que não seja readonly ou disabled
-        for (let field of invalidFields) {
-            if (!field.readOnly && !field.disabled) {
-                try {
-                    field.focus();
-                    // Rola a página até o campo
-                    field.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                    break;
-                } catch (e) {
-                    console.warn('Could not focus on invalid field:', e);
-                }
-            }
-        }
-    }
-}
-
-// Inicialização
-window.addEventListener('DOMContentLoaded', function() {
-    // Mostra a aba inicial
-    showTab('cliente');
+    // Obtém os IDs com proteção
+    const clienteId = "{{ cliente_id|default:'' }}";
+    const processoId = "{{ processo_id|default:'' }}";
 
     // Habilita/desabilita abas conforme IDs existentes
-    const clienteId = "{{ cliente_id }}";
-    const processoId = "{{ processo_id }}";
+    const processoTab = document.getElementById('processo-tab');
+    const tarefaTab = document.getElementById('tarefa-tab');
     
-    if (clienteId) {
-        document.getElementById('processo-tab').disabled = false;
+    if (processoTab) {
+        processoTab.disabled = !isValidId(clienteId);
     }
     
-    if (processoId) {
-        document.getElementById('tarefa-tab').disabled = false;
-    }
-    
-    // Preenche hora atual se vazio
-    const horaInput = document.querySelector('#tarefa input[name="hora"]');
-    if (horaInput && !horaInput.value) {
-        const now = new Date();
-        horaInput.value = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+    if (tarefaTab) {
+        tarefaTab.disabled = !isValidId(processoId);
     }
 
+    // Função para gerenciar a validação das abas
+    function manageTabValidation() {
+        // Desativa required em todas as abas não visíveis
+        document.querySelectorAll('.tab-pane:not(.show) [required]').forEach(el => {
+            el.required = false;
+        });
+        
+        // Ativa required apenas na aba visível
+        const activeTab = document.querySelector('.tab-pane.show');
+        if (activeTab) {
+            activeTab.querySelectorAll('[required]').forEach(el => {
+                el.required = true;
+            });
+        }
+    }
+
+    // Função para mostrar a aba correta com fallback inteligente
+    function showTab(tabName) {
+        // Determina a aba padrão caso a solicitada não esteja disponível
+        let tabToShow = tabName;
+        
+        if (tabName === 'processo' && !isValidId(clienteId)) {
+            tabToShow = 'cliente';
+        } else if (tabName === 'tarefa' && !isValidId(processoId)) {
+            tabToShow = isValidId(clienteId) ? 'processo' : 'cliente';
+        }
+
+        // Esconde todas as abas
+        document.querySelectorAll('.tab-pane').forEach(tab => {
+            tab.classList.remove('show', 'active');
+        });
+
+        // Exibe a aba correspondente
+        const activeTab = document.getElementById(tabToShow);
+        if (activeTab) {
+            activeTab.classList.add('show', 'active');
+        }
+
+        // Atualiza botões de navegação
+        document.querySelectorAll('.nav-link').forEach(btn => {
+            btn.classList.remove('active');
+            if (btn.id === `${tabToShow}-tab`) {
+                btn.classList.add('active');
+            }
+        });
+
+        // Gerenciar a validação após mudar de aba
+        manageTabValidation();
+    }
+
+    // Mostra a aba inicial com lógica inteligente
+    let initialTab = 'cliente';
+    if (isValidId(processoId)) {
+        initialTab = 'tarefa';
+    } else if (isValidId(clienteId)) {
+        initialTab = 'processo';
+    }
+    showTab(initialTab);
+
+    // Adiciona eventos aos botões das abas com verificação de disponibilidade
+    document.querySelectorAll('.nav-link').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            const tabName = this.id.replace('-tab', '');
+            
+            // Verifica se a aba pode ser acessada
+            if ((tabName === 'processo' && !isValidId(clienteId)) || 
+                (tabName === 'tarefa' && !isValidId(processoId))) {
+                e.preventDefault();
+                return;
+            }
+            
+            showTab(tabName);
+        });
+    });
+
     // Foca no primeiro campo inválido, se houver
-    focusFirstInvalidField();
+    const firstInvalidField = document.querySelector('.is-invalid');
+    if (firstInvalidField) {
+        firstInvalidField.focus();
+    }
+
+    // Adiciona feedback visual para abas desabilitadas
+    document.querySelectorAll('.nav-link.disabled').forEach(tab => {
+        tab.title = "Complete a etapa anterior para acessar";
+    });
+
+    // Modifica o evento de submit do formulário
+    document.getElementById('mainForm').addEventListener('submit', function(e) {
+        // Garante que apenas os campos da aba ativa sejam validados
+        manageTabValidation();
+        
+        // Verifica se há campos inválidos na aba ativa
+        const activeTab = document.querySelector('.tab-pane.show');
+        const invalidFields = activeTab.querySelectorAll(':invalid');
+        
+        if (invalidFields.length > 0) {
+            e.preventDefault();
+            invalidFields[0].focus();
+            
+            // Rola até o primeiro campo inválido
+            invalidFields[0].scrollIntoView({
+                behavior: 'smooth',
+                block: 'center'
+            });
+        }
+    });
 });
 </script>
 {% endblock %}

@@ -1,10 +1,9 @@
 # Importações necessárias para o funcionamento das views
 from django.urls import reverse_lazy
-from django.views.generic import ListView, UpdateView, DetailView, DeleteView, CreateView
+from django.views.generic import ListView, DetailView, DeleteView, CreateView
 from django.shortcuts import redirect
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import JsonResponse
 from django.db import transaction
 
 
@@ -43,15 +42,13 @@ class CadastroCreateView(LoginRequiredMixin, CreateView):
             context['processo_form'] = ProcessoForm(prefix='processo')
             context['tarefa_form'] = TarefaForm(prefix='tarefa')
 
-        # Adiciona IDs ao contexto se existirem
-        if 'cliente_id' in self.request.session:
-            context['cliente_id'] = self.request.session['cliente_id']
-        if 'processo_id' in self.request.session:
-            context['processo_id'] = self.request.session['processo_id']
+        context['cliente_id'] = self.request.session.get('cliente_id', '')
+        context['processo_id'] = self.request.session.get('processo_id', '')
         
         return context
 
     def post(self, request, *args, **kwargs):
+        self.object = None  # Garantimos que self.object existe
         etapa = request.POST.get('etapa')
         
         if etapa == 'cliente':
@@ -69,11 +66,11 @@ class CadastroCreateView(LoginRequiredMixin, CreateView):
         if form.is_valid():
             try:
                 with transaction.atomic():
-                    cliente = form.save(commit=False)
-                    cliente.created_by = request.user
-                    cliente.save()
+                    self.object = form.save(commit=False)  # Atribui a self.object
+                    self.object.created_by = request.user
+                    self.object.save()
                     
-                    request.session['cliente_id'] = cliente.id
+                    request.session['cliente_id'] = self.object.id
                     request.session.modified = True
                     
                     messages.success(request, 'Dados do cliente salvos com sucesso!')
@@ -82,7 +79,6 @@ class CadastroCreateView(LoginRequiredMixin, CreateView):
                 messages.error(request, f'Erro ao salvar cliente: {str(e)}')
         else:
             self.mark_invalid_fields(form)
-            self.show_form_errors(request, form.errors, 'Cliente')
         
         return self.render_to_response(self.get_context_data(form=form))
 
@@ -112,7 +108,6 @@ class CadastroCreateView(LoginRequiredMixin, CreateView):
                 messages.error(request, f'Erro ao salvar processo: {str(e)}')
         else:
             self.mark_invalid_fields(form)
-            self.show_form_errors(request, form.errors, 'Processo')
         
         context = self.get_context_data()
         context['processo_form'] = form
@@ -121,7 +116,7 @@ class CadastroCreateView(LoginRequiredMixin, CreateView):
     def process_tarefa_step(self, request):
         processo_id = request.session.get('processo_id')
         if not processo_id:
-            messages.error(request, 'Processo não encontrado. Por favor, preencha os dados do processo primeiro.')
+            messages.error(request, 'Processo não encontrado.')
             return redirect('cadastro:create')
             
         form = TarefaForm(request.POST, prefix='tarefa')
@@ -129,24 +124,27 @@ class CadastroCreateView(LoginRequiredMixin, CreateView):
         if form.is_valid():
             try:
                 with transaction.atomic():
+                    processo = Processo.objects.get(pk=processo_id)
+                    
                     tarefa = form.save(commit=False)
-                    tarefa.processo_id = processo_id
+                    tarefa.processo = processo
                     tarefa.created_by = request.user
                     tarefa.save()
                     form.save_m2m()
                     
-                    if 'cliente_id' in request.session:
-                        del request.session['cliente_id']
-                    if 'processo_id' in request.session:
-                        del request.session['processo_id']
-                    
+                    self.clear_session_data(request)
                     messages.success(request, 'Tarefa salva com sucesso!')
+                    
+                    # Definimos self.object como o cliente associado para o redirecionamento
+                    self.object = processo.cliente
                     return redirect(self.get_success_url())
+                    
+            except Processo.DoesNotExist:
+                messages.error(request, 'Processo associado não existe mais.')
+                return redirect('cadastro:create')
             except Exception as e:
                 messages.error(request, f'Erro ao salvar tarefa: {str(e)}')
-        else:
-            self.mark_invalid_fields(form)
-            self.show_form_errors(request, form.errors, 'Tarefa')
+                logger.error(f"Erro ao salvar tarefa: {str(e)}", exc_info=True)
         
         context = self.get_context_data()
         context['tarefa_form'] = form
@@ -154,39 +152,22 @@ class CadastroCreateView(LoginRequiredMixin, CreateView):
 
     def mark_invalid_fields(self, form):
         """Adiciona classes CSS aos campos inválidos"""
-        for field_name, errors in form.errors.items():
-            if field_name in form.fields:
-                field = form[field_name]
+        for field_name in form.errors:
+            clean_name = field_name.replace(form.prefix + '-', '') if form.prefix else field_name
+            if clean_name in form.fields:
+                field = form[clean_name]
                 css_classes = field.field.widget.attrs.get('class', '')
                 if 'is-invalid' not in css_classes:
                     field.field.widget.attrs['class'] = css_classes + ' is-invalid'
+                    
+    def clear_session_data(self, request):
+        """Limpa os dados da sessão"""
+        if 'cliente_id' in request.session:
+            del request.session['cliente_id']
+        if 'processo_id' in request.session:
+            del request.session['processo_id']
+        request.session.modified = True
 
-    def show_form_errors(self, request, errors, form_name):
-        """Exibe erros de validação do formulário"""
-        for field, field_errors in errors.items():
-            # Remove o prefixo do campo para exibição
-            clean_field = field.replace(f'{form_name.lower()}-', '')
-            for error in field_errors:
-                messages.error(request, f'{form_name} - {clean_field}: {error}')
-
-    def form_invalid(self, form, processo_form, tarefa_form):
-        """Trata forms inválidos no modo tradicional"""
-        self.mark_invalid_fields(form)
-        self.mark_invalid_fields(processo_form)
-        self.mark_invalid_fields(tarefa_form)
-        
-        self.show_form_errors(self.request, form.errors, 'Cliente')
-        self.show_form_errors(self.request, processo_form.errors, 'Processo')
-        self.show_form_errors(self.request, tarefa_form.errors, 'Tarefa')
-
-        return self.render_to_response(
-            self.get_context_data(
-                form=form,
-                processo_form=processo_form,
-                tarefa_form=tarefa_form
-            )
-        )
-                                    
 # CadastroDeleteView
 class CadastroDeleteView(LoginRequiredMixin, DeleteView):
     model = Cliente  # Define o modelo que será utilizado

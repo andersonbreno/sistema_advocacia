@@ -1,0 +1,47 @@
+<div class="tab-pane fade" id="tarefa" role="tabpanel" aria-labelledby="tarefa-tab">
+    <div class="col-md-15">
+    <div class="mb-3 row">                                                                                  
+        <div class="col-md-8">
+            <label for="{{tarefa_form.responsaveis.id_for_label}}" class="form-label"> Responsável:</label>
+                {{tarefa_form.responsaveis}}                                            
+        </div>                                       
+        <div class="col-md-4">
+            <label for="{{tarefa_form.data.id_for_label}}" class="form-label"> Data:</label>
+                {{tarefa_form.data}}                                            
+        </div>
+        <div class="col-md-4">
+            <label for="{{tarefa_form.hora.id_for_label}}" class="form-label"> Horário:</label>
+                {{tarefa_form.hora}}                                            
+        </div>
+        <div class="col-md-4">
+            <label for="{{tarefa_form.tarefa.id_for_label}}" class="form-label"> Tarefa:</label>
+                {{tarefa_form.tarefa}}                                            
+        </div>
+        <div class="col-md-4">
+            <label for="{{tarefa_form.prazo_fatal.id_for_label}}" class="form-label"> Prazo Fatal:</label>
+                {{tarefa_form.prazo_fatal}}                                            
+        </div>
+        <div class="col-md-4">
+            <label for="{{tarefa_form.local.id_for_label}}" class="form-label"> Local:</label>
+                {{tarefa_form.local}}                                            
+        </div>
+        <div class="col-md-4">
+            <label for="{{tarefa_form.prioridade_tarefa.id_for_label}}" class="form-label"> Importante:</label>
+                {{tarefa_form.prioridade_tarefa}}
+        </div>
+        <div class="col-md-4">
+            <label for="{{tarefa_form.status.id_for_label}}" class="form-label"> Status:</label>
+                {{tarefa_form.status}}                                            
+        </div>
+        <div class="col-md-4">
+            <label for="{{tarefa_form.descricao_tarefa.id_for_label}}" class="form-label"> Descrição:</label>
+                {{tarefa_form.descricao_tarefa}}                                            
+        </div>                                        
+    </div>
+    </div>
+
+    <!-- Botões para avançar ou voltar -->
+    <div class="d-flex justify-content-between">
+        <button type="submit" name="etapa" value="tarefa" class="btn btn-primary">Salvar</button>
+    </div>
+</div>

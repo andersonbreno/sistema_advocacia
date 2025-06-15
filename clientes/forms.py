@@ -1,12 +1,18 @@
 from django import forms
-from django.core.validators import validate_email
-
+from datetime import datetime
 from .widgets import DatePickerInput
 from .models import Cliente
-# from .validators import validar_cpf
+from .validators import validar_cpf, validar_cep, validar_telefone
 from .widgets import ImageInput
+import re
 
 class ClienteForm(forms.ModelForm):
+    data_de_nascimento = forms.DateField(
+        widget=DatePickerInput(attrs={'class': 'form-control'}),
+        input_formats=['%Y-%m-%d', '%d/%m/%Y', '%m/%d/%Y', '%d-%m-%Y'],
+        required=False
+    )
+    
     class Meta:
         model = Cliente
         fields = [
@@ -45,20 +51,7 @@ class ClienteForm(forms.ModelForm):
         self.fields['profissao'].required = False
         self.fields['foto'].required = False
         self.fields['telefone'].required = True
-                
-      
-    def clean_cpf(self):
-        cpf = self.cleaned_data.get('cpf')
-        # Verifica se é uma edição (instance existe e tem PK)
-        if self.instance and self.instance.pk:
-            # Se o CPF não foi alterado, não precisa validar
-            if self.instance.cpf == cpf:
-                return cpf
-        # Validação para novo cadastro ou CPF alterado
-        if Cliente.objects.filter(cpf=cpf).exists():
-            raise forms.ValidationError("Cliente com este CPF já existe.")
-        return cpf
-    
+       
     def clean_email(self):
         email = self.cleaned_data.get('email')
         # Verifica se é uma edição (instance existe e tem PK)
@@ -70,14 +63,31 @@ class ClienteForm(forms.ModelForm):
         if email and Cliente.objects.filter(email=email).exists():  # Verifica se email não é vazio
             raise forms.ValidationError("Este email já está em uso.")
         return email
+        
+    def clean_data_de_nascimento(self):
+        data_nascimento = self.cleaned_data.get('data_de_nascimento')
+        if isinstance(data_nascimento, str):
+            try:
+                return datetime.strptime(data_nascimento, '%Y-%m-%d').date()
+            except ValueError:
+                raise forms.ValidationError("Formato de data inválido. Use DD/MM/AAAA ou AAAA-MM-DD")
+        
+        return data_nascimento
     
-    def clean_telefone(self):
-        telefone = self.cleaned_data.get('telefone')
-        if telefone:
-            telefone = ''.join(filter(str.isdigit, telefone))
-            if len(telefone) != 11:
-                raise forms.ValidationError('O telefone deve conter exatamente 11 dígitos.')
-        return telefone
+    def clean(self):
+        cleaned_data = super().clean()
+        
+        # Formata os campos antes de salvar
+        if 'cpf' in cleaned_data:
+            cleaned_data['cpf'] = re.sub(r'[^\d]', '', cleaned_data['cpf'])
+        
+        if 'cep' in cleaned_data:
+            cleaned_data['cep'] = re.sub(r'[^\d]', '', cleaned_data['cep'])
+        
+        if 'telefone' in cleaned_data:
+            cleaned_data['telefone'] = re.sub(r'[^\d]', '', cleaned_data['telefone'])
+        
+        return cleaned_data
     
     def clean_field(self):
         data = self.cleaned_data["field"]

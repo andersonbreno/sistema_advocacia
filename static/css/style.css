@@ -105,13 +105,24 @@ select.form-control {
   }
 }
 
-/*Mensagens de error*/
+/* Estilo para campos inválidos */
 .is-invalid {
     border-color: #dc3545 !important;
-    background-color: #fff8f8 !important;
 }
+
 .invalid-feedback {
     display: block;
     color: #dc3545;
     font-size: 0.875em;
+    margin-top: 0.25rem;
 }
+
+/* Para selects com Select2 */
+.select2-container--default .select2-selection--single.is-invalid {
+    border: 1px solid #dc3545 !important;
+}
+
+.required-field::after {
+        content: " *";
+        color: red;
+    }

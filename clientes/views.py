@@ -104,3 +104,4 @@
 #         self.object.delete()
 #         messages.success(request, 'Cliente deletado com sucesso!')
 #         return redirect(success_url)
+

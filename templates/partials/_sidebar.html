@@ -33,6 +33,22 @@
                 Cadastro
               </p>
             </a>
+          </li>
+          <li class="nav-item">
+            <a href="{% url 'clientes:list' %}" class="nav-link">
+              <i class="nav-icon fas fa-users"></i>
+              <p>
+                Clientes
+              </p>
+            </a>          
+          </li>
+          <li class="nav-item">
+            <a href="{% url 'processos:list' %}" class="nav-link">
+              <i class="nav-icon fas fa-balance-scale"></i>
+              <p>
+                Processos
+              </p>
+            </a>          
           </li>          
           <li class="nav-item">
             <a href="{% url 'parceiros:list' %}" class="nav-link">
@@ -47,6 +63,14 @@
               <i class="nav-icon fas fa-tasks"></i>
               <p>
                 Tarefas
+              </p>
+            </a>          
+          </li>
+          <li class="nav-item">
+            <a href="{% url 'admin:index' %}" class="nav-link">
+              <i class="nav-icon fas fa-cog"></i>
+              <p>
+                Configurações
               </p>
             </a>          
           </li>

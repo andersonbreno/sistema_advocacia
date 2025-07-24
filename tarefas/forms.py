@@ -14,16 +14,13 @@ class TarefaForm(forms.ModelForm):
         widget=forms.Select(attrs={'class': 'form-control'}),
         label="Status da Tarefa",
         initial=Status_Tarefa.PENDENTE  
-    )
-    
+    )    
     processo = forms.ModelChoiceField(
         queryset=Processo.objects.all(),
         required=False,
         label="Processo",
         widget=forms.HiddenInput()
-    )
-    
-    # Adicione um campo para selecionar múltiplos responsáveis
+    )    
     responsaveis = forms.ModelChoiceField(
         queryset=User.objects.all(),
         required=False,
@@ -57,7 +54,13 @@ class TarefaForm(forms.ModelForm):
     
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        
         self.initial['data'] = datetime.now().date()
+        
+        instance = kwargs.get('instance')
+        if instance and instance.status == Status_Tarefa.CONCLUIDA:
+            for field in self.fields.values():
+                field.disabled = True
     
     def clean(self):
         cleaned_data = super().clean()

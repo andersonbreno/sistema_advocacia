@@ -32,12 +32,12 @@
                     <div class="card shadow mb-4">
                         <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                             <h6 class="m-0 font-weight-bold text-primary">Informações do Processo</h6>
-                            <!-- <div>
-                                <a href="{% url 'processos:processo-update' processo.pk %}"
+                            {% comment %} <div>
+                                <a href="{% url 'processos:update' processo.pk %}"
                                     class="btn btn-warning btn-circle btn-sm" title="Editar">
                                     <i class="fas fa-edit"></i>
                                 </a>
-                            </div> -->
+                            </div> {% endcomment %}
                         </div>
                         <div class="card-body">
                             <div class="mb-3">
@@ -46,7 +46,7 @@
                             </div>
                             <div class="mb-3">
                                 <label class="form-label">Descrição:</label>
-                                <p>{{ processo.descricao }}</p>
+                                <p>{{ processo.descricao_processo }}</p>
                             </div>
                             <div class="mb-3">
                                 <label class="form-label">Cliente:</label>

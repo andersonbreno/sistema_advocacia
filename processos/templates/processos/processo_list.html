@@ -28,7 +28,7 @@
                 </div>
             </div>
             <div class="card-body">
-                <!-- <div><a href="{% url 'processos:create'%}" class="btn btn-info">Novo Processo</a></div> -->
+                {% comment %} <div><a href="{% url 'processos:create'%}" class="btn btn-info">Novo Processo</a></div> {% endcomment %}
                 <div class="table-responsive">
                     <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                         <thead>
@@ -44,15 +44,15 @@
                         </thead>
                         <tbody>
                             {% for processo in processos %}
-                            <!-- <tr>
-                                <td><a href="{% url 'processos:processo-update' processo.pk %}">{{ processo.cliente.nome }}</a></td>
+                            <tr>
+                                <td><a href="{% url 'processos:update' processo.pk %}">{{ processo.cliente.nome }}</a></td>
                                 <td>{{ processo.numero_processo }}</td>
                                 <td>{{ processo.get_fase_processo_display }}</td>
                                 <td>{{ processo.get_grupo_display }}</td>
                                 <td>{{ processo.advogado.nome }}</td>
                                 <td>
-                                    <a href="{% url 'processos:processo-update' processo.pk %}"
-                                        class="btn btn-warning btn-sm" title="Editar">
+                                    <a href="{% url 'processos:update' processo.pk %}" class="btn btn-warning btn-sm" 
+                                        title="Editar">
                                         <i class="fas fa-pencil-alt"></i>
                                     </a>
                                     <a href="{% url 'processos:detail' processo.pk %}" class="btn btn-success btn-sm"
@@ -63,7 +63,7 @@
                                         title="Excluir">
                                         <i class="fas fa-trash-alt"></i>
                                     </a>
-                                </td> -->
+                                </td>
                                 <!-- Adicione mais células conforme necessário -->
                             </tr>
                             {% empty %}

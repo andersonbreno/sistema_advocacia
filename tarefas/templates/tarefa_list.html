@@ -50,17 +50,20 @@
                                 <td>{{ tarefa.prazo_fatal }}</td>
                                 <td>{{ tarefa.status }}</td>
                                 <td>
-                                    <a href="{% url 'tarefas:detail' tarefa.pk %}" class="btn btn-success btn-sm" title="Detalhes">
+                                    <a href="{% url 'tarefas:detail' tarefa.pk %}" class="btn btn-success btn-sm" 
+                                        title="Detalhes">
                                         <i class="fas fa-eye"></i>
                                     </a>
-                                    <a href="{% url 'tarefas:tarefa-update' tarefa.pk %}" class="btn btn-warning btn-sm" title="Editar">
+                                    <a href="{% url 'tarefas:update' tarefa.pk %}" class="btn btn-warning btn-sm" 
+                                        title="Editar">
                                         <i class="fas fa-pencil-alt"></i>
                                     </a>
-                                    <a href="{% url 'tarefas:tarefa-duplicar' tarefa.pk %}" class="btn btn-primary btn-sm" title="Criar nova baseada nesta">
+                                    <a href="{% url 'tarefas:duplicar' tarefa.pk %}" class="btn btn-primary btn-sm" 
+                                        title="Criar nova baseada nesta">
                                         <i class="fas fa-copy"></i>
                                     </a>
-                                    <a href="{% url 'tarefas:delete' tarefa.pk %}" 
-                                        class="btn btn-danger btn-sm" title="Excluir">
+                                    <a href="{% url 'tarefas:delete' tarefa.pk %}" class="btn btn-danger btn-sm" 
+                                        title="Excluir">
                                         <i class="fas fa-trash-alt"></i>
                                     </a>
                                 </td>

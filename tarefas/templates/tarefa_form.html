@@ -55,9 +55,12 @@
                             <!-- Botões para avançar ou voltar -->
                             <div class="mt-4 d-flex justify-content-between">
                                 <a href="{% url 'tarefas:list' %}" class="btn btn-secondary">Cancelar</a>
-                                <button type="submit" class="btn btn-primary">
-                                {% if object %}Salvar Alterações{% else %}Criar Tarefa{% endif %}
-                                </button>
+                                
+                                {% if not object.status == "Concluída" %}
+                                    <button type="submit" class="btn btn-primary">
+                                        {% if object %}Salvar Alterações{% else %}Criar Tarefa{% endif %}
+                                    </button>
+                                {% endif %}
                             </div>
                         </form>
                     </div>

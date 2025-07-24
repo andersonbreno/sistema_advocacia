@@ -8,6 +8,12 @@
       <li class="nav-item">
         <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
       </li>
+      <li class="nav-item d-none d-sm-inline-block">
+        <a class="nav-link" href="{% url "pages:index" %}">Home</a>
+      </li>
+      <li class="nav-item d-none d-sm-inline-block">
+        <a class="nav-link" href="{% url 'admin:index' %}">Admin</a>
+      </li>
     </ul>
 
     <!-- Right navbar links -->
@@ -33,7 +39,6 @@
           </form>
         </div>
       </li>
-
       <li class="nav-item">
         <a class="nav-link" data-widget="fullscreen" href="#" role="button">
           <i class="fas fa-expand-arrows-alt"></i>
@@ -42,6 +47,43 @@
       <li class="nav-item">
         <a class="nav-link" data-widget="control-sidebar" data-slide="true" href="#" role="button">
           <i class="fas fa-th-large"></i>
+        </a>
+      </li>
+      <li class="nav-item dropdown user-menu">
+        <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
+            <img src="{% static "admin-lte/dist/img/avatar5.png" %}" class="user-image img-circle elevation-2" alt="User Image">
+            <span class="d-none d-md-inline">{{ user.get_username }}</span>
+        </a>
+        <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+            <!-- User image -->
+            <li class="user-header bg-primary">
+            <img src="{% static "admin-lte/dist/img/avatar5.png" %}" class="img-circle elevation-2" alt="User Image">
+            <p>
+              {{ user.get_full_name|default:user.username }}
+              <small>Membro desde: {{ user.date_joined|date:"d/m/Y" }}</small>
+            </p>
+          </li>
+            <!-- Menu Body -->
+            <li class="user-body">
+            {% comment %} <div class="row">
+                <div class="col-4 text-center">
+                <a href="#">Profile</a>
+                </div>
+                <div class="col-4 text-center">
+                <a href="#">Team</a>
+                </div>
+                <div class="col-4 text-center">
+                <a href="#">Friends</a>
+                </div>
+            </div> {% endcomment %}
+            <!-- /.row -->
+            </li>
+            <!-- Menu Footer-->
+            <li class="user-footer">
+            {% comment %} <a href="/admin/password_change/" class="btn btn-default btn-flat">Change Password</a> {% endcomment %}
+            <a href="{% url 'logout' %}" class="btn btn-default btn-flat float-right">Sair</a><a>
+            </a></li><a>
+        </a></ul><a>
         </a>
       </li>
     </ul>

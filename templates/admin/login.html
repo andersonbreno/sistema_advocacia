@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Victor Rocha Advocacia - Login</title>
+
+    {% load static %}
+
+    <!-- Font Awesome -->
+    <link href="{% static 'theme/docs/assets/plugins/fontawesome-free/css/all.min.css' %}" rel="stylesheet">
+    <!-- AdminLTE -->
+    <link href="{% static 'theme/docs/assets/css/adminlte.min.css' %}" rel="stylesheet">
+    <link href="{% static 'css/style.css' %}" rel="stylesheet">
+
+    <!-- Google Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css?family=Nunito:200,300,400,600,700,800,900"
+        rel="stylesheet">
+
+    <style>
+        .login-container {
+            min-height: 90vh;
+        }
+
+        .card-custom {
+            height: 600px;
+            border-radius: 1rem;
+        }
+
+        .login-form,
+        .welcome-side {
+            padding: 3rem;
+        }
+
+        .login-form .form-control {
+            height: 50px;
+            font-size: 1.1rem;
+        }
+
+        .btn-lg {
+            padding: 0.75rem 1.5rem;
+            font-size: 1.1rem;
+        }
+
+        .logo-img {
+            width: 150px;
+            max-width: 60%;
+            height: auto;
+            margin-bottom: 1.5rem;
+        }
+    </style>
+</head>
+
+<body class="bg-white">
+
+    <div class="container login-container d-flex justify-content-center align-items-center">
+        <div class="row w-100 justify-content-center">
+            <div class="col-xl-8 col-lg-10 col-md-12">
+                <div class="row shadow-lg card-custom overflow-hidden">
+                    <!-- Lado Esquerdo - Login -->
+                    <div class="col-md-6 bg-white login-form d-flex flex-column justify-content-center">
+                        <div class="text-center mb-4">
+                            <h2 class="font-weight-bold">Login</h2>
+                        </div>
+
+                        {% if form.errors %}
+                        <div class="alert alert-danger" role="alert">
+                            <strong>Erro!</strong> Nome de usuário ou senha incorretos.
+                        </div>
+                        {% endif %}
+
+                        <form method="POST" action="{% url 'admin:login' %}">
+                            {% csrf_token %}
+                            <input type="hidden" name="next" value="{{ next }}">
+                            <div class="mb-3">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="fas fa-user"></i></span>
+                                    </div>
+                                    <input  type="text" 
+                                            class="form-control" 
+                                            name="username" 
+                                            placeholder="Usuário" 
+                                            required
+                                            id="id_username"
+                                            >
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="fas fa-key"></i></span>
+                                    </div>
+                                    <input  type="password" 
+                                            class="form-control" 
+                                            name="password" 
+                                            placeholder="Senha" 
+                                            required
+                                            id="id_password"                                     
+                                            >
+                                </div>
+                            </div>
+
+                            <div class="d-flex justify-content-between align-items-center mb-4">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="rememberMe">
+                                    <label class="form-check-label" for="rememberMe">
+                                        Lembre-me
+                                    </label>
+                                </div>
+                                <a href="#" class="text-primary small">Esqueceu a senha?</a>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary btn-lg btn-block">
+                                <i class="fas fa-sign-in-alt mr-2"></i>Entrar
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- Lado Direito - Bem-vindo com logo -->
+                    <div class="col-md-6 bg-dark text-white welcome-side d-flex flex-column justify-content-center align-items-center text-center">
+                        <img src="{% static 'images/logo.png' %}" alt="Logo" class="logo-img">
+                        <h2 class="mb-3">Bem Vindo!</h2>
+                        <p class="mb-4">
+                            É um prazer tê-lo(a) conosco. Acesse sua conta para 
+                            otimizar suas atividades diárias e garantir a excelência 
+                            na gestão dos seus processos.
+                        </p>
+                        <p class="mb-4">
+                            Tenha um ótimo dia.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="{% static 'theme/plugins/jquery/jquery.min.js' %}"></script>
+    <script src="{% static 'theme/plugins/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+</body>
+
+</html>

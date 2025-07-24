@@ -58,7 +58,6 @@ INSTALLED_APPS = [
     "parceiros",
     "processos",
     "tarefas",
-    "usuarios.apps.UsuariosConfig", 
        
 ]
 
@@ -207,5 +206,5 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 # Configurações de autenticação
 
 LOGIN_REDIRECT_URL = 'pages:index'
-LOGOUT_REDIRECT_URL = 'login'
-LOGIN_URL = 'login'
+LOGOUT_REDIRECT_URL = 'admin:login'
+LOGIN_URL = '/'

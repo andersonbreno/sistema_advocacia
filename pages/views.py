@@ -1,5 +1,6 @@
 from django.shortcuts import redirect, render
 from django.views.generic import View
+from django.contrib.auth import logout
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.decorators.cache import never_cache
 from django.utils.decorators import method_decorator
@@ -30,6 +31,11 @@ from .forms import DataPointFormSet
 import logging
 
 logger = logging.getLogger(__name__)
+
+def custom_logout(request):
+    logout(request)
+    request.session.flush()
+    return redirect('login')
 
 # Importe os modelos que você precisa para o dashboard
 # @method_decorator(never_cache, name='dispatch')
